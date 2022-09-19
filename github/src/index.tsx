@@ -14,7 +14,7 @@ root.render(
         {/* <Route path="/Label Management" element={<App />} /> 
         <Route path="/IssueList" element={<App />} /> 
         <Route path="/Issue" element={<App />} /> 
-        <Route path="/NewIssue" element={<App />} />  */}
+        // <Route path="/NewIssue" element={<App />} />  */}
        </Route>
     </Routes>
   </BrowserRouter> 

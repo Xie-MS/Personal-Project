@@ -6,7 +6,7 @@ function App() {
   return (
     <>
       <Reset />
-      <h1>Hello</h1>
+
       <Outlet />
     </>
   );
