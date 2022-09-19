@@ -3,7 +3,6 @@ import ReactDOM from "react-dom/client";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 // import { Provider } from "react-redux";
 import App from "./App";
-import OAuth from "./OAuth";
 
 const root = ReactDOM.createRoot(document.getElementById("root")!);
 root.render(
@@ -11,7 +10,6 @@ root.render(
   <BrowserRouter>
      <Routes>
      <Route path="/" element={<App />}>
-     <Route path="/OAuth" element={<OAuth />} /> 
          {/* <Route index element={<Home />} /> */}
         {/* <Route path="/Label Management" element={<App />} /> 
         <Route path="/IssueList" element={<App />} /> 
