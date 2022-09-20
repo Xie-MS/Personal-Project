@@ -7,105 +7,250 @@
     <link rel="stylesheet" href="style.css" />
     <title>Document</title>
   </head>
+
   <body>
+    <div class="ContainetTitle">
+      <div class="RepoInformation">
+        <ul class="Repo">
+          <img src="./img/repo.svg" class="RepoImg" />
+          <li class="RepoAndUserName">Xie-MS</li>
+          ／
+          <li class="RepoAndUserName">gittest3</li>
+          <li class="RepoVisibility">
+            <button class="RepoVisibilityBtn">Public</button>
+          </li>
+        </ul>
+        <ul class="FunctionalElement">
+          <li class="Pin">
+            <button class="PinBtn">
+              <img src="./img/pin.svg" class="FunctionalElementImg" />
+              Pin
+            </button>
+          </li>
+          <li class="UnWatch">
+            <button class="UnwatchBtn">
+              <img src="./img/Unwatch.svg" class="FunctionalElementImg" />
+              Unwatch
+              <p class="UnWatchNum">1</p>
+              <img src="./img/sortDown.svg" class="UnWatchImg" />
+            </button>
+          </li>
+          <li class="Fork">
+            <button class="ForkBtn">
+              <img src="./img/fork.svg" class="FunctionalElementImg" />
+              Fork
+              <p class="ForkNum">0</p>
+              <img src="./img/sortDown.svg" class="ForkImg" />
+            </button>
+          </li>
+          <li class="Star">
+            <button class="StarBtn">
+              <img src="./img/star.svg" class="FunctionalElementImg" />
+              Star
+              <p class="StarNum">0</p>
+
+              <img src="./img/sortDown.svg" class="StarImg" />
+            </button>
+          </li>
+        </ul>
+      </div>
+      <div class="RepoFunctional">
+        <ul class="Functional">
+          <button class="FunctionalImgandText">
+            <img src="./img/code.svg" class="FunctionalImg" />
+            <p class="FunctionalText">code</p>
+          </button>
+          <button class="FunctionalImgandText">
+            <img src="./img/issue.svg" class="FunctionalImg" />
+            <p class="FunctionalText">Issues</p>
+          </button>
+          <button class="FunctionalImgandText">
+            <img src="./img/pr.svg" class="FunctionalImg" />
+            <p class="FunctionalText">Pull requests</p>
+          </button>
+          <button class="FunctionalImgandText">
+            <img src="./img/action.svg" class="FunctionalImg" />
+            <p class="FunctionalText">Actions</p>
+          </button>
+          <button class="FunctionalImgandText">
+            <img src="./img/Projects.svg" class="FunctionalImg" />
+            <p class="FunctionalText">Projects</p>
+          </button>
+          <button class="FunctionalImgandText">
+            <img src="./img/wiki.svg" class="FunctionalImg" />
+            <p class="FunctionalText">Wiki</p>
+          </button>
+          <button class="FunctionalImgandText">
+            <img src="./img/Security.svg" class="FunctionalImg" />
+            <p class="FunctionalText">Security</p>
+          </button>
+          <button class="FunctionalImgandText">
+            <img src="./img/Insights.svg" class="FunctionalImg" />
+            <p class="FunctionalText">Insights</p>
+          </button>
+          <button class="FunctionalImgandText">
+            <img src="./img/setting.svg" class="FunctionalImg" />
+            <p class="FunctionalText">Settings</p>
+          </button>
+        </ul>
+      </div>
+    </div>
     <div class="Container">
       <div class="Menu">
         <div class="MenuLeft">
-          <ul>
-            <li class="Labels">Labels</li>
-            <li class="Milestones">Milestones</li>
-            <li><input value="Search all labels" class="SearchInput" /></li>
+          <ul class="MenuLeftUl">
+            <li class="MenuBtn">
+              <button class="Labels">
+                <img src="./img/Labels.svg" class="LabelsImg" />Labels
+              </button>
+              <button class="Milestones">
+                <img src="./img/milestone.svg" class="MilestoneImg" />Milestones
+              </button>
+            </li>
+            <li class="Search">
+              <input
+                value="Search all labels"
+                class="SearchInput"
+                img
+                src="./img/search.svg"
+                class="searchImg"
+              />
+            </li>
           </ul>
         </div>
         <div class="MenuRight">
-          <button>New label</button>
+          <button class="CreateLabel">New label</button>
         </div>
       </div>
       <div class="ContainerLabelList">
+        <table class="LableListTitleTable">
+          <tr class="LableListTitle">
+            <td class="LableListTitleText">9 labesls</td>
+            <td class="LabelTitleEvent">
+              Sort<img src="./img/sortDown.svg" width="35%" />
+            </td>
+          </tr>
+        </table>
         <table class="LableList">
           <tr class="Label">
-            <td class="LabelStyle">bug</td>
+            <td class="LabelStyle"><button class="LabelBtn">bug</button></td>
             <td class="LabelText">Something isn't working</td>
             <td class="LabelEvent">
+              <button class="LabelEventBtn">...</button>
               <button class="Edit">Edit</button>
               <button class="Delete">Delete</button>
             </td>
           </tr>
           <tr class="Label">
-            <td class="LabelStyle">documentation</td>
+            <td class="LabelStyle">
+              <button class="LabelBtn">documentation</button>
+            </td>
             <td class="LabelText">
               Improvements or additions to documentation
             </td>
             <td class="LabelEvent">
+              <button class="LabelEventBtn">...</button>
               <button class="Edit">Edit</button>
               <button class="Delete">Delete</button>
             </td>
           </tr>
           <tr class="Label">
-            <td class="LabelStyle">duplicate</td>
+            <td class="LabelStyle">
+              <button class="LabelBtn">duplicate</button>
+            </td>
             <td class="LabelText">This issue or pull request already exists</td>
             <td class="LabelEvent">
+              <button class="LabelEventBtn">...</button>
               <button class="Edit">Edit</button>
               <button class="Delete">Delete</button>
             </td>
           </tr>
           <tr class="Label">
-            <td class="LabelStyle">enhancement</td>
+            <td class="LabelStyle">
+              <button class="LabelBtn">enhancement</button>
+            </td>
             <td class="LabelText">New feature or request</td>
             <td class="LabelEvent">
+              <button class="LabelEventBtn">...</button>
               <button class="Edit">Edit</button>
               <button class="Delete">Delete</button>
             </td>
           </tr>
           <tr class="Label">
-            <td class="LabelStyle">good first issue</td>
+            <td class="LabelStyle">
+              <button class="LabelBtn">good first issue</button>
+            </td>
             <td class="LabelText">Good for newcomers</td>
             <td class="LabelEvent">
+              <button class="LabelEventBtn">...</button>
               <button class="Edit">Edit</button>
               <button class="Delete">Delete</button>
             </td>
           </tr>
           <tr class="Label">
-            <td class="LabelStyle">help wanted</td>
+            <td class="LabelStyle">
+              <button class="LabelBtn">help wanted</button>
+            </td>
             <td class="LabelText">Extra attention is needed</td>
             <td class="LabelEvent">
+              <button class="LabelEventBtn">...</button>
               <button class="Edit">Edit</button>
               <button class="Delete">Delete</button>
             </td>
           </tr>
           <tr class="Label">
-            <td class="LabelStyle">invalid</td>
+            <td class="LabelStyle">
+              <button class="LabelBtn">invalid</button>
+            </td>
             <td class="LabelText">This doesn't seem right</td>
             <td class="LabelEvent">
+              <button class="LabelEventBtn">...</button>
               <button class="Edit">Edit</button>
               <button class="Delete">Delete</button>
             </td>
           </tr>
           <tr class="Label">
-            <td class="LabelStyle">question</td>
+            <td class="LabelStyle">
+              <button class="LabelBtn">question</button>
+            </td>
             <td class="LabelText">Further information is requested</td>
             <td class="LabelEvent">
+              <button class="LabelEventBtn">...</button>
               <button class="Edit">Edit</button>
               <button class="Delete">Delete</button>
             </td>
           </tr>
           <tr class="Label">
-            <td class="LabelStyle">wontfix</td>
+            <td class="LabelStyle">
+              <button class="LabelBtn">wontfix</button>
+            </td>
             <td class="LabelText">This will not be worked on</td>
             <td class="LabelEvent">
-              <button class="Edit">Edit</button>
-              <button class="Delete">Delete</button>
-            </td>
-          </tr>
-          <tr class="Label">
-            <td class="LabelStyle"></td>
-            <td class="LabelText"></td>
-            <td class="LabelEvent">
+              <button class="LabelEventBtn">...</button>
               <button class="Edit">Edit</button>
               <button class="Delete">Delete</button>
             </td>
           </tr>
         </table>
+      </div>
+    </div>
+    <div class="footer">
+      <div class="footerleft">
+        <img src="./img/logo.svg" class="footerLogo" />
+        <p class="CCText">© 2022 GitHub, Inc.</p>
+      </div>
+      <div class="footerRight">
+        <p class="footerText">Terms</p>
+        <p class="footerText">Privacy</p>
+        <p class="footerText">Security</p>
+        <p class="footerText">States</p>
+        <p class="footerText">Docs</p>
+        <p class="footerText">Contant GitHub</p>
+        <p class="footerText">Pricing</p>
+        <p class="footerText">API</p>
+        <p class="footerText">Training</p>
+        <p class="footerText">Blog</p>
+        <p class="footerText">About</p>
       </div>
     </div>
   </body>

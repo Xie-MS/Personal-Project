@@ -1,3 +1,434 @@
+body{
+    font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji";
+}
+
 .Container{
+    margin-top: 24px;
+    padding: 0px 32px;
+}
+
+.ContainetTitle{
+    background-color: #eaeef2;
+    padding: 0px 32px;
+}
+
+.Repo{
+    display: flex;
+    list-style: none;
+    justify-content: start;
+    align-items: center;
+    padding-left: 0px;
+}
+
+.RepoInformation{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.RepoVisibility{
+    margin: 0px 8px 0px 4px;
+}
+
+.RepoVisibilityBtn{
+    display: inline-block;
+    padding: 0 7px;
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 18px;
+    white-space: nowrap;
+    border: 1px solid transparent;
+    border-radius: 2em;
+    border: 1px solid #CCCCCC;
+}
+.RepoImg{
+    width: 16px;
+    height: 16px;
+    margin-right: 8px;
+}
+
+.RepoAndUserName{
+    font-size: 20px;
+    color: #0969da;
+    font-weight: bold ;
+}
+
+.FunctionalElement{
+    list-style: none;
+    display: flex;
+    justify-content: end;
+    align-items: center;
+    padding-left:32px;
+    margin-bottom: 16px;
+}
+
+.FunctionalElementImg{
+    width: 14.79px;
+    height: 14.79px;
+}
+
+.PinBtn{
+    padding: 3px 12px;
+    border: 1px solid #CCCCCC;
+    height: 28px;
+    margin-right: 8px;
+    border-radius: 5px;
+}
+
+.UnwatchBtn,.ForkBtn,.StarBtn{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 28px;
+    border: 1px solid #CCCCCC;
+    border-radius: 5px;
+    margin-right: 8px;
+}
+
+.Fork,.Star{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.ForkSelectBtn,.StarSelectBtn{
+    height: 28px;
+    border: 1px solid #CCCCCC;
+    margin-right: 8px;
+}
+
+.UnWatchNum,.ForkNum,.StarNum{
+    background-color: lightgray;
+    border-radius: 50px;
+    color: black;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.ForkImg,.StarImg{
+    border-left: 1px solid #CCCCCC;
+    width:12%;
+    margin-left: 8px;
+    padding-left: 8px;
+}
+
+.UnWatchImg{
+    border-left: 1px solid #CCCCCC;
+    width:10%;
+    margin-left: 8px;
+    padding-left: 8px;
+}
+
+.Functional{
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    list-style: none;
+    padding: 0px;
+    margin: 0px;
     
 }
+
+.FunctionalImg{
+    width: 16px;
+    height: 16px;
+    margin-right: 8px;
+}
+.FunctionalImgandText{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 20px;
+    font-size: 14px;
+    line-height: 30px;
+    cursor: pointer;
+    background-color: #eaeef2;
+    border: none;
+}
+
+.Menu{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.MenuLeftUl{
+    display: -webkit-inline-box;
+    justify-content: center;
+    align-items: center;
+    list-style: none ;
+    padding-left: 0px;
+}
+
+.MenuBtn{
+    border: 1px solid #000;
+    border-radius: 5px;
+    display: flex;
+}
+
+.Labels{
+    display: flex;
+    padding-right: 10px;
+    justify-content: center;
+    align-items: center;
+    height: 32px;
+    background-color: white;
+    border: none;
+    width: 88px;
+    border-right: 1px solid #000;
+}
+
+.Labels:focus{
+    background-color: #0969da;
+    color: white;
+}
+
+.LabelsImg{
+    width: 16px;
+    height: 16px;
+}
+
+.Milestones{
+    display: flex;
+    padding-right: 10px;
+    justify-content: center;
+    align-items: center;
+    height: 32px;
+    border-radius: 5px;
+    background-color: white;
+    border: none;
+    width: 122px;
+}
+
+.Milestones:focus{
+    background-color: #0969da;
+    color: white;
+}
+
+.MilestoneImg{
+    width: 16px;
+    height: 16px;
+}
+
+.SearchInput{
+    padding: 5px 12px 5px 32px;
+    border: 0.5px solid #000;
+    background-color: lightgray;
+    width: 274px;
+    height: 20px;
+    background-image: url(./img/search.svg);
+    background-repeat: no-repeat;
+    background-position: left;
+    border-radius: 5px;
+}
+
+.SearchInput:focus{
+    border: 1px solid #0969da;
+    background-color: white;
+}
+
+.Search{
+    padding: 0px 24px 0px 8px;
+}
+
+.CreateLabel{
+    border: 0.5px solid rgba(27,31,36,0.15);
+    background-color: #2da44e;
+    color: white;
+    border-radius: 5px;
+    padding: 5px 16px;
+}
+
+.LableList{
+    width: 100%;
+}
+
+.ContainerLabelList{
+    border-radius: 5px;
+    border: 0.5px solid #CCCCCC;
+
+}
+
+.LableListTitleTable{
+    width: 100%;
+    height: 21px;
+    background-color: lightgray;
+}
+
+.LableListTitle{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    
+    border-radius: 5px;
+    padding: 16px 16px;
+    border: 0.5px solid #CCCCCC;
+}
+
+.LabelTitleEvent{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.Label{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 16px;
+    border-top: 0.5px solid #CCCCCC;
+}
+
+.LabelStyle{
+    width: 14%;
+}
+
+.LabelBtn{
+    background-color: antiquewhite;
+    padding: 0 10px;
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 22px !important;
+    border: 1px solid transparent;
+    border-radius: 2em;
+}
+
+.LabelText{
+    width: 33%;
+    font-size: 12px;
+    color: #57606a;
+}
+
+.LabelEvent{
+    width: 12%;
+    text-align: right;
+}
+
+.LabelEventBtn{
+    display: none;
+}
+
+.Edit{
+    background-color: white;
+    border: none;
+}
+
+.Delete{
+    background-color: white;
+    border: none;
+}
+
+.footer{
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    margin-top: 40px;
+    border-top: 0.994px solid #CCCCCC;
+    padding: 40px 32px 8px 32px;
+}
+
+.footerleft{
+    display: flex;
+    align-items: center;
+}
+
+.footerLogo{
+    width: 15%;
+    margin-right: 8px;
+}
+
+.CCText{
+    word-wrap: break-word;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.footerText{
+    word-wrap: break-word;
+    font-size: 14px;
+    line-height: 1.5;
+    color: #0969da;
+    margin-right: 30px;
+}
+
+.footerleft{
+    width: 186px;
+    height: 25px;
+    margin-right: 40px;
+}
+
+.footerRight{
+    display: flex;
+    justify-content: start;
+    align-items: center;
+}
+
+@media screen and (max-width:1011px) { 
+    .Edit{
+        display: none;
+    }
+    .Delete{
+        display: none;
+    }
+
+    .LabelEvent{
+        text-align: center;
+        display: flex;
+        justify-content: end;
+        align-items: center;
+    }
+
+    .LabelEventBtn{
+        display: block;
+        padding: 3px 12px;
+        border: 1px solid #CCCCCC;
+        width: 42px;
+        height: 28px;
+        border-radius: 10px;
+        text-align: center;
+    }
+
+    .footer{
+        display: block;
+    }
+
+    .footerleft {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .footerLogo{
+        width: 2%;
+    }
+
+    .footerRight{
+        justify-content: center;
+    }
+  }
+
+  @media screen and (max-width:767px) { 
+
+    .LabelText{
+        display: none;
+    }
+    .LabelStyle{
+        width: 40%;
+    }
+
+    .FunctionalElement{
+        display: none;
+    }
+
+    .Repo{
+        width: 100%;
+    }
+
+    .MobileIcon{
+        display: block;
+    }
+  }
