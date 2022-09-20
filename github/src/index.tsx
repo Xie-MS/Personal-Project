@@ -6,10 +6,11 @@ import App from "./App";
 
 const root = ReactDOM.createRoot(document.getElementById("root")!);
 root.render(
-    // <Provider>
+    // <Provider store={store}>
   <BrowserRouter>
      <Routes>
      <Route path="/" element={<App />}>
+     {/* <Route path="/OAuth" element={<OAuth />} />  */}
          {/* <Route index element={<Home />} /> */}
         {/* <Route path="/Label Management" element={<App />} /> 
         <Route path="/IssueList" element={<App />} /> 
@@ -18,7 +19,7 @@ root.render(
        </Route>
     </Routes>
   </BrowserRouter> 
-//   </Provider>
+  //  </Provider>
 
 );
 
