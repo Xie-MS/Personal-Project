@@ -4,6 +4,8 @@ import {supabase} from './client'
 
 function OAuth() {
     const [user, setUser]:any = useState(null);
+    const[userName,setUserName] = useState("");
+
     useEffect(()=>{
         checkUser();
         window.addEventListener('hashchange', function(){
@@ -12,11 +14,12 @@ function OAuth() {
     },[])
     async function checkUser() {
         const user = supabase.auth.user();
+        const token:any = supabase.auth.session();
         setUser(user);
-        
+        setUserName(token.user.identities[0].identity_data.user_name)
     }
 
-    async function signInWithFithub() {
+    async function signInWithgithub() {
        await supabase.auth.signIn({
         provider: 'github'
        });
@@ -42,7 +45,7 @@ return(
       <br />
       <p>↓there sing in</p>
       <br />
-      <button onClick={signInWithFithub}>Sign In</button>
+      <button onClick={signInWithgithub}>Sign In</button>
     </>
    )
 
