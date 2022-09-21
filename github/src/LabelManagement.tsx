@@ -499,7 +499,7 @@ color: white;
 `;
 
 const Update = styled.div`
-display: block;
+display: none;
 `;
 
 const UpdateInformation = styled.div`
@@ -516,13 +516,13 @@ padding:0px 16px;
 function LabelManagement() {
   const [labels, setLablels]:any = useState([]);
 
-  // useEffect(() => {
-  //   async function getLabels() {
-  //     const data = await api.getLabels();
-  //     setLablels(data);
-  //   }
-  //   getLabels();
-  // }, []);
+  useEffect(() => {
+    async function getLabels() {
+      const data = await api.getLabels();
+      setLablels(data);
+    }
+    getLabels();
+  }, []);
 
   
 function labelsData(){
