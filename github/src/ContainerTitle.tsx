@@ -72,6 +72,7 @@ justify-content: end;
 align-items: center;
 padding-left:32px;
 margin-bottom: 16px;
+display: flex;
 @media screen and (max-width: 768px) {
   display: none;
 }

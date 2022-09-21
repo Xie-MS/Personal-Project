@@ -44,6 +44,7 @@ display: none;
 }`;
 
 const MobileMenuUl = styled.ul`
+
 @media screen and (max-width: 767px) {
     background-color: #000;
     margin-top: 16px;
@@ -61,6 +62,7 @@ const MobileSearch = styled.li`
     padding: 0px 12px;
     height: 28px;
     border-radius: 5px;
+    display:none;
 }`
 
 const MobileMenuText = styled.li`
@@ -106,7 +108,10 @@ height: 32px;
 `
 
 const HeaderSearch = styled.li`
-display: block;`
+display: block;
+@media screen and (max-width: 767px) {
+  display: none;
+  }`
 
 const HearderSearchInput = styled.input`
 display: table;
@@ -124,8 +129,10 @@ width: 272px;
 height: 30px;
 margin-right: 16px;
 border-radius: 8px;
-display:none;
-`
+display:block;
+@media screen and (max-width: 767px) {
+display: none;
+}`
 
 const HeaderLeftText = styled.li`
 margin-right:16px;

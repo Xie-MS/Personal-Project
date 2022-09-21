@@ -1,5 +1,8 @@
 import React from "react";
 import styled from "styled-components";
+import { useEffect, useRef, useState } from 'react';
+
+import api from './api';
 
 import SortDown from "./img/sortDown.svg";
 import LabelsImage from "./img/Labels.svg";
@@ -202,12 +205,12 @@ width: 14%;
 `;
 
 const LabelBtn = styled.button`
-background-color: antiquewhite;
+background-color: #${(props) => props.color};
 padding: 0 10px;
 font-size: 12px;
 font-weight: 500;
 line-height: 22px !important;
-border: 1px solid transparent;
+border: 1px solid rgba(0,0,0,0.15);
 border-radius: 2em;
 `;
 
@@ -304,6 +307,38 @@ border: none;
 `;
 
 function LabelManagement() {
+  const [labels, setLablels]:any = useState([]);
+
+  useEffect(() => {
+    async function getLabels() {
+      const data = await api.getLabels();
+      setLablels(data);
+      console.log(labels)
+    }
+    getLabels();
+  }, []);
+
+  
+function labelsData(){
+  return [labels][0].map((item:any,index:any) => {
+      return(
+        <Label key={index}>
+          <LabelStyle><LabelBtn key={index} color={[labels][0][index].color}>{[labels][0][index].name}</LabelBtn></LabelStyle>
+          <LabelText>{[labels][0][index].description}</LabelText>
+          <LabelEvent>
+            <LabelEventBtn>...
+                <LabelEventUl>
+                  <LabelEventLi>Edit</LabelEventLi>
+                  <LabelEventLi>Delete</LabelEventLi>
+                </LabelEventUl>
+              </LabelEventBtn>
+            <Edit>Edit</Edit>
+            <Delete>Delete</Delete>
+          </LabelEvent>
+      </Label>
+      );
+  })
+}
   return (
     <Container>
     <Menu>
@@ -344,7 +379,8 @@ function LabelManagement() {
         </LableListTitle>
       </LableListTitleTable>
       <LableList>
-        <Label>
+        {labelsData()}
+        {/* <Label>
           <LabelStyle><LabelBtn>bug</LabelBtn></LabelStyle>
           <LabelText>Something isn't working</LabelText>
           <LabelEvent>
@@ -487,7 +523,7 @@ function LabelManagement() {
             <Edit>Edit</Edit>
             <Delete>Delete</Delete>
           </LabelEvent>
-        </Label>
+        </Label> */}
       </LableList>
     </ContainerLabelList>
   </Container>

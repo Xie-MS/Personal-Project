@@ -1,8 +1,10 @@
 import React from "react";
+import { useSelector } from "react-redux";
 import { Outlet } from "react-router-dom";
 import { Reset } from "styled-reset";
 import { Header } from "./stories/Header";
 import { createGlobalStyle } from "styled-components";
+
 
 import Headers from "./header";
 import ContainerTitle from "./ContainerTitle"
@@ -15,6 +17,8 @@ const GlobalStyle = createGlobalStyle`
 `;
 
 function App() {
+  const state = useSelector((state) => state);
+  console.log(state)
   return (
     <>
       <Reset />

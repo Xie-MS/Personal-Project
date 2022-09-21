@@ -1,7 +1,7 @@
 //import username
 
 const api = {
-    hostname: `https://api.github.com/repos/userName/Personal-Project`,
+    hostname: `https://api.github.com/repos/Xie-Ms/Personal-Project`,
     async getLabels() {
       const response = await fetch(`${this.hostname}/labels`);
       return await response.json();
