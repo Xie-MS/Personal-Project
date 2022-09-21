@@ -9,6 +9,7 @@ import LabelsImage from "./img/Labels.svg";
 import Milestone from "./img/milestone.svg";
 import SearchImage from "./img/search.svg";
 import CheckImage from "./img/check.svg";
+import ChangeColorImage from "./img/change.png";
 
 const Container = styled.div`
 margin-top: 24px;
@@ -306,17 +307,222 @@ border: none;
   }
 `;
 
+const CreateLable = styled.div`
+display: none;
+justify-content: start;
+align-items: center;
+padding: 16px 16px;
+border-radius: 10px;
+color: #f6f8fa;
+
+  @media screen and (max-width: 767px) {
+    border-radius: 50px;
+    width: 95%;
+    border:none;
+    margin-bottom:0px;
+  }
+`;
+
+const CreateLableTitle = styled.div`
+margin-bottom: 8px;
+
+`;
+
+const CreateLableTitleBtn = styled.button`
+background-color: #FBCA04;
+border: 1px solid rgba(0, 0, 0, 0.25);
+padding: 0px 10px;
+border-radius: 50px;
+width: 14%;
+height: 22px;
+@media screen and (max-width: 767px) {
+  width: 30%;
+}
+`;
+
+const CreateInformation = styled.div`
+display: flex;
+justify-content: space-between;
+align-items: self-end;
+@media screen and (max-width: 767px) {
+  display: block;
+}
+`;
+
+const CreateInformationLeft = styled.div`
+display: flex;
+justify-content: start;
+align-items: center;
+@media screen and (max-width: 767px) {
+  display: block;
+}
+`;
+
+const CreateInformationInputUl = styled.ul`
+margin: 16px 0px;
+padding-left: 0px;
+padding-right: 16px;
+display: block;
+justify-content: start;
+align-items: center;
+list-style: none;
+
+@media screen and (max-width: 767px) {
+  display: block;
+  margin: 8px 0px;
+}
+`;
+
+const CreateInformationInputText = styled.li`
+display: flex;
+justify-content: start;
+align-items: center;
+color: black;
+margin-bottom: 6px;
+@media screen and (max-width: 767px) {
+height:44px;
+}
+`;
+
+const CreateInformationInput = styled.li`
+font-size: 14px;
+font-weight: 600;
+word-wrap: break-word;
+line-height: 1.5;
+color: black;
+display:flex;
+justify-content: center;
+align-items: center;
+@media screen and (max-width: 767px) {
+  width:100%;
+}
+`;
+
+const CreateInformationInputName = styled.input`
+margin-right: 5px;
+padding: 5px 12px;
+border: 1px solid rgba(0, 0, 0, 0.25);
+border-radius: 10px;
+width: 100%;
+height: 20px;
+&:focus {
+  background-color: #0969da;
+  border: 1px solid #54aeff;
+}
+@media screen and (max-width: 767px) {
+  width: 100%;
+}
+`;
+
+const CreateInformationInputDescription = styled.input`
+margin-right: 5px;
+padding: 5px 12px;
+border: 1px solid rgba(0, 0, 0, 0.25);
+border-radius: 10px;
+width: 100%;
+height: 20px;
+&:focus {
+  background-color: #0969da;
+  border: 1px solid #54aeff;
+}
+@media screen and (max-width: 767px) {
+  width: 100%;
+}
+`;
+
+const CreateInformationInputColor = styled.input`
+margin-right: 5px;
+padding: 5px 12px;
+border: 1px solid rgba(0, 0, 0, 0.25);
+border-radius: 10px;
+width: 100%;
+height: 20px;
+&:focus {
+  background-color: #0969da;
+  border: 1px solid #54aeff;
+}
+@media screen and (max-width: 767px) {
+  width: 100%;
+}
+`;
+
+const CreateInformationChangeColor = styled.button`
+width: 40px;
+height: 33px;
+background-image: url(${ChangeColorImage});
+background-size: 25px;
+background-repeat: no-repeat;
+background-position: center;
+padding: 0px 7px;
+border: 1px solid rgba(0, 0, 0, 0.25);
+border-radius: 10px;
+background-color: #FBCA04;
+margin-right: 8px;
+`;
+
+const CreateInformationRight = styled.div`
+display: flex;
+justify-content: center;
+align-items: center;
+margin: 16px 0px 16px 12px;
+height:32px;
+@media screen and (max-width: 767px) {
+  justify-content: start;
+  margin: 16px 0px;
+}
+`;
+
+const CreateCancel = styled.button`
+width: 74px;
+height: 30px;
+border: 1px solid rgba(0, 0, 0, 0.25);
+border-radius: 10px;
+background-color: transparent;
+text-align: center;
+margin-right: 8px;
+padding: 5px 16px;
+@media screen and (max-width: 767px) {
+  order: 2;
+  margin-left: 8px;
+}
+`;
+
+const CreateCreateLabel = styled.button`
+width: 107.5px;
+height: 30px;
+pad: 5px 16px;
+border: 1px solid rgba(0, 0, 0, 0.25);
+border-radius: 10px;
+background-color: #94d3a2;
+text-align: center;
+color: white;
+`;
+
+const Update = styled.div`
+display: block;
+`;
+
+const UpdateInformation = styled.div`
+display: flex;
+justify-content: space-between;
+align-items: self-end;
+padding:0px 16px;
+@media screen and (max-width: 767px) {
+  display: block;
+  padding:0px 16px
+}
+`;
+
 function LabelManagement() {
   const [labels, setLablels]:any = useState([]);
 
-  useEffect(() => {
-    async function getLabels() {
-      const data = await api.getLabels();
-      setLablels(data);
-      console.log(labels)
-    }
-    getLabels();
-  }, []);
+  // useEffect(() => {
+  //   async function getLabels() {
+  //     const data = await api.getLabels();
+  //     setLablels(data);
+  //   }
+  //   getLabels();
+  // }, []);
 
   
 function labelsData(){
@@ -378,152 +584,98 @@ function labelsData(){
           </LabelTitleEvent>
         </LableListTitle>
       </LableListTitleTable>
+      <CreateLable>
+      <CreateLableTitle>
+        <CreateLableTitleBtn>Label preview</CreateLableTitleBtn>
+      </CreateLableTitle>
+      <CreateInformation>
+        <CreateInformationLeft>
+          <CreateInformationInputUl>
+            <CreateInformationInputText>Label name</CreateInformationInputText>
+            <CreateInformationInput>
+              <CreateInformationInputName type="text"
+                placeholder="Label name" />
+            </CreateInformationInput>
+          </CreateInformationInputUl>
+          <CreateInformationInputUl>
+            <CreateInformationInputText>Description</CreateInformationInputText>
+            <CreateInformationInput>
+              <CreateInformationInputDescription
+                type="text"
+                placeholder="Description（optional）"
+              />
+            </CreateInformationInput>
+          </CreateInformationInputUl>
+          <CreateInformationInputUl>
+            <CreateInformationInputText>Color</CreateInformationInputText>
+            <CreateInformationInput>
+              <CreateInformationChangeColor />
+              <CreateInformationInputColor
+                type="text"
+                placeholder="#FBCA04"
+              />
+            </CreateInformationInput>
+          </CreateInformationInputUl>
+        </CreateInformationLeft>
+        <CreateInformationRight>
+          <CreateCancel>Cancel</CreateCancel>
+          <CreateCreateLabel>
+            Create label
+          </CreateCreateLabel>
+        </CreateInformationRight>
+      </CreateInformation>
+    </CreateLable>
       <LableList>
+        <Update>
+      <Label>
+          <LabelStyle><LabelBtn>test</LabelBtn></LabelStyle>
+          <LabelEvent>
+            <LabelEventBtn>...
+                <LabelEventUl>
+                  <LabelEventLi>Delete</LabelEventLi>
+                </LabelEventUl>
+              </LabelEventBtn>
+            <Delete>Delete</Delete>
+          </LabelEvent>
+          </Label>
+          <UpdateInformation>
+        <CreateInformationLeft>
+          <CreateInformationInputUl>
+            <CreateInformationInputText>Label name</CreateInformationInputText>
+            <CreateInformationInput>
+              <CreateInformationInputName type="text"
+                placeholder="Label name" />
+            </CreateInformationInput>
+          </CreateInformationInputUl>
+          <CreateInformationInputUl>
+            <CreateInformationInputText>Description</CreateInformationInputText>
+            <CreateInformationInput>
+              <CreateInformationInputDescription
+                type="text"
+                placeholder="Description（optional）"
+              />
+            </CreateInformationInput>
+          </CreateInformationInputUl>
+          <CreateInformationInputUl>
+            <CreateInformationInputText>Color</CreateInformationInputText>
+            <CreateInformationInput>
+              <CreateInformationChangeColor />
+              <CreateInformationInputColor
+                type="text"
+                placeholder="#FBCA04"
+              />
+            </CreateInformationInput>
+          </CreateInformationInputUl>
+        </CreateInformationLeft>
+        <CreateInformationRight>
+          <CreateCancel>Cancel</CreateCancel>
+          <CreateCreateLabel>
+            Create label
+          </CreateCreateLabel>
+        </CreateInformationRight>
+      </UpdateInformation>
+      </Update>
         {labelsData()}
-        {/* <Label>
-          <LabelStyle><LabelBtn>bug</LabelBtn></LabelStyle>
-          <LabelText>Something isn't working</LabelText>
-          <LabelEvent>
-            <LabelEventBtn>...
-                <LabelEventUl>
-                  <LabelEventLi>Edit</LabelEventLi>
-                  <LabelEventLi>Delete</LabelEventLi>
-                </LabelEventUl>
-              </LabelEventBtn>
-            <Edit>Edit</Edit>
-            <Delete>Delete</Delete>
-          </LabelEvent>
-        </Label>
-        <Label>
-          <LabelStyle>
-            <LabelBtn>documentation</LabelBtn>
-          </LabelStyle>
-          <LabelText>
-            Improvements or additions to documentation
-          </LabelText>
-          <LabelEvent>
-            <LabelEventBtn>...
-                <LabelEventUl>
-                  <LabelEventLi>Edit</LabelEventLi>
-                  <LabelEventLi>Delete</LabelEventLi>
-                </LabelEventUl>
-              </LabelEventBtn>
-            <Edit>Edit</Edit>
-            <Delete>Delete</Delete>
-          </LabelEvent>
-        </Label>
-        <Label>
-          <LabelStyle>
-            <LabelBtn>duplicate</LabelBtn>
-          </LabelStyle>
-          <LabelText>This issue or pull request already exists</LabelText>
-          <LabelEvent>
-              <LabelEventBtn>...
-                <LabelEventUl>
-                  <LabelEventLi>Edit</LabelEventLi>
-                  <LabelEventLi>Delete</LabelEventLi>
-                </LabelEventUl>
-              </LabelEventBtn>
-            <Edit>Edit</Edit>
-            <Delete>Delete</Delete>
-          </LabelEvent>
-        </Label>
-        <Label>
-          <LabelStyle>
-            <LabelBtn>enhancement</LabelBtn>
-          </LabelStyle>
-          <LabelText>New feature or request</LabelText>
-          <LabelEvent>
-            <LabelEventBtn>...
-                <LabelEventUl>
-                  <LabelEventLi>Edit</LabelEventLi>
-                  <LabelEventLi>Delete</LabelEventLi>
-                </LabelEventUl>
-              </LabelEventBtn>
-            <Edit>Edit</Edit>
-            <Delete>Delete</Delete>
-          </LabelEvent>
-        </Label>
-        <Label>
-          <LabelStyle>
-            <LabelBtn>good first issue</LabelBtn>
-          </LabelStyle>
-          <LabelText>Good for newcomers</LabelText>
-          <LabelEvent>
-            <LabelEventBtn>...
-                <LabelEventUl>
-                  <LabelEventLi>Edit</LabelEventLi>
-                  <LabelEventLi>Delete</LabelEventLi>
-                </LabelEventUl>
-              </LabelEventBtn>
-            <Edit>Edit</Edit>
-            <Delete>Delete</Delete>
-          </LabelEvent>
-        </Label>
-        <Label>
-          <LabelStyle>
-            <LabelBtn>help wanted</LabelBtn>
-          </LabelStyle>
-          <LabelText>Extra attention is needed</LabelText>
-          <LabelEvent>
-            <LabelEventBtn>...
-                <LabelEventUl>
-                  <LabelEventLi>Edit</LabelEventLi>
-                  <LabelEventLi>Delete</LabelEventLi>
-                </LabelEventUl>
-              </LabelEventBtn>
-            <Edit>Edit</Edit>
-            <Delete>Delete</Delete>
-          </LabelEvent>
-        </Label>
-        <Label>
-          <LabelStyle>
-            <LabelBtn>invalid</LabelBtn>
-          </LabelStyle>
-          <LabelText>This doesn't seem right</LabelText>
-          <LabelEvent>
-            <LabelEventBtn>...
-                <LabelEventUl>
-                  <LabelEventLi>Edit</LabelEventLi>
-                  <LabelEventLi>Delete</LabelEventLi>
-                </LabelEventUl>
-              </LabelEventBtn>
-            <Edit>Edit</Edit>
-            <Delete>Delete</Delete>
-          </LabelEvent>
-        </Label>
-        <Label>
-          <LabelStyle>
-            <LabelBtn>question</LabelBtn>
-          </LabelStyle>
-          <LabelText>Further information is requested</LabelText>
-          <LabelEvent>
-            <LabelEventBtn>...
-                <LabelEventUl>
-                  <LabelEventLi>Edit</LabelEventLi>
-                  <LabelEventLi>Delete</LabelEventLi>
-                </LabelEventUl>
-              </LabelEventBtn>
-            <Edit>Edit</Edit>
-            <Delete>Delete</Delete>
-          </LabelEvent>
-        </Label>
-        <Label>
-          <LabelStyle>
-            <LabelBtn>wontfix</LabelBtn>
-          </LabelStyle>
-          <LabelText>This will not be worked on</LabelText>
-          <LabelEvent>
-            <LabelEventBtn>...
-                <LabelEventUl>
-                  <LabelEventLi>Edit</LabelEventLi>
-                  <LabelEventLi>Delete</LabelEventLi>
-                </LabelEventUl>
-              </LabelEventBtn>
-            <Edit>Edit</Edit>
-            <Delete>Delete</Delete>
-          </LabelEvent>
-        </Label> */}
       </LableList>
     </ContainerLabelList>
   </Container>
