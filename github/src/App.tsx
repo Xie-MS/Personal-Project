@@ -20,6 +20,7 @@ function App() {
       <Reset />
       <GlobalStyle />
       <Headers />
+      
       <ContainerTitle />
       <Outlet />
       <Footer />

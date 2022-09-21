@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
+import LogoImage from "./img/logo.svg";
 
 const Footer = styled.div`
 display: flex;
@@ -68,7 +69,7 @@ function Footers() {
   return (
     <Footer>
       <Footerleft>
-        <FooterLogo src="./img/logo.svg" />
+        <FooterLogo src={LogoImage} />
         <CCText>© 2022 GitHub, Inc.</CCText>
       </Footerleft>
       <FooterRight>

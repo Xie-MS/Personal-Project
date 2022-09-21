@@ -1,6 +1,11 @@
 import React from "react";
 import styled from "styled-components";
 
+import SortDown from "./img/sortDown.svg";
+import LabelsImage from "./img/Labels.svg";
+import Milestone from "./img/milestone.svg";
+import SearchImage from "./img/search.svg";
+import CheckImage from "./img/check.svg";
 
 const Container = styled.div`
 margin-top: 24px;
@@ -19,6 +24,7 @@ justify-content: center;
 align-items: center;
 list-style: none ;
 padding-left: 0px;
+margin-bottom:24px;
 `;
 
 const MenuBtn = styled.li`
@@ -74,7 +80,7 @@ border: 0.5px solid #000;
 background-color: lightgray;
 width: 274px;
 height: 20px;
-background-image: url(./img/search.svg);
+background-image: url(${SearchImage});
 background-repeat: no-repeat;
 background-position: left;
 border-radius: 5px;
@@ -116,6 +122,59 @@ const LabelTitleEvent = styled.td`
 display: flex;
 justify-content: center;
 align-items: center;
+position: relative;
+`;
+
+const LabelTitleEventUl = styled.ul`
+display:none;
+@media screen and (max-width: 767px) {
+  margin-top: 4px;
+  margin-bottom: 20px;
+  width:298px;
+  background-color:white;
+  position: absolute;
+  top: 30px;
+  z-index: 2;
+  right: -19px;
+  border-radius: 5px;
+  border: 1px solid #CCCCCC;
+  display:none;
+}
+`;
+
+const LabelTitleEventLi = styled.li`
+@media screen and (max-width: 767px) {
+  padding : 8px 8px 8px 37px;
+  border-bottom: 1px solid #CCCCCC;
+  border-radius: 5px;
+}
+`;
+
+const LabelTitleEventLiTitleDefault = styled.li`
+@media screen and (max-width: 767px) {
+  padding : 8px 10px;
+  border-bottom: 1px solid #CCCCCC;
+  border-radius: 5px;
+  display: flex;
+  justify-content: start;
+  align-items: center;
+}
+`;
+
+const LabelTitleEventLiTitle = styled.li`
+@media screen and (max-width: 767px) {
+  padding : 8px 10px;
+  border-bottom: 1px solid #CCCCCC;
+  border-radius: 5px;
+  display: flex;
+  justify-content: start;
+  align-items: center;
+}
+`;
+
+const LabelTitleEventLiTitleImg = styled.img`
+width: 8%;
+margin-right: 4px;
 `;
 
 const LableListTitleImg = styled.img`
@@ -185,6 +244,44 @@ display: none;
     height: 28px;
     border-radius: 10px;
     text-align: center;
+    position: relative;
+  }
+`;
+
+const LabelEventUl = styled.ul`
+display: none;
+
+  @media screen and (max-width: 1011px) {
+    display: block;
+    padding: 3px 0px;
+    border: 1px solid #CCCCCC;
+    width: 158px;
+    height: 68px;
+    border-radius: 10px;
+    text-align: center;
+    position: relative;
+    left: -130px;
+    bottom: -8.5px;
+    z-index: 2;
+    background: white;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    display: none;
+  }
+`;
+
+const LabelEventLi = styled.li`
+display: none;
+
+  @media screen and (max-width: 1011px) {
+    display: block;
+    padding: 8px 16px 8px 8px;
+    width: 134px;
+    height: 18px;
+    background: white;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    text-align:left;
   }
 `;
 
@@ -207,8 +304,6 @@ border: none;
 `;
 
 function LabelManagement() {
-
-
   return (
     <Container>
     <Menu>
@@ -216,10 +311,10 @@ function LabelManagement() {
         <MenuLeftUl>
           <MenuBtn>
             <Labels>
-              <LabelsImg src="./img/Labels.svg" />Labels
+              <LabelsImg src={LabelsImage} />Labels
             </Labels>
             <Milestones>
-              <LabelsImg src="./img/milestone.svg" />Milestones
+              <LabelsImg src={Milestone} />Milestones
             </Milestones>
           </MenuBtn>
           <Search>
@@ -237,7 +332,14 @@ function LabelManagement() {
         <LableListTitle>
           <td>9 labesls</td>
           <LabelTitleEvent>
-            Sort<LableListTitleImg src="./img/sortDown.svg" />
+            Sort<LableListTitleImg src={SortDown} />
+            <LabelTitleEventUl>
+            <LabelTitleEventLiTitle>Sort</LabelTitleEventLiTitle>
+              <LabelTitleEventLiTitleDefault><LabelTitleEventLiTitleImg src={CheckImage} />Alphabetically</LabelTitleEventLiTitleDefault>
+              <LabelTitleEventLi>Reverse alphabetically</LabelTitleEventLi>
+              <LabelTitleEventLi>Most issues</LabelTitleEventLi>
+              <LabelTitleEventLi>Fewest issues</LabelTitleEventLi>
+            </LabelTitleEventUl>
           </LabelTitleEvent>
         </LableListTitle>
       </LableListTitleTable>
@@ -246,7 +348,12 @@ function LabelManagement() {
           <LabelStyle><LabelBtn>bug</LabelBtn></LabelStyle>
           <LabelText>Something isn't working</LabelText>
           <LabelEvent>
-            <LabelEventBtn>...</LabelEventBtn>
+            <LabelEventBtn>...
+                <LabelEventUl>
+                  <LabelEventLi>Edit</LabelEventLi>
+                  <LabelEventLi>Delete</LabelEventLi>
+                </LabelEventUl>
+              </LabelEventBtn>
             <Edit>Edit</Edit>
             <Delete>Delete</Delete>
           </LabelEvent>
@@ -259,7 +366,12 @@ function LabelManagement() {
             Improvements or additions to documentation
           </LabelText>
           <LabelEvent>
-            <LabelEventBtn>...</LabelEventBtn>
+            <LabelEventBtn>...
+                <LabelEventUl>
+                  <LabelEventLi>Edit</LabelEventLi>
+                  <LabelEventLi>Delete</LabelEventLi>
+                </LabelEventUl>
+              </LabelEventBtn>
             <Edit>Edit</Edit>
             <Delete>Delete</Delete>
           </LabelEvent>
@@ -270,7 +382,12 @@ function LabelManagement() {
           </LabelStyle>
           <LabelText>This issue or pull request already exists</LabelText>
           <LabelEvent>
-            <LabelEventBtn>...</LabelEventBtn>
+              <LabelEventBtn>...
+                <LabelEventUl>
+                  <LabelEventLi>Edit</LabelEventLi>
+                  <LabelEventLi>Delete</LabelEventLi>
+                </LabelEventUl>
+              </LabelEventBtn>
             <Edit>Edit</Edit>
             <Delete>Delete</Delete>
           </LabelEvent>
@@ -281,7 +398,12 @@ function LabelManagement() {
           </LabelStyle>
           <LabelText>New feature or request</LabelText>
           <LabelEvent>
-            <LabelEventBtn>...</LabelEventBtn>
+            <LabelEventBtn>...
+                <LabelEventUl>
+                  <LabelEventLi>Edit</LabelEventLi>
+                  <LabelEventLi>Delete</LabelEventLi>
+                </LabelEventUl>
+              </LabelEventBtn>
             <Edit>Edit</Edit>
             <Delete>Delete</Delete>
           </LabelEvent>
@@ -292,7 +414,12 @@ function LabelManagement() {
           </LabelStyle>
           <LabelText>Good for newcomers</LabelText>
           <LabelEvent>
-            <LabelEventBtn>...</LabelEventBtn>
+            <LabelEventBtn>...
+                <LabelEventUl>
+                  <LabelEventLi>Edit</LabelEventLi>
+                  <LabelEventLi>Delete</LabelEventLi>
+                </LabelEventUl>
+              </LabelEventBtn>
             <Edit>Edit</Edit>
             <Delete>Delete</Delete>
           </LabelEvent>
@@ -303,7 +430,12 @@ function LabelManagement() {
           </LabelStyle>
           <LabelText>Extra attention is needed</LabelText>
           <LabelEvent>
-            <LabelEventBtn>...</LabelEventBtn>
+            <LabelEventBtn>...
+                <LabelEventUl>
+                  <LabelEventLi>Edit</LabelEventLi>
+                  <LabelEventLi>Delete</LabelEventLi>
+                </LabelEventUl>
+              </LabelEventBtn>
             <Edit>Edit</Edit>
             <Delete>Delete</Delete>
           </LabelEvent>
@@ -314,7 +446,12 @@ function LabelManagement() {
           </LabelStyle>
           <LabelText>This doesn't seem right</LabelText>
           <LabelEvent>
-            <LabelEventBtn>...</LabelEventBtn>
+            <LabelEventBtn>...
+                <LabelEventUl>
+                  <LabelEventLi>Edit</LabelEventLi>
+                  <LabelEventLi>Delete</LabelEventLi>
+                </LabelEventUl>
+              </LabelEventBtn>
             <Edit>Edit</Edit>
             <Delete>Delete</Delete>
           </LabelEvent>
@@ -325,7 +462,12 @@ function LabelManagement() {
           </LabelStyle>
           <LabelText>Further information is requested</LabelText>
           <LabelEvent>
-            <LabelEventBtn>...</LabelEventBtn>
+            <LabelEventBtn>...
+                <LabelEventUl>
+                  <LabelEventLi>Edit</LabelEventLi>
+                  <LabelEventLi>Delete</LabelEventLi>
+                </LabelEventUl>
+              </LabelEventBtn>
             <Edit>Edit</Edit>
             <Delete>Delete</Delete>
           </LabelEvent>
@@ -336,7 +478,12 @@ function LabelManagement() {
           </LabelStyle>
           <LabelText>This will not be worked on</LabelText>
           <LabelEvent>
-            <LabelEventBtn>...</LabelEventBtn>
+            <LabelEventBtn>...
+                <LabelEventUl>
+                  <LabelEventLi>Edit</LabelEventLi>
+                  <LabelEventLi>Delete</LabelEventLi>
+                </LabelEventUl>
+              </LabelEventBtn>
             <Edit>Edit</Edit>
             <Delete>Delete</Delete>
           </LabelEvent>

@@ -2,18 +2,34 @@ import React from "react";
 import styled from "styled-components";
 
 
-// import LogoImg from "./img/logo.jpg";
+import RepoImage from "./img/repo.svg";
+import PinImage from "./img/pin.svg";
+import UnwatchImage from "./img/Unwatch.svg";
+import SortDownImage from "./img/sortDown.svg";
+import ForkImage from "./img/fork.svg";
+import StarImage from "./img/star.svg";
+import CodeImage from "./img/code.svg";
+import IssueImage from "./img/issue.svg";
+import PRImage from "./img/pr.svg";
+import ActionImage from "./img/action.svg";
+import ProjectsImage from "./img/Projects.svg";
+import WikiImage from "./img/wiki.svg";
+import SecurityImage from "./img/Security.svg";
+import InsightsImage from "./img/Insights.svg";
+import SettingImage from "./img/setting.svg";
 
 
 const ContainetTitle = styled.div`
 background-color: #eaeef2;
 padding: 0px 32px;
+padding-top:16px;
 `;
 
 const RepoInformation = styled.div`
 display: flex;
 justify-content: space-between;
 align-items: center;
+margin-bottom: 16px;
 `;
 
 const Repo = styled.ul`
@@ -52,13 +68,12 @@ border: 1px solid #CCCCCC;`
 
 const FunctionalElement = styled.ul`
 list-style: none;
-display: flex;
 justify-content: end;
 align-items: center;
 padding-left:32px;
 margin-bottom: 16px;
-@media screen and (max-width: 767px) {
-    display: none;
+@media screen and (max-width: 768px) {
+  display: none;
 }
 `
 const PinBtn = styled.button`
@@ -80,6 +95,7 @@ height: 28px;
 border: 1px solid #CCCCCC;
 border-radius: 5px;
 margin-right: 8px;
+
 `
 const ForkAndStar = styled.li`
 display: flex;
@@ -141,7 +157,7 @@ function ContainerTitle() {
     <ContainetTitle>
       <RepoInformation>
         <Repo>
-          <RepoImg src="./img/repo.svg"/>
+          <RepoImg src={RepoImage}/>
           <RepoAndUserName>Xie-MS</RepoAndUserName>
           ／
           <RepoAndUserName>gittest3</RepoAndUserName>
@@ -152,33 +168,33 @@ function ContainerTitle() {
         <FunctionalElement>
           <li>
             <PinBtn>
-              <FunctionalElementImg src="./img/pin.svg" />
+              <FunctionalElementImg src={PinImage} />
               Pin
             </PinBtn>
           </li>
           <li>
             <FunctionalElementBtn>
-              <FunctionalElementImg src="./img/Unwatch.svg" />
+              <FunctionalElementImg src={UnwatchImage} />
               Unwatch
               <FunctionalElementNum>1</FunctionalElementNum>
-              <UnWatchImg src="./img/sortDown.svg" />
+              <UnWatchImg src={SortDownImage} />
             </FunctionalElementBtn>
           </li>
           <ForkAndStar>
             <FunctionalElementBtn>
-              <ForkAndStarImg src="./img/fork.svg" />
+              <ForkAndStarImg src={ForkImage} />
               Fork
               <FunctionalElementNum>0</FunctionalElementNum>
-              <FunctionalElementImg src="./img/sortDown.svg"/>
+              <FunctionalElementImg src={SortDownImage}/>
             </FunctionalElementBtn>
           </ForkAndStar>
           <ForkAndStar>
             <FunctionalElementBtn>
-              <ForkAndStarImg src="./img/star.svg" />
+              <ForkAndStarImg src={StarImage} />
               Star
               <FunctionalElementNum>0</FunctionalElementNum>
 
-              <FunctionalElementImg src="./img/sortDown.svg" />
+              <FunctionalElementImg src={SortDownImage} />
             </FunctionalElementBtn>
           </ForkAndStar>
         </FunctionalElement>
@@ -186,39 +202,39 @@ function ContainerTitle() {
       <div>
         <Functional>
           <FunctionalImgandText>
-            <FunctionalImg src="./img/code.svg"/>
+            <FunctionalImg src={CodeImage}/>
             <p>code</p>
           </FunctionalImgandText>
           <FunctionalImgandText>
-            <FunctionalImg src="./img/issue.svg" />
+            <FunctionalImg src={IssueImage} />
             <p>Issues</p>
           </FunctionalImgandText>
           <FunctionalImgandText>
-            <FunctionalImg src="./img/pr.svg" />
+            <FunctionalImg src={PRImage} />
             <p>Pull requests</p>
           </FunctionalImgandText>
           <FunctionalImgandText>
-            <FunctionalImg src="./img/action.svg" />
+            <FunctionalImg src={ActionImage} />
             <p>Actions</p>
           </FunctionalImgandText>
           <FunctionalImgandText>
-            <FunctionalImg src="./img/Projects.svg" />
+            <FunctionalImg src={ProjectsImage} />
             <p>Projects</p>
           </FunctionalImgandText>
           <FunctionalImgandText>
-            <FunctionalImg src="./img/wiki.svg" />
+            <FunctionalImg src={WikiImage} />
             <p>Wiki</p>
           </FunctionalImgandText>
           <FunctionalImgandText>
-            <FunctionalImg src="./img/Security.svg" />
+            <FunctionalImg src={SecurityImage} />
             <p>Security</p>
           </FunctionalImgandText>
           <FunctionalImgandText>
-            <FunctionalImg src="./img/Insights.svg" />
+            <FunctionalImg src={InsightsImage} />
             <p>Insights</p>
           </FunctionalImgandText>
           <FunctionalImgandText>
-            <FunctionalImg src="./img/setting.svg" />
+            <FunctionalImg src={SettingImage} />
             <p>Settings</p>
           </FunctionalImgandText>
         </Functional>

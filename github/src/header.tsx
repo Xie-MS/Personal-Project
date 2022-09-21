@@ -1,9 +1,10 @@
 import React from "react";
 import styled from "styled-components";
 
-
-// import LogoImg from "./img/logo.jpg";
-
+import LogoImage from "./img/logo.jpg";
+import SingOut from "./img/Singout.jpg";
+import BellImage from "./img/bell.png";
+import SortWhite from "./img/SortWhite.png";
 
 const Header = styled.div`
     display: flex;
@@ -43,7 +44,6 @@ display: none;
 }`;
 
 const MobileMenuUl = styled.ul`
-
 @media screen and (max-width: 767px) {
     background-color: #000;
     margin-top: 16px;
@@ -53,7 +53,7 @@ const MobileMenuUl = styled.ul`
 }`
 
 const MobileSearch = styled.li`
-
+  display:block;
 @media screen and (max-width: 767px) {
     width: 94%;
     background-color: #000;
@@ -64,7 +64,6 @@ const MobileSearch = styled.li`
 }`
 
 const MobileMenuText = styled.li`
-
 @media screen and (max-width: 767px) {
     padding: 8px;
     font-weight: 600;
@@ -103,10 +102,11 @@ margin-right: 16px;`
 
 const LogoImg = styled.img`
 width: 32px;
-height: 32px;`
+height: 32px;
+`
 
 const HeaderSearch = styled.li`
-display: none;`
+display: block;`
 
 const HearderSearchInput = styled.input`
 display: table;
@@ -123,7 +123,9 @@ color:lightgray;
 width: 272px;
 height: 30px;
 margin-right: 16px;
-border-radius: 8px;`
+border-radius: 8px;
+display:none;
+`
 
 const HeaderLeftText = styled.li`
 margin-right:16px;
@@ -189,7 +191,7 @@ function Headers() {
     <MobileMenu>
       <MobileMenuUl>
         <MobileSearch>
-          <input type="text" placeholder="Search" />
+          <input type="search" placeholder="Search" />
         </MobileSearch>
         <MobileMenuText>Dashboard</MobileMenuText>
         <MobileMenuText>Pull Requests</MobileMenuText>
@@ -200,18 +202,18 @@ function Headers() {
         <MobileMenuText>Sponsors</MobileMenuText>
         <MobileMenuText>Settings</MobileMenuText>
         <MobileMenuTextAndImg>
-          <MobileMenuImg src="./img/logo.jpg" />
+          <MobileMenuImg src={LogoImage} alt="LogoImage"/>
           Xie-MS
         </MobileMenuTextAndImg>
         <MobileMenuTextAndImg>
-          <MobileMenuImg src="./img/Singout.jpg" />
+          <MobileMenuImg src={SingOut} />
           Sign out
         </MobileMenuTextAndImg>
       </MobileMenuUl>
     </MobileMenu>
     <div>
       <HeaderLeftUl>
-        <Logo><LogoImg src="./img/logo.jpg" /></Logo>
+        <Logo><LogoImg src={LogoImage} /></Logo>
         <HeaderSearch>
           <HearderSearchInput
             type="text"
@@ -225,14 +227,14 @@ function Headers() {
     </div>
     <div>
       <HeaderRightUl>
-        <li><BellImg src="./img/bell.png" /></li>
+        <li><BellImg src={BellImage} /></li>
         <More>
           <MoreText>＋</MoreText>
-          <SortDownImg src="./img/SortWhite.png" />
+          <SortDownImg src={SortWhite} />
         </More>
         <Pofile>
-          <UserImg src="./img/logo.jpg" />
-          <SortDownImgUser src="./img/SortWhite.png" />
+          <UserImg src={LogoImage} />
+          <SortDownImgUser src={SortWhite} />
         </Pofile>
       </HeaderRightUl>
     </div>
