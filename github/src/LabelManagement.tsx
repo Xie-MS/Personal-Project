@@ -594,6 +594,7 @@ function LabelManagement() {
   const [moreBtnNumActive,setMoreBtnNumActive]  = useState(-1);
   const LabelName = useRef<HTMLInputElement | null>(null);
   const Description = useRef<HTMLInputElement | null>(null);
+  const [selectColor,setSelectColor]:any  = useState();
 
   useEffect(() => {
     async function getLabels() {
@@ -633,7 +634,21 @@ function labelsData(){
 }
 
 function PostLabelColor(e:any){
-  console.log(e.target.value,LabelName.current?.value,Description.current?.value)
+  setSelectColor(e.target.value);
+}
+
+
+async function setLabels() {
+  const data = await api.setLabels(
+    {
+      owner: 'Xie-MS',
+      repo: 'Personal-Project',
+      name: LabelName.current?.value,
+      description: Description.current?.value,
+      color:selectColor.substring(1),
+    },
+  );
+  console.log(data)
 }
 
   return (
@@ -696,7 +711,7 @@ function PostLabelColor(e:any){
             </CreateInformationLeft>
             <CreateInformationRight>
               <CreateCancel onClick={() => setActive(false)}>Cancel</CreateCancel>
-              <CreateCreateLabel>
+              <CreateCreateLabel onClick={() => setLabels()}>
                 Create label
               </CreateCreateLabel>
             </CreateInformationRight>
