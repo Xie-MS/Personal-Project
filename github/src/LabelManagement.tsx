@@ -10,6 +10,7 @@ import Milestone from "./img/milestone.svg";
 import SearchImage from "./img/search.svg";
 import CheckImage from "./img/check.svg";
 import ChangeColorImage from "./img/change.png";
+import ts from "typescript";
 
 const Container = styled.div`
 margin-top: 24px;
@@ -47,6 +48,7 @@ background-color: white;
 border: none;
 width: 88px;
 border-right: 1px solid #000;
+padding: 5px 12px;
 &:focus {
     background-color: #0969da;
     color: white;
@@ -68,6 +70,7 @@ border-radius: 5px;
 background-color: white;
 border: none;
 width: 122px;
+padding: 5px 12px;
 &:focus {
     background-color: #0969da;
     color: white;
@@ -129,8 +132,32 @@ align-items: center;
 position: relative;
 `;
 
-const LabelTitleEventUl = styled.ul`
-display:none;
+const LabelTitleEventBtn = styled.button`
+display: flex;
+justify-content: center;
+align-items: center;
+position: relative;
+background-color: transparent;
+border:none;
+`;
+
+
+type Sortboolean = {
+  sortActive:boolean;
+}
+
+const LabelTitleEventUl = styled.ul<Sortboolean>`
+display:${(props) => props.sortActive ? "block" : "none"};
+margin-top: 4px;
+margin-bottom: 20px;
+width:279px;
+background-color:white;
+position: absolute;
+top: 30px;
+z-index: 2;
+right: -19px;
+border-radius: 5px;
+border: 1px solid #CCCCCC;
 @media screen and (max-width: 767px) {
   margin-top: 4px;
   margin-bottom: 20px;
@@ -142,38 +169,34 @@ display:none;
   right: -19px;
   border-radius: 5px;
   border: 1px solid #CCCCCC;
-  display:none;
 }
 `;
 
 const LabelTitleEventLi = styled.li`
-@media screen and (max-width: 767px) {
-  padding : 8px 8px 8px 37px;
-  border-bottom: 1px solid #CCCCCC;
-  border-radius: 5px;
-}
+padding : 8px 8px 8px 37px;
+border-bottom: 1px solid #CCCCCC;
+border-radius: 5px;
+height:16px;
 `;
 
 const LabelTitleEventLiTitleDefault = styled.li`
-@media screen and (max-width: 767px) {
-  padding : 8px 10px;
-  border-bottom: 1px solid #CCCCCC;
-  border-radius: 5px;
-  display: flex;
-  justify-content: start;
-  align-items: center;
-}
+padding : 8px 10px;
+border-bottom: 1px solid #CCCCCC;
+border-radius: 5px;
+display: flex;
+justify-content: start;
+align-items: center;
+height:16px;
 `;
 
 const LabelTitleEventLiTitle = styled.li`
-@media screen and (max-width: 767px) {
-  padding : 8px 10px;
-  border-bottom: 1px solid #CCCCCC;
-  border-radius: 5px;
-  display: flex;
-  justify-content: start;
-  align-items: center;
-}
+padding : 8px 10px;
+border-bottom: 1px solid #CCCCCC;
+border-radius: 5px;
+display: flex;
+justify-content: start;
+align-items: center;
+height:16px;
 `;
 
 const LabelTitleEventLiTitleImg = styled.img`
@@ -252,7 +275,49 @@ display: none;
   }
 `;
 
-const LabelEventUl = styled.ul`
+const DeleteLabelEventBtn = styled.button`
+display: none;
+
+  @media screen and (max-width: 1011px) {
+    display: block;
+    padding: 3px 12px;
+    border: 1px solid #CCCCCC;
+    width: 42px;
+    height: 28px;
+    border-radius: 10px;
+    text-align: center;
+    position: relative;
+  }
+`;
+
+type MoreButtonBoolean = {
+  index:number;
+  moreBtnNumActive:any;
+}
+
+const LabelEventUl = styled.ul<MoreButtonBoolean>`
+display: ${(props) => props.index === props.moreBtnNumActive ? "block" : "none"};
+
+  @media screen and (max-width: 1011px) {
+    display: block;
+    padding: 3px 0px;
+    border: 1px solid #CCCCCC;
+    width: 158px;
+    height: 68px;
+    border-radius: 10px;
+    text-align: center;
+    position: relative;
+    left: -130px;
+    bottom: -8.5px;
+    z-index: 2;
+    background: white;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    display: ${(props) => props.index === props.moreBtnNumActive ? "block" : "none"};
+  }
+`;
+
+const DeleteLabelEventUl = styled.ul`
 display: none;
 
   @media screen and (max-width: 1011px) {
@@ -307,14 +372,20 @@ border: none;
   }
 `;
 
-const CreateLable = styled.div`
-display: none;
+type CreateLabelboolean = {
+  active:boolean;
+}
+
+const CreateLable = styled.div<CreateLabelboolean>`
+display: ${(props) => props.active ? "block" : "none"};
 justify-content: start;
 align-items: center;
 padding: 16px 16px;
 border-radius: 10px;
 color: #f6f8fa;
-
+border: 1px solid rgba(0, 0, 0, 0.25);
+margin-bottom:16px;
+background-color:#f6f8fa;
   @media screen and (max-width: 767px) {
     border-radius: 50px;
     width: 95%;
@@ -398,6 +469,7 @@ align-items: center;
 }
 `;
 
+
 const CreateInformationInputName = styled.input`
 margin-right: 5px;
 padding: 5px 12px;
@@ -406,7 +478,6 @@ border-radius: 10px;
 width: 100%;
 height: 20px;
 &:focus {
-  background-color: #0969da;
   border: 1px solid #54aeff;
 }
 @media screen and (max-width: 767px) {
@@ -422,7 +493,6 @@ border-radius: 10px;
 width: 100%;
 height: 20px;
 &:focus {
-  background-color: #0969da;
   border: 1px solid #54aeff;
 }
 @media screen and (max-width: 767px) {
@@ -438,7 +508,6 @@ border-radius: 10px;
 width: 100%;
 height: 20px;
 &:focus {
-  background-color: #0969da;
   border: 1px solid #54aeff;
 }
 @media screen and (max-width: 767px) {
@@ -498,8 +567,12 @@ text-align: center;
 color: white;
 `;
 
-const Update = styled.div`
-display: none;
+type UpdateLabelboolean = {
+  updateActive:boolean;
+}
+
+const Update = styled.div<UpdateLabelboolean>`
+display: ${(props) => props.updateActive ? "block" : "none"};
 `;
 
 const UpdateInformation = styled.div`
@@ -515,6 +588,12 @@ padding:0px 16px;
 
 function LabelManagement() {
   const [labels, setLablels]:any = useState([]);
+  const [active,setActive] = useState(false);
+  const [updateActive,setUpdateActive] = useState(false);
+  const [sortActive,setSortActive] = useState(false);
+  const [moreBtnNumActive,setMoreBtnNumActive]  = useState(-1);
+  const LabelName = useRef<HTMLInputElement | null>(null);
+  const Description = useRef<HTMLInputElement | null>(null);
 
   useEffect(() => {
     async function getLabels() {
@@ -524,160 +603,172 @@ function LabelManagement() {
     getLabels();
   }, []);
 
-  
-function labelsData(){
-  return [labels][0].map((item:any,index:any) => {
+  function showSortList (){
+    if(sortActive === false){
+      setSortActive(true)
+    }else{
+      setSortActive(false)
+    }
+  }
+
+function labelsData(){  
+  return [labels][0].map((item:any,index:number) => {
       return(
         <Label key={index}>
           <LabelStyle><LabelBtn key={index} color={[labels][0][index].color}>{[labels][0][index].name}</LabelBtn></LabelStyle>
           <LabelText>{[labels][0][index].description}</LabelText>
           <LabelEvent>
-            <LabelEventBtn>...
-                <LabelEventUl>
-                  <LabelEventLi>Edit</LabelEventLi>
+            <LabelEventBtn onClick={() => setMoreBtnNumActive(index)}>...
+                <LabelEventUl index={index} moreBtnNumActive={moreBtnNumActive}>
+                  <LabelEventLi onClick={() => setUpdateActive(true)}>Edit</LabelEventLi>
                   <LabelEventLi>Delete</LabelEventLi>
                 </LabelEventUl>
               </LabelEventBtn>
-            <Edit>Edit</Edit>
+            <Edit onClick={() => setUpdateActive(true)}>Edit</Edit>
             <Delete>Delete</Delete>
           </LabelEvent>
       </Label>
       );
   })
 }
+
+function PostLabelColor(e:any){
+  console.log(e.target.value,LabelName.current?.value,Description.current?.value)
+}
+
   return (
     <Container>
-    <Menu>
-      <div>
-        <MenuLeftUl>
-          <MenuBtn>
-            <Labels>
-              <LabelsImg src={LabelsImage} />Labels
-            </Labels>
-            <Milestones>
-              <LabelsImg src={Milestone} />Milestones
-            </Milestones>
-          </MenuBtn>
-          <Search>
-            <SearchInput
-              value="Search all labels" />
-          </Search>
-        </MenuLeftUl>
-      </div>
-      <div>
-        <CreateLabel>New label</CreateLabel>
+      <Menu>
+        <div>
+          <MenuLeftUl>
+            <MenuBtn>
+              <Labels>
+                <LabelsImg src={LabelsImage} />Labels
+              </Labels>
+              <Milestones>
+                <LabelsImg src={Milestone} />Milestones
+              </Milestones>
+            </MenuBtn>
+            <Search>
+              <SearchInput
+                value="Search all labels" />
+            </Search>
+          </MenuLeftUl>
+        </div>
+        <div>
+          <CreateLabel onClick={() => setActive(true)}>New label</CreateLabel>
       </div>
     </Menu>
+    <CreateLable active={active}>
+          <CreateLableTitle>
+            <CreateLableTitleBtn>Label preview</CreateLableTitleBtn>
+          </CreateLableTitle>
+          <CreateInformation>
+            <CreateInformationLeft>
+              <CreateInformationInputUl>
+                <CreateInformationInputText>Label name</CreateInformationInputText>
+                <CreateInformationInput>
+                  <CreateInformationInputName 
+                    type="text"
+                    placeholder="Label name"
+                    ref={LabelName} />
+                </CreateInformationInput>
+              </CreateInformationInputUl>
+              <CreateInformationInputUl>
+                <CreateInformationInputText>Description</CreateInformationInputText>
+                <CreateInformationInput>
+                  <CreateInformationInputDescription
+                    type="text"
+                    placeholder="Description（optional）"
+                    ref={Description} />
+                </CreateInformationInput>
+              </CreateInformationInputUl>
+              <CreateInformationInputUl>
+                <CreateInformationInputText>Color</CreateInformationInputText>
+                <CreateInformationInput>
+                  <CreateInformationChangeColor />
+                  <CreateInformationInputColor
+                    type="text"
+                    placeholder="#FBCA04" 
+                    onChange={(e) => PostLabelColor(e)} />
+                </CreateInformationInput>
+              </CreateInformationInputUl>
+            </CreateInformationLeft>
+            <CreateInformationRight>
+              <CreateCancel onClick={() => setActive(false)}>Cancel</CreateCancel>
+              <CreateCreateLabel>
+                Create label
+              </CreateCreateLabel>
+            </CreateInformationRight>
+          </CreateInformation>
+        </CreateLable>
     <ContainerLabelList>
-      <LableListTitleTable>
-        <LableListTitle>
-          <td>9 labesls</td>
-          <LabelTitleEvent>
-            Sort<LableListTitleImg src={SortDown} />
-            <LabelTitleEventUl>
-            <LabelTitleEventLiTitle>Sort</LabelTitleEventLiTitle>
-              <LabelTitleEventLiTitleDefault><LabelTitleEventLiTitleImg src={CheckImage} />Alphabetically</LabelTitleEventLiTitleDefault>
-              <LabelTitleEventLi>Reverse alphabetically</LabelTitleEventLi>
-              <LabelTitleEventLi>Most issues</LabelTitleEventLi>
-              <LabelTitleEventLi>Fewest issues</LabelTitleEventLi>
-            </LabelTitleEventUl>
-          </LabelTitleEvent>
-        </LableListTitle>
-      </LableListTitleTable>
-      <CreateLable>
-      <CreateLableTitle>
-        <CreateLableTitleBtn>Label preview</CreateLableTitleBtn>
-      </CreateLableTitle>
-      <CreateInformation>
-        <CreateInformationLeft>
-          <CreateInformationInputUl>
-            <CreateInformationInputText>Label name</CreateInformationInputText>
-            <CreateInformationInput>
-              <CreateInformationInputName type="text"
-                placeholder="Label name" />
-            </CreateInformationInput>
-          </CreateInformationInputUl>
-          <CreateInformationInputUl>
-            <CreateInformationInputText>Description</CreateInformationInputText>
-            <CreateInformationInput>
-              <CreateInformationInputDescription
-                type="text"
-                placeholder="Description（optional）"
-              />
-            </CreateInformationInput>
-          </CreateInformationInputUl>
-          <CreateInformationInputUl>
-            <CreateInformationInputText>Color</CreateInformationInputText>
-            <CreateInformationInput>
-              <CreateInformationChangeColor />
-              <CreateInformationInputColor
-                type="text"
-                placeholder="#FBCA04"
-              />
-            </CreateInformationInput>
-          </CreateInformationInputUl>
-        </CreateInformationLeft>
-        <CreateInformationRight>
-          <CreateCancel>Cancel</CreateCancel>
-          <CreateCreateLabel>
-            Create label
-          </CreateCreateLabel>
-        </CreateInformationRight>
-      </CreateInformation>
-    </CreateLable>
-      <LableList>
-        <Update>
-      <Label>
-          <LabelStyle><LabelBtn>test</LabelBtn></LabelStyle>
-          <LabelEvent>
-            <LabelEventBtn>...
-                <LabelEventUl>
-                  <LabelEventLi>Delete</LabelEventLi>
-                </LabelEventUl>
-              </LabelEventBtn>
-            <Delete>Delete</Delete>
-          </LabelEvent>
-          </Label>
-          <UpdateInformation>
-        <CreateInformationLeft>
-          <CreateInformationInputUl>
-            <CreateInformationInputText>Label name</CreateInformationInputText>
-            <CreateInformationInput>
-              <CreateInformationInputName type="text"
-                placeholder="Label name" />
-            </CreateInformationInput>
-          </CreateInformationInputUl>
-          <CreateInformationInputUl>
-            <CreateInformationInputText>Description</CreateInformationInputText>
-            <CreateInformationInput>
-              <CreateInformationInputDescription
-                type="text"
-                placeholder="Description（optional）"
-              />
-            </CreateInformationInput>
-          </CreateInformationInputUl>
-          <CreateInformationInputUl>
-            <CreateInformationInputText>Color</CreateInformationInputText>
-            <CreateInformationInput>
-              <CreateInformationChangeColor />
-              <CreateInformationInputColor
-                type="text"
-                placeholder="#FBCA04"
-              />
-            </CreateInformationInput>
-          </CreateInformationInputUl>
-        </CreateInformationLeft>
-        <CreateInformationRight>
-          <CreateCancel>Cancel</CreateCancel>
-          <CreateCreateLabel>
-            Create label
-          </CreateCreateLabel>
-        </CreateInformationRight>
-      </UpdateInformation>
-      </Update>
-        {labelsData()}
-      </LableList>
-    </ContainerLabelList>
+        <LableListTitleTable>
+          <LableListTitle>
+            <td>9 labesls</td>
+            <LabelTitleEvent>
+              <LabelTitleEventBtn onClick={() => showSortList()}>Sort<LableListTitleImg src={SortDown}/></LabelTitleEventBtn>
+              <LabelTitleEventUl sortActive={sortActive}>
+                <LabelTitleEventLiTitle>Sort</LabelTitleEventLiTitle>
+                <LabelTitleEventLiTitleDefault><LabelTitleEventLiTitleImg src={CheckImage} />Alphabetically</LabelTitleEventLiTitleDefault>
+                <LabelTitleEventLi>Reverse alphabetically</LabelTitleEventLi>
+                <LabelTitleEventLi>Most issues</LabelTitleEventLi>
+                <LabelTitleEventLi>Fewest issues</LabelTitleEventLi>
+              </LabelTitleEventUl>
+            </LabelTitleEvent>
+          </LableListTitle>
+        </LableListTitleTable>
+        <LableList>
+          <Update updateActive={updateActive}>
+            <Label>
+              <LabelStyle><LabelBtn>test</LabelBtn></LabelStyle>
+              <LabelEvent>
+                <DeleteLabelEventBtn>...
+                  <DeleteLabelEventUl>
+                    <LabelEventLi>Delete</LabelEventLi>
+                  </DeleteLabelEventUl>
+                </DeleteLabelEventBtn>
+                <Delete>Delete</Delete>
+              </LabelEvent>
+            </Label>
+            <UpdateInformation>
+              <CreateInformationLeft>
+                <CreateInformationInputUl>
+                  <CreateInformationInputText>Label name</CreateInformationInputText>
+                  <CreateInformationInput>
+                    <CreateInformationInputName type="text"
+                      placeholder="Label name" />
+                  </CreateInformationInput>
+                </CreateInformationInputUl>
+                <CreateInformationInputUl>
+                  <CreateInformationInputText>Description</CreateInformationInputText>
+                  <CreateInformationInput>
+                    <CreateInformationInputDescription
+                      type="text"
+                      placeholder="Description（optional）" />
+                  </CreateInformationInput>
+                </CreateInformationInputUl>
+                <CreateInformationInputUl>
+                  <CreateInformationInputText>Color</CreateInformationInputText>
+                  <CreateInformationInput>
+                    <CreateInformationChangeColor />
+                    <CreateInformationInputColor
+                      type="text"
+                      placeholder="#FBCA04" />
+                  </CreateInformationInput>
+                </CreateInformationInputUl>
+              </CreateInformationLeft>
+              <CreateInformationRight>
+                <CreateCancel onClick={() => setUpdateActive(false)}>Cancel</CreateCancel>
+                <CreateCreateLabel>
+                  Save Changes
+                </CreateCreateLabel>
+              </CreateInformationRight>
+            </UpdateInformation>
+          </Update>
+          {labelsData()}
+        </LableList>
+      </ContainerLabelList>
   </Container>
   );
 }

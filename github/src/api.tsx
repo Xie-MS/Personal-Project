@@ -1,4 +1,4 @@
-//import username
+//import username and token
 
 const api = {
     hostname: `https://api.github.com/repos/Xie-Ms/Personal-Project`,
@@ -6,6 +6,19 @@ const api = {
       const response = await fetch(`${this.hostname}/labels`);
       return await response.json();
     },
+
+    async setLabels(data:any) {
+      const response = await fetch(`${this.hostname}/labels`, {
+        body: JSON.stringify(data),
+        headers: new Headers({
+          'Content-Type': 'application/json',
+          Authorization: "Bearer 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",
+        }),
+        method: 'POST',
+      });
+      return await response.json();
+    },
+
     async getListIssuesState() {
       const response = await fetch(`${this.hostname}/issues`);
       return await response.json();

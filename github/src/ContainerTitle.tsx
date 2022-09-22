@@ -64,7 +64,9 @@ line-height: 18px;
 white-space: nowrap;
 border: 1px solid transparent;
 border-radius: 2em;
-border: 1px solid #CCCCCC;`
+border: 1px solid #CCCCCC;
+
+`
 
 const FunctionalElement = styled.ul`
 list-style: none;
@@ -83,6 +85,9 @@ border: 1px solid #CCCCCC;
 height: 28px;
 margin-right: 8px;
 border-radius: 5px;
+display: flex;
+justify-content: center;
+align-items: center;
 `
 const FunctionalElementImg = styled.img`
 width: 14.79px;

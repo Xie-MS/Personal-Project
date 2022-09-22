@@ -6,6 +6,8 @@ import SingOut from "./img/Singout.jpg";
 import BellImage from "./img/bell.png";
 import SortWhite from "./img/SortWhite.png";
 
+import { useState } from 'react';
+
 const Header = styled.div`
     display: flex;
     padding: 16px;
@@ -32,15 +34,20 @@ const MobileIcon = styled.div`
   }
   `;
 
-const MobileMenu = styled.div`
+  type mobileMenuboolean = {
+    mobileMenuActive:boolean;
+  }
+
+const MobileMenu = styled.div<mobileMenuboolean>`
 display: none;
 
 @media screen and (max-width: 767px) {
     position: absolute;
-    top: 53px;
-    left: 8px;
-    display: none;
-    width: 97.8%;
+    top: 45px;
+    left: 0px;
+    display: ${(props) => props.mobileMenuActive ? "block" : "none"};
+    width: 100%;
+    z-index:3;
 }`;
 
 const MobileMenuUl = styled.ul`
@@ -190,12 +197,20 @@ const SortDownImgUser = styled.img`
 width: 20%;`
 
 function Headers() {
+  const [mobileMenuActive, setMobileMenuActive] = useState(false);
 
+  function mobileMenu(){
+if(mobileMenuActive === false){
+  setMobileMenuActive(true)
+}else{
+  setMobileMenuActive(false)
+}
+  }
 
   return (
     <Header>
-    <MobileIcon>☰</MobileIcon>
-    <MobileMenu>
+    <MobileIcon onClick={() => mobileMenu()}>☰</MobileIcon>
+    <MobileMenu mobileMenuActive={mobileMenuActive}>
       <MobileMenuUl>
         <MobileSearch>
           <input type="search" placeholder="Search" />
