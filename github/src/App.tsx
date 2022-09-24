@@ -17,14 +17,13 @@ const GlobalStyle = createGlobalStyle`
 `;
 
 function App() {
-  const state = useSelector((state) => state);
-  console.log(state)
+  const LabelsData = useSelector((state) => state);
+  console.log(LabelsData)
   return (
     <>
       <Reset />
       <GlobalStyle />
       <Headers />
-      
       <ContainerTitle />
       <Outlet />
       <Footer />
