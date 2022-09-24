@@ -671,21 +671,30 @@ function LabelManagement() {
   const [errorColorValue, setErrorColorValue]: any = useState(false);
   const [deleteLabels, setDeleteLabels]: any = useState();
   const dispatch = useDispatch();
-  const LabelsData = useSelector((state) => state);
+  const LabelsData:any = useSelector((state) => state);
+
+
+
+
 
   useEffect(() => {
     async function getLabels() {
       const data = await api.getLabels();
       setLablels(data);
+      if(LabelsData.length !== 1){
+        setLablels(LabelsData);
+        console.log(LabelsData.length,labels.length,data)
+      }else if(LabelsData.length === 1){
+        setLablels(data);
+      }
+      
     }
     getLabels();
   }, [LabelsData]);
 
-  useEffect(() => {
-    console.log("work", LabelsData);
-
-    setLablels(LabelsData);
-  }, [LabelsData]);
+  // useEffect(() => {
+  //   setLablels(LabelsData);
+  // }, [LabelsData]);
 
   function showSortList() {
     if (sortActive === false) {
@@ -785,7 +794,6 @@ function LabelManagement() {
           payload: { Labeldata },
         });
       });
-    console.log(data);
   }
 
 
@@ -801,7 +809,6 @@ function LabelManagement() {
           payload: { Labeldata },
         });
       });
-      console.log(data);
   }
 
 
