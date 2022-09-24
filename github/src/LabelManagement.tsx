@@ -213,7 +213,33 @@ const LableList = styled.table`
   width: 100%;
 `;
 
-const Label = styled.tr`
+type CloseLabelTr = {
+  CloseLabelTr: boolean;
+};
+
+const Label = styled.tr<CloseLabelTr>`
+  display: ${(props) => (props.CloseLabelTr ? "flex" : "none")};
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 16px;
+  border-top: 0.5px solid #cccccc;
+`;
+
+type UpdateCloseLabelTr = {
+  UpdateCloseLabelTr: number;
+  index: number
+};
+
+const UpdateLabels = styled.tr<UpdateCloseLabelTr>`
+  display: ${(props) => (props.UpdateCloseLabelTr === props.index ? "flex" : "none")};
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 16px;
+  border-top: 0.5px solid #cccccc;
+`;
+
+
+const UpdateLabel = styled.tr`
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -222,7 +248,7 @@ const Label = styled.tr`
 `;
 
 const LabelStyle = styled.td`
-  width: 14%;
+  width: 18%;
 
   @media screen and (max-width: 767px) {
     width: 40%;
@@ -406,7 +432,7 @@ const CreateLableTitleBtn = styled.button`
   border: 1px solid rgba(0, 0, 0, 0.25);
   padding: 0px 10px;
   border-radius: 50px;
-  width: 14%;
+  width: 18%;
   height: 22px;
   @media screen and (max-width: 767px) {
     width: 30%;
@@ -432,19 +458,27 @@ const CreateInformationLeft = styled.div`
 `;
 
 const CreateInformationInputUl = styled.ul`
-  margin: 16px 0px;
   padding-left: 0px;
   padding-right: 16px;
   display: block;
   justify-content: start;
   align-items: center;
   list-style: none;
-  position: relative;
+
   @media screen and (max-width: 767px) {
     display: block;
     margin: 8px 0px;
   }
 `;
+
+const CreateInformationInputUlTotal = styled.div`
+display:flex;
+justify-content: center;
+align-items: end;
+margin: 16px 0px;
+position: relative;
+`;
+
 
 const CreateInformationInputText = styled.li`
   display: flex;
@@ -616,12 +650,25 @@ const CreateCreateLabel = styled.button<CreateButton>`
   color: white;
 `;
 
+const UpdateSaveBtn = styled.button`
+  width: 107.5px;
+  height: 30px;
+  pad: 5px 16px;
+  border: 1px solid rgba(0, 0, 0, 0.25);
+  border-radius: 10px;
+  background-color: #2da44e;
+  text-align: center;
+  color: white;
+`;
+
 type UpdateLabelboolean = {
-  updateActive: boolean;
+  updateActive: number;
+  updateId: number;
 };
 
+
 const Update = styled.div<UpdateLabelboolean>`
-  display: ${(props) => (props.updateActive ? "block" : "none")};
+  display: ${(props) => (props.updateActive === props.updateId ? "block" : "none")};
 `;
 
 const UpdateInformation = styled.div`
@@ -657,19 +704,27 @@ let colorListArray: any = [
 function LabelManagement() {
   const [labels, setLablels]: any = useState([]);
   const [active, setActive] = useState(false);
-  const [updateActive, setUpdateActive] = useState(false);
+  const [updateActive, setUpdateActive] = useState(-1);
   const [sortActive, setSortActive] = useState(false);
   const [createActive, setCreateActive]: any = useState(true);
   const [moreBtnNumActive, setMoreBtnNumActive] = useState(-1);
   const Description = useRef<HTMLInputElement | null>(null);
+  const UpdateDescription = useRef<HTMLInputElement | null>(null);
+  const SeleceColor = useRef<HTMLInputElement | null>(null);
+  const UpdateSeleceColor = useRef<HTMLInputElement | null>(null);
   const [inputName, setInputName]: any = useState("");
   const [newLabelsSelectColor, setNewLabelsSelectColor]: any =
     useState("#FBCA04");
   const [selectColorMenuActive, setSelectColorMenuActive]: any =
     useState(false);
+    const [closeLabelTr, setCloseLabelTr]: any =
+    useState(true);
   const [colorMathFloorNum, setColorMathFloorNum]: any = useState(0);
   const [errorColorValue, setErrorColorValue]: any = useState(false);
   const [deleteLabels, setDeleteLabels]: any = useState();
+  const [updateLabelName, setUpdateLabelName]: any = useState();
+  const [updateUpdateDescription, setupdateUpdateDescription]: any = useState();
+  const [updateUpdateColor, setupdateUpdateColor]: any = useState();
   const dispatch = useDispatch();
   const LabelsData:any = useSelector((state) => state);
 
@@ -681,13 +736,15 @@ function LabelManagement() {
     async function getLabels() {
       const data = await api.getLabels();
       setLablels(data);
+      console.log(LabelsData[0].name,LabelsData,data)
       if(LabelsData.length !== 1){
         setLablels(LabelsData);
-        console.log(LabelsData.length,labels.length,data)
-      }else if(LabelsData.length === 1){
+        console.log(LabelsData[0].name)
+      }else if(LabelsData.length === 1 && LabelsData[0].name === undefined){
+        setLablels(data);
+      }else if(LabelsData.length === 1 && LabelsData[0].name !== undefined){
         setLablels(data);
       }
-      
     }
     getLabels();
   }, [LabelsData]);
@@ -705,10 +762,10 @@ function LabelManagement() {
   }
 
   function labelsData() {
-    if (labels === undefined) return <Label></Label>;
+    if (labels === undefined) return <Label CloseLabelTr={closeLabelTr}></Label>;
     return [labels][0].map((item: any, index: number) => {
-      return (
-        <Label key={index}>
+      return (<>
+        <Label key={index} CloseLabelTr={closeLabelTr}>
           <LabelStyle>
             <LabelBtn key={index} color={[labels][0][index].color}>
               {[labels][0][index].name}
@@ -719,18 +776,120 @@ function LabelManagement() {
             <LabelEventBtn onClick={() => setMoreBtnNumActive(index)}>
               ...
               <LabelEventUl index={index} moreBtnNumActive={moreBtnNumActive}>
-                <LabelEventLi onClick={() => setUpdateActive(true)}>
+                <LabelEventLi onClick={() => {setUpdateActive(index)
+                setCloseLabelTr(false)
+                setUpdateLabelName([labels][0][index].name)
+                setupdateUpdateDescription([labels][0][index].description)
+                setupdateUpdateColor([labels][0][index].color)}
+                }>
                   Edit
                 </LabelEventLi>
                 <LabelEventLi onClick={() => {setDeleteLabels([labels][0][index].name)
                 deleteLabel()}}>Delete</LabelEventLi>
               </LabelEventUl>
             </LabelEventBtn>
-            <Edit onClick={() => setUpdateActive(true)}>Edit</Edit>
+            <Edit onClick={() => {setUpdateActive(index)
+              setUpdateLabelName([labels][0][index].name)
+              setupdateUpdateDescription([labels][0][index].description)
+              setupdateUpdateColor([labels][0][index].color)
+            }}>Edit</Edit>
             <Delete onClick={() => {setDeleteLabels([labels][0][index].name)
                 deleteLabel()}}>Delete</Delete>
           </LabelEvent>
         </Label>
+        <Update updateActive={updateActive} updateId={index}>
+            <UpdateLabel>
+              <LabelStyle>
+                <LabelBtn key={index} color={newLabelsSelectColor.substring(1)}>{[labels][0][index].name}</LabelBtn>
+              </LabelStyle>
+              <LabelEvent>
+                <DeleteLabelEventBtn>
+                  ...
+                  <DeleteLabelEventUl>
+                    <LabelEventLi onClick={() => {setDeleteLabels([labels][0][index].name)
+                deleteLabel()}}>Delete</LabelEventLi>
+                  </DeleteLabelEventUl>
+                </DeleteLabelEventBtn>
+                <Delete onClick={() => {setDeleteLabels([labels][0][index].name)
+                deleteLabel()}}>Delete</Delete>
+              </LabelEvent>
+            </UpdateLabel>
+            <UpdateInformation>
+              <CreateInformationLeft>
+                <CreateInformationInputUl>
+                  <CreateInformationInputText>
+                    Label name
+                  </CreateInformationInputText>
+                  <CreateInformationInput>
+                    <CreateInformationInputName
+                      type="text"
+                      defaultValue={[labels][0][index].name}
+                      onChange={(e) => UpdateLabelName(e)}
+                    />
+                  </CreateInformationInput>
+                </CreateInformationInputUl>
+                <CreateInformationInputUl>
+                  <CreateInformationInputText>
+                    Description
+                  </CreateInformationInputText>
+                  <CreateInformationInput>
+                    <CreateInformationInputDescription
+                      type="text"
+                      defaultValue={[labels][0][index].description}
+                      onChange={(e) => {UpdateDescriptionInput(e)}}
+                    />
+                  </CreateInformationInput>
+                </CreateInformationInputUl>
+                <CreateInformationInputUlTotal>
+                <CreateInformationInputUl>
+                  <CreateInformationInputText>Color</CreateInformationInputText>
+                  <CreateInformationInput
+                    onClick={() => {
+                      setSelectColorMenuActive(true);
+                    }}
+                  />
+                  <CreateInformationChangeColor
+                    color={newLabelsSelectColor}
+                    onClick={() => {
+                      getColor();
+                    }}
+                  />
+                  </CreateInformationInputUl>
+                  <CreateInformationInputColor
+                    type="text"
+                    value={newLabelsSelectColor}
+                    ref={UpdateSeleceColor}
+                    onClick={()=>{
+                      setSelectColorMenuActive(true);
+                      console.log(UpdateSeleceColor.current?.value,[labels][0][index].color)
+                    }}
+                    errorColorValue={errorColorValue}
+                    onChange={(e) => {
+                      PostLabelColor(e)
+                      console.log(UpdateSeleceColor.current?.value)
+                    }}
+                  />
+                  <ColorList selectColorMenuActive={selectColorMenuActive}>
+                    <ColorListP>Choose from default colors:</ColorListP>
+                    <li>{ColorListTotal()}</li>
+                  </ColorList>
+                  </CreateInformationInputUlTotal>
+              </CreateInformationLeft>
+              <CreateInformationRight>
+                <CreateCancel onClick={() => {setUpdateActive(index)
+                setCloseLabelTr(true)
+                setUpdateActive(-1)
+                setMoreBtnNumActive(-1)}
+                }>
+                  Cancel
+                </CreateCancel>
+                <UpdateSaveBtn onClick={() => {updataLabels()}}>
+                  Save Changes
+                </UpdateSaveBtn>
+              </CreateInformationRight>
+            </UpdateInformation>
+          </Update>
+        </>
       );
     });
   }
@@ -741,7 +900,9 @@ function LabelManagement() {
           key={index}
           color={item}
           onClick={() => {
+            console.log({ item }.item)
             setNewLabelsSelectColor({ item }.item);
+            setupdateUpdateColor({ item }.item)
             if (selectColorMenuActive === true) {
               setSelectColorMenuActive(false);
             } else {
@@ -755,10 +916,11 @@ function LabelManagement() {
 
   function getColor() {
     setSelectColorMenuActive(false);
-    console.log(selectColorMenuActive);
+    console.log(selectColorMenuActive,newLabelsSelectColor,UpdateSeleceColor.current?.value);
     let MathFloorColorNum;
     MathFloorColorNum = Math.floor(Math.random() * colorListArray.length);
     setColorMathFloorNum(MathFloorColorNum);
+    setupdateUpdateColor(colorListArray[colorMathFloorNum])
     setNewLabelsSelectColor(colorListArray[colorMathFloorNum]);
   }
 
@@ -766,6 +928,19 @@ function LabelManagement() {
     if (e.target.value !== undefined) {
       setInputName(e.target.value);
       setCreateActive(false);
+    } else return;
+  }
+
+  function UpdateLabelName(e: any) {
+    if (e.target.value !== undefined) {
+      setInputName(e.target.value);
+      setUpdateLabelName(e.target.value);
+    } else return;
+  }
+
+  function UpdateDescriptionInput(e: any) {
+    if (e.target.value !== undefined) {
+      setupdateUpdateDescription(e.target.value);
     } else return;
   }
 
@@ -786,7 +961,7 @@ function LabelManagement() {
         repo: "Personal-Project",
         name: inputName,
         description: Description.current?.value,
-        color: newLabelsSelectColor.substring(1),
+        color: SeleceColor.current?.value.substring(1),
       })
       .then((Labeldata) => {
         dispatch({
@@ -809,6 +984,28 @@ function LabelManagement() {
           payload: { Labeldata },
         });
       });
+  }
+
+console.log(updateLabelName,updateUpdateDescription,updateUpdateColor)
+
+  async function updataLabels() {
+    console.log(updateLabelName,updateUpdateDescription,updateUpdateColor.substring(1))
+    const data = await api.updataLabels({
+      owner: "Xie-MS",
+      repo: "Personal-Project",
+      oldName:labels[moreBtnNumActive].name,
+      name: updateLabelName,
+      description: updateUpdateDescription,
+      color: updateUpdateColor.substring(1),
+      })
+      .then((Labeldata) => {
+        dispatch({
+          type: "UpdateLabels",
+          payload: { Labeldata },
+        });
+      });
+      setCloseLabelTr(true);
+      setUpdateActive(-1);
   }
 
 
@@ -868,6 +1065,7 @@ function LabelManagement() {
                 />
               </CreateInformationInput>
             </CreateInformationInputUl>
+            <CreateInformationInputUlTotal>
             <CreateInformationInputUl>
               <CreateInformationInputText>Color</CreateInformationInputText>
               <CreateInformationInput
@@ -881,30 +1079,24 @@ function LabelManagement() {
                   getColor();
                 }}
               />
+              </CreateInformationInputUl>
               <CreateInformationInputColor
                 type="text"
-                defaultValue={newLabelsSelectColor}
-                // value={newLabelsSelectColor}
+                value={newLabelsSelectColor}
+                ref={SeleceColor}
                 onClick={()=>{
                   setSelectColorMenuActive(true);
                 }}
                 errorColorValue={errorColorValue}
                 onChange={(e) => {
-                  setSelectColorMenuActive(false);
-                  if (e.target.value.length !== 7) {
-                    setErrorColorValue(true);
-                    setNewLabelsSelectColor(e.target.value);
-                  } else {
-                    setErrorColorValue(false);
-                    setNewLabelsSelectColor(e.target.value);
-                  }
+                  PostLabelColor(e)
                 }}
               />
               <ColorList selectColorMenuActive={selectColorMenuActive}>
                 <ColorListP>Choose from default colors:</ColorListP>
                 <li>{ColorListTotal()}</li>
               </ColorList>
-            </CreateInformationInputUl>
+              </CreateInformationInputUlTotal>
           </CreateInformationLeft>
           <CreateInformationRight>
             <CreateCancel onClick={() => setActive(false)}>Cancel</CreateCancel>
@@ -941,70 +1133,6 @@ function LabelManagement() {
           </LableListTitle>
         </LableListTitleTable>
         <LableList>
-          <Update updateActive={updateActive}>
-            <Label>
-              <LabelStyle>
-                <LabelBtn>test</LabelBtn>
-              </LabelStyle>
-              <LabelEvent>
-                <DeleteLabelEventBtn>
-                  ...
-                  <DeleteLabelEventUl>
-                    <LabelEventLi>Delete</LabelEventLi>
-                  </DeleteLabelEventUl>
-                </DeleteLabelEventBtn>
-                <Delete>Delete</Delete>
-              </LabelEvent>
-            </Label>
-            <UpdateInformation>
-              <CreateInformationLeft>
-                <CreateInformationInputUl>
-                  <CreateInformationInputText>
-                    Label name
-                  </CreateInformationInputText>
-                  <CreateInformationInput>
-                    <CreateInformationInputName
-                      type="text"
-                      placeholder="Label name"
-                    />
-                  </CreateInformationInput>
-                </CreateInformationInputUl>
-                <CreateInformationInputUl>
-                  <CreateInformationInputText>
-                    Description
-                  </CreateInformationInputText>
-                  <CreateInformationInput>
-                    <CreateInformationInputDescription
-                      type="text"
-                      placeholder="Description（optional）"
-                    />
-                  </CreateInformationInput>
-                </CreateInformationInputUl>
-                <CreateInformationInputUl>
-                  <CreateInformationInputText>Color</CreateInformationInputText>
-                  <CreateInformationInput>
-                    <CreateInformationChangeColor />
-                    <CreateInformationInputColor
-                      type="text"
-                      errorColorValue={errorColorValue}
-                      placeholder="#FBCA04"
-                    />
-                  </CreateInformationInput>
-                </CreateInformationInputUl>
-              </CreateInformationLeft>
-              <CreateInformationRight>
-                <CreateCancel onClick={() => setUpdateActive(false)}>
-                  Cancel
-                </CreateCancel>
-                <CreateCreateLabel
-                  CreateActive={createActive}
-                  disabled={createActive}
-                >
-                  Save Changes
-                </CreateCreateLabel>
-              </CreateInformationRight>
-            </UpdateInformation>
-          </Update>
           {labelsData()}
         </LableList>
       </ContainerLabelList>

@@ -28,14 +28,25 @@ state=initialize , action:any
         return newCartItems;
           }
 
-          case "DeleteLabels": {
-            const newCartItems = [
-              {
-                "name": action.payload.Labeldata.name,
-              },
-            ];
-            return newCartItems;
-              }
+        case "DeleteLabels": {
+          const newCartItems = [
+            {
+              "name": action.payload.Labeldata.name,
+            },
+          ];
+          return newCartItems;
+            }
+
+            case "UpdateLabels": {
+              const newCartItems = [
+                {
+                  "name": action.payload.Labeldata.name,
+                  "description": action.payload.Labeldata.description,
+                  "color": action.payload.Labeldata.color,
+                },
+              ];
+              return newCartItems;
+                }
 
         default:
         return;
