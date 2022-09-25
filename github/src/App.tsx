@@ -2,7 +2,6 @@ import React from "react";
 import { useSelector } from "react-redux";
 import { Outlet } from "react-router-dom";
 import { Reset } from "styled-reset";
-import { Header } from "./stories/Header";
 import { createGlobalStyle } from "styled-components";
 
 
