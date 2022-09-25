@@ -225,8 +225,7 @@ if(mobileMenuActive === false){
       const user = supabase.auth.user();
       const token:any = supabase.auth.session();
       navigate('/LabelManagement') 
-      setUser(user);
-      
+      setUser(user);      
       setUserName(token.user.identities[0].identity_data.user_name)    
   }
 

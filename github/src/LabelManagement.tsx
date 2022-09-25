@@ -262,6 +262,7 @@ type LabelBtnColor = {
 
 const LabelBtn:any = styled.button<LabelBtnColor>`
   background-color: #${(props) => (props.LabelBtnColorNum === props.index ? props.UpdateChangeColor : props.LabelBtnColor)};
+  color:${(props) => props.color};
   padding: 0 10px;
   font-size: 12px;
   font-weight: 500;
@@ -432,13 +433,19 @@ const CreateLableTitle = styled.div`
   margin-bottom: 8px;
 `;
 
-const CreateLableTitleBtn = styled.button`
+type CreateLableTitleBtnText = {
+  CreateLableTitleBtnText: string;
+};
+
+
+const CreateLableTitleBtn = styled.button<CreateLableTitleBtnText>`
   background-color: ${(props) => props.color};
   border: 1px solid rgba(0, 0, 0, 0.25);
   padding: 0px 10px;
   border-radius: 50px;
   width: 18%;
   height: 22px;
+  color: ${(props) => props.CreateLableTitleBtnText};
   @media screen and (max-width: 767px) {
     width: 30%;
   }
@@ -737,16 +744,58 @@ function LabelManagement() {
   const [updateUpdateDescription, setupdateUpdateDescription]: any = useState();
   const [updateUpdateColor, setupdateUpdateColor]: any = useState();
   const [labelsDataTotal, setLabelsDataTotal]: any = useState();
+  const [lightOrDarkCreateText, setLightOrCreateDark]: any = useState("black");
+  const [lightOrDarkText, setLightOrDark]: any = useState("black");
   const dispatch = useDispatch();
   const LabelsData:any = useSelector((state) => state);
 
 
+  function lightOrDarkCreate() {
+    const r1 = parseInt(newLabelsSelectColor.substring(1).slice(0, 1), 16)
+    const r2 = parseInt(newLabelsSelectColor.substring(1).slice(1, 2), 16)
+    const g1 = parseInt(newLabelsSelectColor.substring(1).slice(2, 3), 16)
+    const g2 = parseInt(newLabelsSelectColor.substring(1).slice(3, 4), 16)
+    const b1 = parseInt(newLabelsSelectColor.substring(1).slice(4, 5), 16)
+    const b2 = parseInt(newLabelsSelectColor.substring(1).slice(5, 6), 16)
+    const hsp = r1  + r2  + g1 + g2 + b1 + b2 
+    console.log(hsp,newLabelsSelectColor,newLabelsSelectColor)
+    if (hsp > 45) {
+      setLightOrCreateDark("black")
+    } else {
+      setLightOrCreateDark("white")
+    }
+  }
+
+  function lightOrDark() {
+    let BGColor:string;
+    if(LabelBtnColor !== UpdateChangeColor){
+      BGColor = UpdateChangeColor;
+    }else{
+      BGColor = LabelBtnColor;
+    }
+    const r1 = parseInt(UpdateChangeColor.slice(0, 1), 16)
+    const r2 = parseInt(UpdateChangeColor.slice(1, 2), 16)
+    const g1 = parseInt(UpdateChangeColor.slice(2, 3), 16)
+    const g2 = parseInt(UpdateChangeColor.slice(3, 4), 16)
+    const b1 = parseInt(UpdateChangeColor.slice(4, 5), 16)
+    const b2 = parseInt(UpdateChangeColor.slice(5, 6), 16)
+    const hsp = r1  + r2  + g1 + g2 + b1 + b2 
+// console.log(BGColor,LabelBtnColor,UpdateChangeColor)
+    if (hsp < 45) {
+      setLightOrDark("black")
+    } else {
+      setLightOrDark("white")
+    }
+  }
 
 
 
-  useEffect(() => {
+
+  useEffect(() =>{
     async function getLabels() {
-      const data = await api.getLabels();
+      const data = await api.getLabels()
+      console.log(data);
+      
       setLablels(data);
       setLabelsDataTotal(data.length);
       if(LabelsData.length !== 1){
@@ -754,6 +803,8 @@ function LabelManagement() {
         setLabelsDataTotal(LabelsData.length);
       }else if(LabelsData.length === 1 && LabelsData[0].name === undefined){
         setLablels(data);
+        console.log("AAAAA",data,LabelsData);
+        
         setLabelsDataTotal(data.length);
       }else if(LabelsData.length === 1 && LabelsData[0].name !== undefined){
         setLablels(data);
@@ -772,6 +823,10 @@ function LabelManagement() {
   }
 
 
+function CloseColorListOrMoreBtn(){
+  setSelectColorMenuActive(false)
+  setMoreBtnNumActive(-1)
+}
 
 
   function labelsData() {
@@ -788,8 +843,8 @@ function LabelManagement() {
         <Label key={index} CloseLabelTr={index} index={index}>
           <LabelStyle color={UpdateChangeColor}>
             <LabelBtn key={index} LabelBtnColorNum={LabelBtnColorNum} 
-           index={index} UpdateChangeColor={UpdateChangeColor} LabelBtnColor={[labels][0][index].color}>
-              {[labels][0][index].name}
+           index={index} UpdateChangeColor={UpdateChangeColor} LabelBtnColor={[labels][0][index].color} color={lightOrDarkText}>
+              {[labels][0][index].name }
             </LabelBtn>
           </LabelStyle>
           <LabelText>{[labels][0][index].description}</LabelText>
@@ -865,7 +920,7 @@ function LabelManagement() {
                     }}
                   />
                   <CreateInformationChangeColor
-                    color={`#` + UpdateChangeColor}
+                    color={newLabelsSelectColor}
                     onClick={() => {
                       getUpdateColor();
                     }}
@@ -873,11 +928,12 @@ function LabelManagement() {
                   </CreateInformationInputUl>
                   <CreateInformationInputColor
                     type="text"
-                    value={`#` + UpdateChangeColor}
+                    value={newLabelsSelectColor}
                     pattern="#?([a-fA-F0-9]{6})"
                     maxLength={7}
                     ref={UpdateSeleceColor}
                     onClick={()=>{
+                      
                       setSelectColorMenuActive(true);
                     }}
                     errorColorValue={errorColorValue}
@@ -917,7 +973,8 @@ function LabelManagement() {
           color={item}
           onClick={() => {
             setNewLabelsSelectColor({ item }.item);
-            setupdateUpdateColor({ item }.item)
+            setUpdateChangeColor({ item }.item.substring(1))
+            console.log(newLabelsSelectColor,UpdateChangeColor)
             if (selectColorMenuActive === true) {
               setSelectColorMenuActive(false);
             } else {
@@ -930,19 +987,23 @@ function LabelManagement() {
   }
 
   function getColor() {
+    lightOrDarkCreate();
+    lightOrDark();
     setSelectColorMenuActive(false);
-    
     let MathFloorColorNum;
     MathFloorColorNum = Math.floor(Math.random() * colorListArray.length);
     setColorMathFloorNum(MathFloorColorNum);
-    setUpdateLabelsSelectColor(colorListArray[colorMathFloorNum]);
+    // setUpdateLabelsSelectColor(colorListArray[colorMathFloorNum]);
     setNewLabelsSelectColor(colorListArray[colorMathFloorNum]);
-    setUpdateChangeColor(colorListArray[colorMathFloorNum].substring(1));
+    console.log(newLabelsSelectColor,colorMathFloorNum,colorListArray[colorMathFloorNum])
+    // setUpdateChangeColor(colorListArray[colorMathFloorNum].substring(1));
 
   }
 
   function getUpdateColor() {
     setSelectColorMenuActive(false);
+    lightOrDarkCreate();
+    lightOrDark();
     let MathFloorColorNum;
     MathFloorColorNum = Math.floor(Math.random() * colorListArray.length);
     setColorMathFloorNum(MathFloorColorNum);
@@ -1034,10 +1095,9 @@ function LabelManagement() {
       setUpdateActive(-1);
   }
 
-
   return (
     <Container>
-      <Menu>
+      <Menu onMouseDown={() => {CloseColorListOrMoreBtn()}}>
         <div>
           <MenuLeftUl>
             <MenuBtn>
@@ -1059,9 +1119,9 @@ function LabelManagement() {
           <CreateLabel onClick={() => setActive(true)}>New label</CreateLabel>
         </div>
       </Menu>
-      <CreateLable active={active}>
+      <CreateLable active={active} >
         <CreateLableTitle>
-          <CreateLableTitleBtn color={newLabelsSelectColor}>
+          <CreateLableTitleBtn color={newLabelsSelectColor} CreateLableTitleBtnText={lightOrDarkCreateText}>
             Label preview
           </CreateLableTitleBtn>
         </CreateLableTitle>
