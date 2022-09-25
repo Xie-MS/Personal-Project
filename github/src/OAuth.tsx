@@ -22,6 +22,7 @@ function OAuth() {
     async function signInWithgithub() {
        await supabase.auth.signIn({
         provider: 'github'
+        
        });
     }
 

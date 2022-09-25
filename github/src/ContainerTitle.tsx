@@ -166,7 +166,7 @@ function ContainerTitle() {
           <RepoImg src={RepoImage}/>
           <RepoAndUserName>Xie-MS</RepoAndUserName>
           ／
-          <RepoAndUserName>gittest3</RepoAndUserName>
+          <RepoAndUserName>Personal-Project</RepoAndUserName>
           <RepoVisibility>
             <RepoVisibilityBtn>Public</RepoVisibilityBtn>
           </RepoVisibility>

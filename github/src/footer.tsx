@@ -64,8 +64,6 @@ margin-right: 30px;
 ;`
 
 function Footers() {
-
-
   return (
     <Footer>
       <Footerleft>

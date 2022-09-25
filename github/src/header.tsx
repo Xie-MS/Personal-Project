@@ -6,7 +6,9 @@ import SingOut from "./img/Singout.jpg";
 import BellImage from "./img/bell.png";
 import SortWhite from "./img/SortWhite.png";
 
-import { useState } from 'react';
+import { useState , useEffect} from 'react';
+import { useNavigate } from "react-router-dom";
+import {supabase} from './client';
 
 const Header = styled.div`
     display: flex;
@@ -196,8 +198,9 @@ margin-right: 5px;`
 const SortDownImgUser = styled.img`
 width: 20%;`
 
-function Headers() {
+function Headers() {  
   const [mobileMenuActive, setMobileMenuActive] = useState(false);
+  const navigate = useNavigate();
 
   function mobileMenu(){
 if(mobileMenuActive === false){
@@ -207,8 +210,42 @@ if(mobileMenuActive === false){
 }
   }
 
-  return (
-    <Header>
+  const [user, setUser]:any = useState(null);
+  const[userName,setUserName] = useState("");
+
+
+  useEffect(()=>{
+      checkUser();
+      window.addEventListener('hashchange', function(){
+          checkUser();
+      })
+  },[])
+
+  async function checkUser() {    
+      const user = supabase.auth.user();
+      const token:any = supabase.auth.session();
+      navigate('/LabelManagement') 
+      setUser(user);
+      
+      setUserName(token.user.identities[0].identity_data.user_name)    
+  }
+
+  async function signInWithgithub() {
+     await supabase.auth.signIn({
+      provider: 'github'
+     })
+     navigate('/LabelManagement') 
+  }
+
+  async function signOut() {
+  await supabase.auth.signOut();
+      setUser(null);
+      navigate('/')            
+  }
+
+if(user){
+ return(<>
+ <Header>
     <MobileIcon onClick={() => mobileMenu()}>☰</MobileIcon>
     <MobileMenu mobileMenuActive={mobileMenuActive}>
       <MobileMenuUl>
@@ -227,9 +264,8 @@ if(mobileMenuActive === false){
           <MobileMenuImg src={LogoImage} alt="LogoImage"/>
           Xie-MS
         </MobileMenuTextAndImg>
-        <MobileMenuTextAndImg>
-          <MobileMenuImg src={SingOut} />
-          Sign out
+        <MobileMenuTextAndImg onClick={signOut} >
+          <MobileMenuImg src={SingOut} />Sign out
         </MobileMenuTextAndImg>
       </MobileMenuUl>
     </MobileMenu>
@@ -257,6 +293,61 @@ if(mobileMenuActive === false){
         <Pofile>
           <UserImg src={LogoImage} />
           <SortDownImgUser src={SortWhite} />
+        </Pofile>
+      </HeaderRightUl>
+    </div>
+  </Header>
+ </>)
+}
+  return (
+    <Header>
+    <MobileIcon onClick={() => mobileMenu()}>☰</MobileIcon>
+    <MobileMenu mobileMenuActive={mobileMenuActive}>
+      <MobileMenuUl>
+        <MobileSearch>
+          <input type="search" placeholder="Search" />
+        </MobileSearch>
+        <MobileMenuText>Dashboard</MobileMenuText>
+        <MobileMenuText>Pull Requests</MobileMenuText>
+        <MobileMenuText>Issues</MobileMenuText>
+        <MobileMenuText>Codespaces</MobileMenuText>
+        <MobileMenuText>Marketplace</MobileMenuText>
+        <MobileMenuText>Explore</MobileMenuText>
+        <MobileMenuText>Sponsors</MobileMenuText>
+        <MobileMenuText>Settings</MobileMenuText>
+        <MobileMenuTextAndImg>
+          <MobileMenuImg src={LogoImage} alt="LogoImage"/>
+          Xie-MS
+        </MobileMenuTextAndImg>
+        <MobileMenuTextAndImg onClick={signOut}>
+          <MobileMenuImg src={SingOut}/>Sign out
+        </MobileMenuTextAndImg>
+      </MobileMenuUl>
+    </MobileMenu>
+    <div>
+      <HeaderLeftUl>
+        <Logo><LogoImg src={LogoImage} /></Logo>
+        <HeaderSearch>
+          <HearderSearchInput
+            type="text"
+            value="  Search or jump to..." />
+        </HeaderSearch>
+        <HeaderLeftText>Pull requests</HeaderLeftText>
+        <HeaderLeftText>Issues</HeaderLeftText>
+        <HeaderLeftText>Marketplace</HeaderLeftText>
+        <HeaderLeftText>Explore</HeaderLeftText>
+      </HeaderLeftUl>
+    </div>
+    <div>
+      <HeaderRightUl>
+        <li><BellImg src={BellImage} /></li>
+        <More>
+          <MoreText>＋</MoreText>
+          <SortDownImg src={SortWhite} />
+        </More>
+        <Pofile onClick={() =>{signInWithgithub()
+      navigate(`/LabelManagement`)
+      }} >Sign In
         </Pofile>
       </HeaderRightUl>
     </div>
