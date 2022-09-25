@@ -843,7 +843,7 @@ function CloseColorListOrMoreBtn(){
         <Label key={index} CloseLabelTr={index} index={index}>
           <LabelStyle color={UpdateChangeColor}>
             <LabelBtn key={index} LabelBtnColorNum={LabelBtnColorNum} 
-           index={index} UpdateChangeColor={UpdateChangeColor} LabelBtnColor={[labels][0][index].color} color={lightOrDarkText}>
+           index={index} UpdateChangeColor={UpdateChangeColor} LabelBtnColor={[labels][0][index].color}>
               {[labels][0][index].name }
             </LabelBtn>
           </LabelStyle>
@@ -920,7 +920,7 @@ function CloseColorListOrMoreBtn(){
                     }}
                   />
                   <CreateInformationChangeColor
-                    color={newLabelsSelectColor}
+                    color={`#`+UpdateChangeColor}
                     onClick={() => {
                       getUpdateColor();
                     }}
@@ -993,10 +993,10 @@ function CloseColorListOrMoreBtn(){
     let MathFloorColorNum;
     MathFloorColorNum = Math.floor(Math.random() * colorListArray.length);
     setColorMathFloorNum(MathFloorColorNum);
-    // setUpdateLabelsSelectColor(colorListArray[colorMathFloorNum]);
+    setUpdateLabelsSelectColor(colorListArray[colorMathFloorNum]);
     setNewLabelsSelectColor(colorListArray[colorMathFloorNum]);
     console.log(newLabelsSelectColor,colorMathFloorNum,colorListArray[colorMathFloorNum])
-    // setUpdateChangeColor(colorListArray[colorMathFloorNum].substring(1));
+    setUpdateChangeColor(colorListArray[colorMathFloorNum].substring(1));
 
   }
 

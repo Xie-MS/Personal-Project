@@ -15,12 +15,38 @@ const api = {
         body: JSON.stringify(data),
         headers: new Headers({
           Accept: "application/vnd.github+json",
-          Authorization: 'token ',
+          Authorization: 'token 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',
         }),
         method: 'POST',
       });
       return await response.json();
+    },
+
+    async deleteLabel(data:any) {
+      console.log(data.name)
+      const response = await fetch(`${this.hostname}/labels/${data.name}`, {
+        headers: new Headers({
+          Accept: "application/vnd.github+json",
+          Authorization: 'token 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',
+        }),
+        method: 'DELETE',
+      });
+      console.log(response)
+      return await response;    
       
+    },
+    async updataLabels(data:any) {
+
+      const response = await fetch(`${this.hostname}/labels/${data.oldName}`, {
+        body: JSON.stringify(data),
+        headers: new Headers({
+          Accept: "application/vnd.github+json",
+          Authorization: 'token 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',
+        }),
+        method: 'POST',
+      });
+      console.log(response)
+      return await response.json();
     },
 
     async getListIssuesState() {
