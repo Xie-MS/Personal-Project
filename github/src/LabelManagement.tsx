@@ -224,28 +224,6 @@ const Label = styled.tr<CloseLabelTr>`
   border-top: 0.5px solid #cccccc;
 `;
 
-type UpdateCloseLabelTr = {
-  UpdateCloseLabelTr: number;
-  index: number
-};
-
-const UpdateLabels = styled.tr<UpdateCloseLabelTr>`
-  display: ${(props) => (props.UpdateCloseLabelTr === props.index ? "flex" : "none")};
-  justify-content: space-between;
-  align-items: center;
-  padding: 16px 16px;
-  border-top: 0.5px solid #cccccc;
-`;
-
-
-const UpdateLabel = styled.tr`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 16px 16px;
-  border-top: 0.5px solid #cccccc;
-`;
-
 const LabelStyle = styled.td`
   width: 18%;
   @media screen and (max-width: 767px) {
@@ -308,21 +286,6 @@ const LabelEventBtn = styled.button`
   }
 `;
 
-const DeleteLabelEventBtn = styled.button`
-  display: none;
-
-  @media screen and (max-width: 1011px) {
-    display: block;
-    padding: 3px 12px;
-    border: 1px solid #cccccc;
-    width: 42px;
-    height: 28px;
-    border-radius: 10px;
-    text-align: center;
-    position: relative;
-  }
-`;
-
 type MoreButtonBoolean = {
   index: number;
   moreBtnNumActive: any;
@@ -349,28 +312,6 @@ const LabelEventUl = styled.ul<MoreButtonBoolean>`
     padding-bottom: 8px;
     display: ${(props) =>
       props.index === props.moreBtnNumActive ? "block" : "none"};
-  }
-`;
-
-const DeleteLabelEventUl = styled.ul`
-  display: none;
-
-  @media screen and (max-width: 1011px) {
-    display: block;
-    padding: 3px 0px;
-    border: 1px solid #cccccc;
-    width: 158px;
-    height: 68px;
-    border-radius: 10px;
-    text-align: center;
-    position: relative;
-    left: -130px;
-    bottom: -8.5px;
-    z-index: 2;
-    background: white;
-    padding-top: 8px;
-    padding-bottom: 8px;
-    display: none;
   }
 `;
 
@@ -721,9 +662,7 @@ function LabelManagement() {
   const [createActive, setCreateActive]: any = useState(true);
   const [moreBtnNumActive, setMoreBtnNumActive] = useState(-1);
   const Description = useRef<HTMLInputElement | null>(null);
-  const UpdateDescription = useRef<HTMLInputElement | null>(null);
   const SeleceColor = useRef<HTMLInputElement | null>(null);
-  const UpdateSeleceColor = useRef<HTMLInputElement | null>(null);
   const [inputName, setInputName]: any = useState("");
   const [newLabelsSelectColor, setNewLabelsSelectColor]: any =
     useState("#FFFFFF");
@@ -749,23 +688,6 @@ function LabelManagement() {
   const dispatch = useDispatch();
   const LabelsData:any = useSelector((state) => state);
 
-
-  // function lightOrDarkCreate() {
-  //   const r1 = parseInt(newLabelsSelectColor.substring(1).slice(0, 1), 16)
-  //   const r2 = parseInt(newLabelsSelectColor.substring(1).slice(1, 2), 16)
-  //   const g1 = parseInt(newLabelsSelectColor.substring(1).slice(2, 3), 16)
-  //   const g2 = parseInt(newLabelsSelectColor.substring(1).slice(3, 4), 16)
-  //   const b1 = parseInt(newLabelsSelectColor.substring(1).slice(4, 5), 16)
-  //   const b2 = parseInt(newLabelsSelectColor.substring(1).slice(5, 6), 16)
-  //   const hsp = r1  + r2  + g1 + g2 + b1 + b2 
-  //   console.log(hsp,newLabelsSelectColor,newLabelsSelectColor)
-  //   if (hsp > 45) {
-  //     setLightOrCreateDark("black")
-  //   } else {
-  //     setLightOrCreateDark("white")
-  //   }
-  // }
-
   function lightOrDark() {
     let BGColor:string;
     if(LabelBtnColor !== UpdateChangeColor){
@@ -780,7 +702,6 @@ function LabelManagement() {
     const b1 = parseInt(UpdateChangeColor.slice(4, 5), 16)
     const b2 = parseInt(UpdateChangeColor.slice(5, 6), 16)
     const hsp = r1  + r2  + g1 + g2 + b1 + b2 
-// console.log(BGColor,LabelBtnColor,UpdateChangeColor)
     if (hsp < 45) {
       setLightOrDark("black")
     } else {
@@ -796,14 +717,11 @@ function LabelManagement() {
       const data = await api.getLabels()
       setLablels(data);
       setLabelsDataTotal(data.length);
-      console.log(data,LabelsData)
       if(LabelsData.length !== 1){
         setLablels(LabelsData);
         setLabelsDataTotal(LabelsData.length);
-        console.log(data,labels,LabelsData);
       }else if(LabelsData.length === 1 && LabelsData[0].name === undefined){
         setLablels(data);
-        console.log(data);
         setLabelsDataTotal(data.length);
       }else if(LabelsData.length === 1 && LabelsData[0].name !== undefined){
         setLablels(data);
@@ -837,7 +755,6 @@ function CloseColorListOrMoreBtn(){
         setLabelBtnColor([labels][0][index].color)
         setUpdateChangeColor([labels][0][index].color)
       }
-      console.log(UpdateChangeColor,LabelBtnColorNum,index,LabelBtnColor)
 
       return (
       <>
@@ -996,7 +913,6 @@ function CloseColorListOrMoreBtn(){
     setColorMathFloorNum(MathFloorColorNum);
     setUpdateLabelsSelectColor(colorListArray[colorMathFloorNum]);
     setNewLabelsSelectColor(colorListArray[colorMathFloorNum]);
-    console.log(newLabelsSelectColor,colorMathFloorNum,colorListArray[colorMathFloorNum])
     setUpdateChangeColor(colorListArray[colorMathFloorNum].substring(1));
 
   }
@@ -1008,7 +924,6 @@ function CloseColorListOrMoreBtn(){
     setColorMathFloorNum(MathFloorColorNum);
     setLabelBtnColorNum(colorMathFloorNum)
     setUpdateChangeColor(colorListArray[colorMathFloorNum].substring(1))
-    console.log(UpdateChangeColor)
   }
 
   function PostLabelName(e: any) {
@@ -1061,7 +976,6 @@ function CloseColorListOrMoreBtn(){
 
 
   async function deleteLabel(index:number) {
-    console.log(labels[index].name,index)
     const data = await api.deleteLabel({
       owner: "Xie-MS",
       repo: "Personal-Project",
@@ -1073,7 +987,6 @@ function CloseColorListOrMoreBtn(){
           payload: { Labeldata },
         });
       });
-      console.log(data)
   }
 
 
