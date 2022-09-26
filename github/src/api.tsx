@@ -15,7 +15,7 @@ const api = {
         body: JSON.stringify(data),
         headers: new Headers({
           Accept: "application/vnd.github+json",
-          Authorization: 'token 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',
+          Authorization: 'token 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',
         }),
         method: 'POST',
       });
@@ -27,7 +27,7 @@ const api = {
       const response = await fetch(`${this.hostname}/labels/${data.name}`, {
         headers: new Headers({
           Accept: "application/vnd.github+json",
-          Authorization: 'token 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',
+          Authorization: 'token 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',
         }),
         method: 'DELETE',
       });
@@ -41,7 +41,7 @@ const api = {
         body: JSON.stringify(data),
         headers: new Headers({
           Accept: "application/vnd.github+json",
-          Authorization: 'token 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',
+          Authorization: 'token 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',
         }),
         method: 'POST',
       });
