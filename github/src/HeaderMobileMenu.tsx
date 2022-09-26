@@ -3,24 +3,23 @@ import React from "react";
 
 
 const MobileMenuUl = styled.ul`
-
-@media screen and (max-width: 767px) {
+    list-style: none;
     background-color: #000;
     margin-top: 16px;
     margin-bottom: 16px;
     list-style: none;
     padding: 16px 16px 16px 16px;
-}`
+`
 
 const MobileMenuText = styled.li`
-@media screen and (max-width: 767px) {
+
     padding: 8px;
     font-weight: 600;
     white-space: nowrap;
     border-bottom: 1px solid rgba(255,255,255,0.15);
     color:white;
     list-style: none;
-}
+
 `
 
 

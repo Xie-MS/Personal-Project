@@ -5,16 +5,17 @@ import LogoImage from "./img/logo.jpg";
 import SingOut from "./img/Singout.jpg";
 
 const MobileMenuUl = styled.ul`
-@media screen and (max-width: 767px) {
+
     background-color: #000;
     margin-top: 16px;
     margin-bottom: 16px;
     list-style: none;
     padding: 16px 16px 16px 16px;
-}`
+    list-style: none;
+`
 
 const MobileMenuTextAndImg = styled.li`
-@media screen and (max-width: 767px) {
+
     padding: 8px;
     font-weight: 600;
     white-space: nowrap;
@@ -24,17 +25,15 @@ const MobileMenuTextAndImg = styled.li`
     align-items: center;
     color:white;
     list-style: none;
-}`
+`
 
 const MobileMenuImg = styled.img`
-width: 20px;
-height: 20px;
-@media screen and (max-width: 767px) {
+
     width: 20px;
     height: 20px;
     margin-right: 3px;
     color:white;
-}`
+`
 
 
 function Product() {

@@ -750,21 +750,21 @@ function LabelManagement() {
   const LabelsData:any = useSelector((state) => state);
 
 
-  function lightOrDarkCreate() {
-    const r1 = parseInt(newLabelsSelectColor.substring(1).slice(0, 1), 16)
-    const r2 = parseInt(newLabelsSelectColor.substring(1).slice(1, 2), 16)
-    const g1 = parseInt(newLabelsSelectColor.substring(1).slice(2, 3), 16)
-    const g2 = parseInt(newLabelsSelectColor.substring(1).slice(3, 4), 16)
-    const b1 = parseInt(newLabelsSelectColor.substring(1).slice(4, 5), 16)
-    const b2 = parseInt(newLabelsSelectColor.substring(1).slice(5, 6), 16)
-    const hsp = r1  + r2  + g1 + g2 + b1 + b2 
-    console.log(hsp,newLabelsSelectColor,newLabelsSelectColor)
-    if (hsp > 45) {
-      setLightOrCreateDark("black")
-    } else {
-      setLightOrCreateDark("white")
-    }
-  }
+  // function lightOrDarkCreate() {
+  //   const r1 = parseInt(newLabelsSelectColor.substring(1).slice(0, 1), 16)
+  //   const r2 = parseInt(newLabelsSelectColor.substring(1).slice(1, 2), 16)
+  //   const g1 = parseInt(newLabelsSelectColor.substring(1).slice(2, 3), 16)
+  //   const g2 = parseInt(newLabelsSelectColor.substring(1).slice(3, 4), 16)
+  //   const b1 = parseInt(newLabelsSelectColor.substring(1).slice(4, 5), 16)
+  //   const b2 = parseInt(newLabelsSelectColor.substring(1).slice(5, 6), 16)
+  //   const hsp = r1  + r2  + g1 + g2 + b1 + b2 
+  //   console.log(hsp,newLabelsSelectColor,newLabelsSelectColor)
+  //   if (hsp > 45) {
+  //     setLightOrCreateDark("black")
+  //   } else {
+  //     setLightOrCreateDark("white")
+  //   }
+  // }
 
   function lightOrDark() {
     let BGColor:string;
@@ -794,17 +794,16 @@ function LabelManagement() {
   useEffect(() =>{
     async function getLabels() {
       const data = await api.getLabels()
-      console.log(data);
-      
       setLablels(data);
       setLabelsDataTotal(data.length);
+      console.log(data,LabelsData)
       if(LabelsData.length !== 1){
         setLablels(LabelsData);
         setLabelsDataTotal(LabelsData.length);
+        console.log(data,labels,LabelsData);
       }else if(LabelsData.length === 1 && LabelsData[0].name === undefined){
         setLablels(data);
-        console.log("AAAAA",data,LabelsData);
-        
+        console.log(data);
         setLabelsDataTotal(data.length);
       }else if(LabelsData.length === 1 && LabelsData[0].name !== undefined){
         setLablels(data);
@@ -831,12 +830,14 @@ function CloseColorListOrMoreBtn(){
 
   function labelsData() {
 
+
     if (labels === undefined) return <Label CloseLabelTr={-1} index={-1}></Label>;
     return [labels][0].map((item: any, index: number) => {
       if(LabelBtnColor === undefined && LabelBtnColorNum === -1){
         setLabelBtnColor([labels][0][index].color)
         setUpdateChangeColor([labels][0][index].color)
       }
+      console.log(UpdateChangeColor,LabelBtnColorNum,index,LabelBtnColor)
 
       return (
       <>
@@ -872,7 +873,7 @@ function CloseColorListOrMoreBtn(){
                   Edit
                 </LabelEventLi>
                 <LabelEventLi onClick={() => {setDeleteLabels([labels][0][index].name)
-                deleteLabel()}}>Delete</LabelEventLi>
+                deleteLabel(index)}}>Delete</LabelEventLi>
               </LabelEventUl>
             </LabelEventBtn>
             <Edit onClick={() => {setUpdateActive(index)
@@ -881,7 +882,7 @@ function CloseColorListOrMoreBtn(){
               setupdateUpdateColor([labels][0][index].color)
             }}>Edit</Edit>
             <Delete onClick={() => {setDeleteLabels([labels][0][index].name)
-                deleteLabel()}}>Delete</Delete>
+                deleteLabel(index)}}>Delete</Delete>
           </LabelEvent>
         </Label>
         <Update updateActive={updateActive} updateId={index}>
@@ -928,10 +929,10 @@ function CloseColorListOrMoreBtn(){
                   </CreateInformationInputUl>
                   <CreateInformationInputColor
                     type="text"
-                    value={newLabelsSelectColor}
+                    value={`#`+UpdateChangeColor}
                     pattern="#?([a-fA-F0-9]{6})"
                     maxLength={7}
-                    ref={UpdateSeleceColor}
+                    ref={SeleceColor}
                     onClick={()=>{
                       
                       setSelectColorMenuActive(true);
@@ -974,6 +975,7 @@ function CloseColorListOrMoreBtn(){
           onClick={() => {
             setNewLabelsSelectColor({ item }.item);
             setUpdateChangeColor({ item }.item.substring(1))
+            setLabelBtnColorNum(index)
             console.log(newLabelsSelectColor,UpdateChangeColor)
             if (selectColorMenuActive === true) {
               setSelectColorMenuActive(false);
@@ -987,7 +989,6 @@ function CloseColorListOrMoreBtn(){
   }
 
   function getColor() {
-    lightOrDarkCreate();
     lightOrDark();
     setSelectColorMenuActive(false);
     let MathFloorColorNum;
@@ -1002,13 +1003,12 @@ function CloseColorListOrMoreBtn(){
 
   function getUpdateColor() {
     setSelectColorMenuActive(false);
-    lightOrDarkCreate();
-    lightOrDark();
     let MathFloorColorNum;
     MathFloorColorNum = Math.floor(Math.random() * colorListArray.length);
     setColorMathFloorNum(MathFloorColorNum);
+    setLabelBtnColorNum(colorMathFloorNum)
     setUpdateChangeColor(colorListArray[colorMathFloorNum].substring(1))
-
+    console.log(UpdateChangeColor)
   }
 
   function PostLabelName(e: any) {
@@ -1060,11 +1060,12 @@ function CloseColorListOrMoreBtn(){
   }
 
 
-  async function deleteLabel() {
+  async function deleteLabel(index:number) {
+    console.log(labels[index].name,index)
     const data = await api.deleteLabel({
       owner: "Xie-MS",
       repo: "Personal-Project",
-      name:labels[moreBtnNumActive].name
+      name:labels[index].name
       })
       .then((Labeldata) => {
         dispatch({
@@ -1072,6 +1073,7 @@ function CloseColorListOrMoreBtn(){
           payload: { Labeldata },
         });
       });
+      console.log(data)
   }
 
 
@@ -1083,7 +1085,7 @@ function CloseColorListOrMoreBtn(){
       oldName:labels[index].name,
       name: updateLabelName,
       description: updateUpdateDescription,
-      color: updateUpdateColor.substring(1),
+      color: updateUpdateColor,
       })
       .then((Labeldata) => {
         dispatch({
