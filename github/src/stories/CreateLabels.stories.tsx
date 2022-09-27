@@ -1,7 +1,7 @@
 import React from "react";
 
-import CreateLabelsDisabled from "../CreateLabelsInformationDisabled";
-import CreateLabels from "../CreateLabelsInformation";
+import CreateLabelsDisabled from "../LabelManagement/CreateLabelsInformationDisabled";
+import CreateLabels from "../LabelManagement/CreateLabelsInformation";
 
 export default {
   title: "Example/CreateLabels",

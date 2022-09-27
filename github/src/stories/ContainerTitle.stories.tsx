@@ -1,7 +1,7 @@
 import React from "react";
 
-import RepoFunctionalElement from "../RepoFunctionalElement";
-import Functional from "../Functional";
+import RepoFunctionalElement from "../LabelManagement/RepoFunctionalElement";
+import Functional from "../LabelManagement/Functional";
 
 export default {
   title: "Example/ContainerTitle",

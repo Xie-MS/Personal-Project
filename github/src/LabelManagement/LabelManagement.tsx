@@ -3,14 +3,14 @@ import styled from "styled-components";
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import api from "./api";
+import api from "../api";
 
-import SortDown from "./img/sortDown.svg";
-import LabelsImage from "./img/Labels.svg";
-import Milestone from "./img/milestone.svg";
-import SearchImage from "./img/search.svg";
-import CheckImage from "./img/check.svg";
-import ChangeColorImage from "./img/change.png";
+import SortDown from "../img/SortDown.svg";
+import LabelsImage from "../img/Labels.svg";
+import Milestone from "../img/milestone.svg";
+import SearchImage from "../img/search.svg";
+import CheckImage from "../img/check.svg";
+import ChangeColorImage from "../img/change.png";
 
 const Container = styled.div`
   margin-top: 24px;

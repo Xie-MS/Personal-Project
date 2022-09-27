@@ -67,7 +67,7 @@ function Footers() {
   return (
     <Footer>
       <Footerleft>
-        <FooterLogo src={LogoImage} />
+        <FooterLogo src={LogoImage}  alt=""/>
         <CCText>© 2022 GitHub, Inc.</CCText>
       </Footerleft>
       <FooterRight>

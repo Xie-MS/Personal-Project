@@ -1,12 +1,12 @@
 import React from "react";
 
-import HeaderLogo from "../HeaderLogo";
-import HeaderSearch from "../HeaderSearch";
-import HeaderPCMenu from "../HeaderPCMenu";
-import HeaderUserMenuPC from "../HeaderUserMenuPC";
-import HeaderUserMenuPCNoSign from "../HeaderUserMenuPCNoSign";
-import HeaderMobileMenu from "../HeaderMobileMenu";
-import HeaderUserMenuMobile from "../HeaderUserMenuMobile";
+import HeaderLogo from "../LabelManagement/HeaderLogo";
+import HeaderSearch from "../LabelManagement/HeaderSearch";
+import HeaderPCMenu from "../LabelManagement/HeaderPCMenu";
+import HeaderUserMenuPC from "../LabelManagement/HeaderUserMenuPC";
+import HeaderUserMenuPCNoSign from "../LabelManagement/HeaderUserMenuPCNoSign";
+import HeaderMobileMenu from "../LabelManagement/HeaderMobileMenu";
+import HeaderUserMenuMobile from "../LabelManagement/HeaderUserMenuMobile";
 
 
 export default {

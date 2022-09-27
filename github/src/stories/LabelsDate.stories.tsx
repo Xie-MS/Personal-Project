@@ -1,6 +1,6 @@
 import React from "react";
 
-import LabelsData from "../LabelsData";
+import LabelsData from "../LabelManagement/LabelsData";
 
 export default {
   title: "Example/LabelsData",

@@ -8,6 +8,7 @@ import { createGlobalStyle } from "styled-components";
 import Headers from "./header";
 import ContainerTitle from "./ContainerTitle"
 import Footer from "./footer";
+import './index.css';
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -16,8 +17,7 @@ const GlobalStyle = createGlobalStyle`
 `;
 
 function App() {
-  const LabelsData = useSelector((state) => state);
-  console.log(LabelsData)
+   const LabelsData = useSelector((state) => state);
   return (
     <>
       <Reset />
@@ -28,6 +28,7 @@ function App() {
       <Footer />
     </>
   );
+ 
 }
 
 export default App;

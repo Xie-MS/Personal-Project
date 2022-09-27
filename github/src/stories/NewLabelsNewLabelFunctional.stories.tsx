@@ -1,8 +1,8 @@
 import React from "react";
 
-import NewLabelFunctional from "../NewLabelFunctional";
-import NewLabelSearch from "../NewLabelSearch";
-import NewLabelCreatrBtn from "../NewLabelCreatrBtn";
+import NewLabelFunctional from "../LabelManagement/NewLabelFunctional";
+import NewLabelSearch from "../LabelManagement/NewLabelSearch";
+import NewLabelCreatrBtn from "../LabelManagement/NewLabelCreatrBtn";
 
 export default {
   title: "Example/NewLabel",

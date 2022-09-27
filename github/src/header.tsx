@@ -224,7 +224,6 @@ if(mobileMenuActive === false){
   async function checkUser() {    
       const user = supabase.auth.user();
       const token:any = supabase.auth.session();
-      navigate('/LabelManagement') 
       setUser(user);      
       setUserName(token.user.identities[0].identity_data.user_name)    
   }
@@ -233,13 +232,11 @@ if(mobileMenuActive === false){
      await supabase.auth.signIn({
       provider: 'github'
      })
-     navigate('/LabelManagement') 
   }
 
   async function signOut() {
   await supabase.auth.signOut();
-      setUser(null);
-      navigate('/')            
+      setUser(null);      
   }
 
 if(user){

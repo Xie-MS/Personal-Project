@@ -5,7 +5,7 @@ import styled from "styled-components";
 import RepoImage from "./img/repo.svg";
 import PinImage from "./img/pin.svg";
 import UnwatchImage from "./img/Unwatch.svg";
-import SortDownImage from "./img/sortDown.svg";
+import SortDownImage from "./img/SortDown.svg";
 import ForkImage from "./img/fork.svg";
 import StarImage from "./img/star.svg";
 import CodeImage from "./img/code.svg";
@@ -163,7 +163,7 @@ function ContainerTitle() {
     <ContainetTitle>
       <RepoInformation>
         <Repo>
-          <RepoImg src={RepoImage}/>
+          <RepoImg src={RepoImage} alt=""/>
           <RepoAndUserName>Xie-MS</RepoAndUserName>
           ／
           <RepoAndUserName>Personal-Project</RepoAndUserName>
@@ -174,33 +174,33 @@ function ContainerTitle() {
         <FunctionalElement>
           <li>
             <PinBtn>
-              <FunctionalElementImg src={PinImage} />
+              <FunctionalElementImg src={PinImage} alt="" />
               Pin
             </PinBtn>
           </li>
           <li>
             <FunctionalElementBtn>
-              <FunctionalElementImg src={UnwatchImage} />
+              <FunctionalElementImg src={UnwatchImage}  alt=""/>
               Unwatch
               <FunctionalElementNum>1</FunctionalElementNum>
-              <UnWatchImg src={SortDownImage} />
+              <UnWatchImg src={SortDownImage}  alt=""/>
             </FunctionalElementBtn>
           </li>
           <ForkAndStar>
             <FunctionalElementBtn>
-              <ForkAndStarImg src={ForkImage} />
+              <ForkAndStarImg src={ForkImage} alt="" />
               Fork
               <FunctionalElementNum>0</FunctionalElementNum>
-              <FunctionalElementImg src={SortDownImage}/>
+              <FunctionalElementImg src={SortDownImage} alt=""/>
             </FunctionalElementBtn>
           </ForkAndStar>
           <ForkAndStar>
             <FunctionalElementBtn>
-              <ForkAndStarImg src={StarImage} />
+              <ForkAndStarImg src={StarImage} alt="" />
               Star
               <FunctionalElementNum>0</FunctionalElementNum>
 
-              <FunctionalElementImg src={SortDownImage} />
+              <FunctionalElementImg src={SortDownImage} alt="" />
             </FunctionalElementBtn>
           </ForkAndStar>
         </FunctionalElement>
@@ -208,39 +208,39 @@ function ContainerTitle() {
       <div>
         <Functional>
           <FunctionalImgandText>
-            <FunctionalImg src={CodeImage}/>
+            <FunctionalImg src={CodeImage} alt=""/>
             <p>code</p>
           </FunctionalImgandText>
           <FunctionalImgandText>
-            <FunctionalImg src={IssueImage} />
+            <FunctionalImg src={IssueImage} alt="" />
             <p>Issues</p>
           </FunctionalImgandText>
           <FunctionalImgandText>
-            <FunctionalImg src={PRImage} />
+            <FunctionalImg src={PRImage} alt="" />
             <p>Pull requests</p>
           </FunctionalImgandText>
           <FunctionalImgandText>
-            <FunctionalImg src={ActionImage} />
+            <FunctionalImg src={ActionImage} alt="" />
             <p>Actions</p>
           </FunctionalImgandText>
           <FunctionalImgandText>
-            <FunctionalImg src={ProjectsImage} />
+            <FunctionalImg src={ProjectsImage} alt="" />
             <p>Projects</p>
           </FunctionalImgandText>
           <FunctionalImgandText>
-            <FunctionalImg src={WikiImage} />
+            <FunctionalImg src={WikiImage} alt="" />
             <p>Wiki</p>
           </FunctionalImgandText>
           <FunctionalImgandText>
-            <FunctionalImg src={SecurityImage} />
+            <FunctionalImg src={SecurityImage} alt="" />
             <p>Security</p>
           </FunctionalImgandText>
           <FunctionalImgandText>
-            <FunctionalImg src={InsightsImage} />
+            <FunctionalImg src={InsightsImage} alt="" />
             <p>Insights</p>
           </FunctionalImgandText>
           <FunctionalImgandText>
-            <FunctionalImg src={SettingImage} />
+            <FunctionalImg src={SettingImage} alt="" />
             <p>Settings</p>
           </FunctionalImgandText>
         </Functional>
