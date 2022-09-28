@@ -1,6 +1,13 @@
 //import username and token
-
 import { LoggedOut } from "./stories/Page.stories";
+import { useState , useEffect} from 'react';
+
+let jwtToken:any;
+
+    function getProfile() {
+      jwtToken = JSON.parse(window.localStorage.getItem('userToken') as string);
+    }
+    getProfile()
 
 const api = {
     hostname: `https://api.github.com/repos/Xie-Ms/Personal-Project`,
@@ -10,12 +17,13 @@ const api = {
     },
 
     async setLabels(data:any) {
-      console.log(data);
+      console.log(`token ${jwtToken}`);
       const response = await fetch(`${this.hostname}/labels`, {
         body: JSON.stringify(data),
         headers: new Headers({
+          'Content-type':'application/json',
           Accept: "application/vnd.github+json",
-          Authorization: 'token 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',
+          Authorization: `token ${jwtToken}`,
         }),
         method: 'POST',
       });
@@ -27,7 +35,7 @@ const api = {
       const response = await fetch(`${this.hostname}/labels/${data.name}`, {
         headers: new Headers({
           Accept: "application/vnd.github+json",
-          Authorization: 'token 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',
+          Authorization: `token ${jwtToken}`,
         }),
         method: 'DELETE',
       });
@@ -41,7 +49,7 @@ const api = {
         body: JSON.stringify(data),
         headers: new Headers({
           Accept: "application/vnd.github+json",
-          Authorization: 'token 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',
+          Authorization: `token ${jwtToken}`,
         }),
         method: 'POST',
       });

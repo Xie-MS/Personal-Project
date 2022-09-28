@@ -37,17 +37,25 @@ state=initialize , action:any
           return newCartItems;
             }
 
-            case "UpdateLabels": {
-              const newCartItems = [
-                {
-                  "name": action.payload.Labeldata.name,
-                  "description": action.payload.Labeldata.description,
-                  "color": action.payload.Labeldata.color,
-                },
-              ];
-              return newCartItems;
-                }
-
+        case "UpdateLabels": {
+          const newCartItems = [
+            {
+              "name": action.payload.Labeldata.name,
+              "description": action.payload.Labeldata.description,
+              "color": action.payload.Labeldata.color,
+            },
+          ];
+          return newCartItems;
+            }
+            
+        case "getToken": {
+          const newCartItems = [
+            {
+              "token": action.payload.Labeldata.userToken
+            }
+          ];
+          return newCartItems;
+            }
         default:
         return;
       }

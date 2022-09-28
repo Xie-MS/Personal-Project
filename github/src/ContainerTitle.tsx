@@ -139,6 +139,7 @@ align-items: center;
 list-style: none;
 padding: 0px;
 margin: 0px;
+overflow: hidden;
 `
 const FunctionalImg = styled.img`
 width: 16px;

@@ -6,23 +6,28 @@ function OAuth() {
     const [user, setUser]:any = useState(null);
     const[userName,setUserName] = useState("");
 
+    
     useEffect(()=>{
         checkUser();
         window.addEventListener('hashchange', function(){
             checkUser();
         })
+       
     },[])
     async function checkUser() {
         const user = supabase.auth.user();
         const token:any = supabase.auth.session();
         setUser(user);
         setUserName(token.user.identities[0].identity_data.user_name)
+        
     }
 
     async function signInWithgithub() {
        await supabase.auth.signIn({
         provider: 'github'
-       });
+       },{
+        scopes: "repo gist notifications",
+      });
        
     }
 
