@@ -1,9 +1,7 @@
-//import username and token
+//import username
 import { LoggedOut } from "./stories/Page.stories";
-import { useState , useEffect} from 'react';
 
-let jwtToken:any;
-
+let jwtToken:string;
     function getProfile() {
       jwtToken = JSON.parse(window.localStorage.getItem('userToken') as string);
     }
@@ -12,13 +10,19 @@ let jwtToken:any;
 const api = {
     hostname: `https://api.github.com/repos/Xie-Ms/Personal-Project`,
     async getLabels() {
-      const response = await fetch(`${this.hostname}/labels`);
+      const response = await fetch(`${this.hostname}/labels`,{
+        headers: new Headers({
+          'Content-type':'application/json',
+          Accept: "application/vnd.github+json",
+          Authorization: `token ${jwtToken}`,
+        }),
+      });
       return await response.json();
     },
 
     async setLabels(data:any) {
       console.log(`token ${jwtToken}`);
-      const response = await fetch(`${this.hostname}/labels`, {
+      const response = await fetch(`${this.hostname}/labels`,{
         body: JSON.stringify(data),
         headers: new Headers({
           'Content-type':'application/json',
@@ -58,9 +62,37 @@ const api = {
     },
 
     async getListIssuesState() {
-      const response = await fetch(`${this.hostname}/issues`);
+      const response = await fetch(`${this.hostname}/issues`,{
+        headers: new Headers({
+          'Content-type':'application/json',
+          Accept: "application/vnd.github+json",
+          Authorization: `token ${jwtToken}`,
+        }),
+      });
       return await response.json();
     },
+
+    async getIssuesAuthorMe() {
+      const response = await fetch(`${this.hostname}/issues?author=@me`,{
+        headers: new Headers({
+          'Content-type':'application/json',
+          Accept: "application/vnd.github+json",
+          Authorization: `token ${jwtToken}`,
+        }),
+      });
+      return await response.json();
+    },
+
+    async getIssuesAssigneeMe() {
+      const response = await fetch(`${this.hostname}/issues?assignee=Xie-MS`);
+      return await response.json();
+    },
+
+    async getIssuesMentionsMe() {
+      const response = await fetch(`${this.hostname}/issues?mentioned=Xie-MS`);
+      return await response.json();
+    },
+
     async Pagination(per_page:number|string, paging:number|string) {
       const response = await fetch(
         `${this.hostname}/issues?per_page=${per_page}&page=${paging}`

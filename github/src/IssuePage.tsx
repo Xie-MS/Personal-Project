@@ -1,15 +1,12 @@
 import React from "react";
 import SortDown from "../src/img/SortDown.svg";
-import Search from "../src/img/search.svg";
 import LabelsImage from "../src/img/Labels.svg";
 import Milestone from "../src/img/milestone.svg";
-import Close from "../src/img/x.svg";
 import issueOpened from "../src/img/issueOpened.svg";
 import Check from "../src/img/check.svg";
 import UserImg from "../src/img/userImg.png";
-import Comment from "../src/img/comment.svg";
 import Light from "../src/img/light.svg";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 import {IssueOpenedIcon, LinkExternalIcon, CheckIcon, XIcon, ChevronRightIcon,ChevronLeftIcon, CommentIcon   } from "@primer/octicons-react"
 
@@ -21,28 +18,67 @@ const[labelMenu, setLabelMenu] = useState(false);
 const[assigneMenu, setAssigne] = useState(false);
 const[sortMenu, setSortMenu] = useState(false);
 const[mobileMenuBG, setMobileMenuBG] = useState(false);
-const[issueInformation, setIssueInformation]:any = useState([]);
-const[labelsNum, setLabelsNum]:any = useState();
+const[noSearch, setNoSearch] = useState(false);
+const[clearSearch, setClearSearch]:any = useState();
 
+const[renderData, setRenderData]:any = useState([]);
+const[sortSelect, setsortSelect]:any = useState(null);
+
+const Filters = ["Open issues and pull requests","Your issues","Your Pull requests","Everything assigned to you","Everything mentioning you"];
 
 useEffect(() =>{
   async function getListIssues() {
-    const data = await api.getListIssuesState()
-    setIssueInformation(data);
+    if(sortSelect === null){
+      const data = await api.getListIssuesState();
+      setRenderData(data);
+      if(data.length === 0){
+        setNoSearch(true);
+      }else{
+        setNoSearch(false);
+      }
+    }
+
+    else if(sortSelect === "Your issues"){
+      const data = await api.getIssuesAuthorMe()
+      setRenderData(data);
+      if(data.length === 0){
+        setNoSearch(true);
+      }else{
+        setNoSearch(false);
+      }
+    }
+    
+    else if(sortSelect === "Everything assigned to you"){
+      const data = await api.getIssuesAssigneeMe();
+      setRenderData(data);
+      if(data.length === 0){
+        setNoSearch(true);
+      }else{
+        setNoSearch(false);
+      }
+    }
+
+    else if(sortSelect === "Everything mentioning you"){
+      const data = await api.getIssuesMentionsMe();
+      setRenderData(data);
+      if(data.length === 0){
+        setNoSearch(true);
+      }else{
+        setNoSearch(false);
+      }
+    }
   }
   getListIssues();
-  console.log(issueInformation);
-}, []);
-
+}, [sortSelect]);
 
 
 
 function getIssues(){
-  return issueInformation.map((item:any, index: number) => {
-    if(issueInformation[index].pull_request === undefined){      
+  return renderData.map((item:any, index: number) => {
+    if(renderData[index].pull_request === undefined){ 
   return(
     <>
-    <div className="flex justify-between items-center">
+    <div style={{border:"revert"}} className={`${noSearch ? "hidden" : "flex"} justify-between items-center border-b-[1px] border-r-[1px] border-l-[1px] border-slate-300"`}>
     <div className="flex justify-start items-start pl-4">
         <div className="py-2">
           <input type="checkbox" className="flex md:hidden"/>
@@ -52,12 +88,10 @@ function getIssues(){
         </div>
         <div className="block justify-center items-center px-2 py-2">
           <div className="flex justify-start items-center md:block">
-            <p className="text-base font-semibold hover:text-[#0969da] hover:cursor-pointer">{issueInformation[index].title}</p>
+            <p className="text-base font-semibold hover:text-[#0969da] hover:cursor-pointer">{renderData[index].title}</p>
             {getLabels(index)}
           </div>
-          <p className="mt-1 text-xs">
-            #{issueInformation[index].number} opend 1 houe ago by {issueInformation[index].user.login}
-          </p>
+              {TimeDifference(index)}
           </div>
           </div>
           <div className="flex justify-end items-center pt-2 pr-4">
@@ -69,23 +103,64 @@ function getIssues(){
       </div>
     </>
       )}})
+    
 }
 
 function getLabels(index:number){
-  return issueInformation.map((item:any, listIndex: number) => {
-    if(issueInformation[index].labels.length !== 0 && index === listIndex){
-      console.log(issueInformation[index].labels[0].color)
+  return renderData.map((item:any, listIndex: number) => {
+    if(renderData[index].labels.length !== 0 && index === listIndex){
+     
       return(
-        <button className={`bg-[${`#`+issueInformation[index].labels[0].color}] rounded-xl px-[7px] font-semibold text-sm md:text-xs`}>
-        {issueInformation[index].labels[0].name}
+        <button style={{backgroundColor: `#${renderData[index].labels[0].color}`}} className={`rounded-xl px-[7px] font-semibold text-sm md:text-xs`}>
+        {renderData[index].labels[0].name}
         </button>
       )
     }
   })}
 
+  function TimeDifference(index:number){
+    const NewTime = new Date();
+    const IssuesTime = new Date(renderData[index].created_at)
+    const reduce = NewTime.getTime() - IssuesTime.getTime()
+    const days=Math.floor(reduce/(24*3600*1000))
+    const leave1=reduce%(24*3600*1000)    //計算天數後剩余的毫秒數  
+    const hours=Math.floor(leave1/(3600*1000))  //計算相差分鐘數  
+    const leave2=leave1%(3600*1000)        //計算小時數後剩余的毫秒數  
+    const minutes=Math.floor(leave2/(60*1000))  //計算相差秒數  
+    const leave3=leave2%(60*1000)      //計算分鐘數後剩余的毫秒數  
+    const seconds=Math.round(leave3/1000) 
+    // console.log(" 相差 "+days+"天 "+hours+"小時 "+minutes+" 分鐘"+seconds+" 秒")
+    
+    return renderData.map((item:any, CreateTimeIndex: number) => {
+    if (days>0 && index === CreateTimeIndex){
+      return(
+        <p className="mt-1 text-xs">
+        #{`${renderData[CreateTimeIndex].number}`} opend {`${days}`} days ago by {`${renderData[CreateTimeIndex].user.login}`}
+      </p>
+      )  
+    }else if(days === 0 && hours>0 && index === CreateTimeIndex){
+      return(
+        <p className="mt-1 text-xs">
+        #{`${renderData[CreateTimeIndex].number}`} opend {`${hours}`} hour ago by {`${renderData[CreateTimeIndex].user.login}`}
+      </p>
+      )
+    }else if(days === 0 && hours === 0 && minutes>0 && index === CreateTimeIndex){
+      return(
+        <p className="mt-1 text-xs">
+        #{`${renderData[CreateTimeIndex].number}`} opend {`${minutes}`} minutes ago by {`${renderData[CreateTimeIndex].user.login}`}
+      </p>
+      )
+    }else if(days === 0 && hours === 0 && minutes === 0 && seconds>0 && index === CreateTimeIndex){
+      <p className="mt-1 text-xs">
+        #{`${renderData[CreateTimeIndex].number}`} opend {`${seconds}`} seconds ago by {`${renderData[CreateTimeIndex].user.login}`}
+      </p>
+    }
+    })}
+    
+
   function getAssignees(index:number){
-    return issueInformation.map((item:any, assigneesIndex: number) => {
-      if(issueInformation[index].assignees.length !== 0 && index === assigneesIndex){
+    return renderData.map((item:any, assigneesIndex: number) => {
+      if(renderData[index].assignees.length !== 0 && index === assigneesIndex){
         return(
           <div className="flex justify-end items-center w-[87.83px]">
           <img src={UserImg} alt="" className="w-[30%] rounded-full sm:hidden"/>
@@ -95,20 +170,35 @@ function getLabels(index:number){
     })}
 
     function getComments(index:number){
-      return issueInformation.map((item:any, commentsIndex: number) => {
-        if(issueInformation[index].comments !== 0 && index === commentsIndex){
+      return renderData.map((item:any, commentsIndex: number) => {
+        if(renderData[index].comments !== 0 && index === commentsIndex){
           return(
             <div className="flex justify-end items-center w-[70px] hover:text-[#0969da] hover:cursor-pointer ml-2 sm:hidden">
             <CommentIcon size={16}  className="hover:fill-[#0969da]"/>
-              <p>{issueInformation[index].comments}</p>
+              <p>{renderData[index].comments}</p>
             </div>
           )
         }
       })}
 
+      function FiltersDSelect(){
+        return Filters.map((item:any, FiltersDSelectIndex: number) => {
+            return(
+              <li className="flex justify-start items-center border-b-[1px] border-solid border-gray-400 py-[7px] pl-9 pr-[7px] text-xs sm:px-4 sm:py-4" onClick={() => {setsortSelect(Filters[FiltersDSelectIndex])
+                setFiletersMenu(false)
+                setClearSearch(true)
+                }}>
+              <div className={`${sortSelect === Filters[FiltersDSelectIndex] ? "block" : "hidden" } absolute left-[26px] `}>
+              <CheckIcon size={16} className="mr-2"/>
+              </div>
+              <p>{Filters[FiltersDSelectIndex]}</p>
+            </li>
+            )
+          
+        })}
+
   return (
-    <div className=" relative z-10">
-      
+    <div className=" relative z-10">      
     <div className="mt-6 px-6">    
    <div className="px-6 py-6 mb-6 border-[1px] border-solid border-gray-200 flex justify-between items-start rounded-xl">
       <div className="w-full block justify-between items-center text-center relative">
@@ -127,10 +217,8 @@ function getLabels(index:number){
    <button className="text-blue-500 text-sm absolute top-[10px] right-[40px]">
           <p className="hover:underline decoration-auto">Dismiss</p>
         </button>
-    <div>
-    
-      <div className="flex justify-between items-center mb-4  md:flex-col md:mb-0">
-       
+    <div>    
+      <div className="flex justify-between items-center mb-4  md:flex-col md:mb-0">       
       <div className="xl:bg-gray-100 border-[1px] border-solid border-gray-400 flex justify-between items-center rounded-lg order-0 w-[60%] relative lg:w-[46%] md:w-full md:order-2 my-6">
         <button className="flex px-4 py-[5px]" onClick={() => {
           setFiletersMenu(true)
@@ -162,44 +250,17 @@ function getLabels(index:number){
             setMobileMenuBG(false)
             }}>X</p>  
           </li>
-          <li className="flex justify-start items-center border-b-[1px] border-solid border-gray-400 py-[7px] pl-4 pr-[7px] text-xs sm:px-4 sm:py-4">
-            <div className="invisible">
-            <CheckIcon size={16} className="mr-2"/>
-            </div>
-            <p>Open issues and pull requests</p>
-          </li>
-          <li className="flex justify-start items-center border-b-[1px] border-solid border-gray-400 py-[7px] pl-4 pr-[7px] text-xs sm:px-4 sm:py-4 w-full">
-          <div className="invisible">
-            <CheckIcon size={16} className="mr-2"/>
-          </div>
-            <p>Your issues</p>
-          </li>
-          <li className="flex justify-start items-center border-b-[1px] border-solid border-gray-400 py-[7px] pl-4 pr-[7px] text-xs sm:px-4 sm:py-4">
-          <div className="invisible">
-            <CheckIcon size={16} className="mr-2"/>
-          </div>
-            <p>Your Pull requests</p>
-            </li>
-          <li className="flex justify-start items-center border-b-[1px] border-solid border-gray-400 py-[7px] pl-4 pr-[7px] text-xs sm:px-4 sm:py-4">
-          <div className="invisible">
-            <CheckIcon size={16} className="mr-2"/>
-          </div>
-            <p>Everything assigned to you</p>
-            </li>
-          <li className="flex justify-start items-center border-b-[1px] border-solid border-gray-400 py-[7px] pl-4 pr-[7px] text-xs sm:px-4 sm:py-4">
-          <div className="invisible">
-            <CheckIcon size={16} className="mr-2"/>
-          </div>
-            <p>Everything mentioning you</p>
-            </li>
+          {FiltersDSelect()}
           <li className="flex justify-start items-center  py-[7px] px-4 text-xs sm:px-4 sm:py-4">
             <LinkExternalIcon size={16} className="mr-2"/>
-            <p>View advanced search syntax</p></li>
+            <p>View advanced search syntax</p>
+            </li>
         </ul>
         
         <input type="text"
-        defaultValue={"is:issue is:open"}
+        defaultValue={"is:issue"}
         className=" text-sm bg-gray-100 pr-3 pl-8 py-[5px] bg-[url('../src/img/search.svg')] bg-no-repeat bg-[center_left_4px] bg-auto border-l-[1px] border-solid border-gray-400 w-full rounded-r-lg h-[30px]"
+        onChange={(e) => {console.log(e.target.value)}}
         />
       </div>
       
@@ -229,11 +290,12 @@ function getLabels(index:number){
       </div>
       </div>
     <div>
-    <button className="flex justify-evenly items-center mb-4 lg:text-sm">
+    <button className={`${clearSearch ? "flex" : "hidden"} justify-evenly items-center mb-4 lg:text-sm`}>
     <XIcon size={16} fill="white" className="bg-gray-500 rounded-md mr-1"/>
-    <a href="#" className="font-semibold">
+    <p className="font-semibold hover:cursor-pointer hover:text-[#0969da]" onClick={() =>{setsortSelect(null) 
+      setClearSearch(false)}}>
       Clear current search query, filters, and sorts
-    </a>
+    </p>
     </button>
     <div className="hidden justify-start items-center lg:flex mb-4">
     <button className="flex justify-center items-center">
@@ -422,7 +484,7 @@ function getLabels(index:number){
 
           </div>
       </div>
-      <div className="px-10 py-20 text-center hidden">
+      <div className={`${noSearch ? "block" : "hidden"} px-10 py-20 text-center`}>
         <img src={issueOpened} alt=""  className=" my-0 mx-auto"/>
         <p className="my-4 text-2xl font-semibold">No results matched your search.</p>
         <p className="mb-[10px]">You could search <a href="#" className="text-[#0969da]">all of GitHub</a> or try an <a href="#" className="text-[#0969da]">advanced search</a>.</p>

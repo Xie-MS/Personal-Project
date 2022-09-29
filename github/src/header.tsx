@@ -230,6 +230,8 @@ if(mobileMenuActive === false){
       setUserToken(token.provider_token)
   }
 
+  console.log(userToken)
+
   useEffect(() => {
     if(userToken === "")return
     window.localStorage.setItem(`userToken`, JSON.stringify(`${userToken}`));
