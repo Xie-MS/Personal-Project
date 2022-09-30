@@ -83,13 +83,58 @@ const api = {
       return await response.json();
     },
 
-    async getIssuesAssigneeMe() {
-      const response = await fetch(`${this.hostname}/issues?assignee=Xie-MS`);
+    async getIssuesAssignee() {
+      const response = await fetch(`${this.hostname}/assignees`,{
+        headers: new Headers({
+          'Content-type':'application/json',
+          Accept: "application/vnd.github+json",
+          Authorization: `token ${jwtToken}`,
+        }),
+      });
+      return await response.json();
+    },
+
+    async getIssuesAssigneeMe(assigneeName:string) {
+      const response = await fetch(`${this.hostname}/issues?assignee=${assigneeName}`,{
+        headers: new Headers({
+          'Content-type':'application/json',
+          Accept: "application/vnd.github+json",
+          Authorization: `token ${jwtToken}`,
+        }),
+      });
       return await response.json();
     },
 
     async getIssuesMentionsMe() {
-      const response = await fetch(`${this.hostname}/issues?mentioned=Xie-MS`);
+      const response = await fetch(`${this.hostname}/issues?mentioned=Xie-MS`,{
+        headers: new Headers({
+          'Content-type':'application/json',
+          Accept: "application/vnd.github+json",
+          Authorization: `token ${jwtToken}`,
+        }),
+      });
+      return await response.json();
+    },
+
+    async getIssuesSort(date:string,sort:string) {
+      const response = await fetch(`${this.hostname}/issues?sort=${date}-${sort}`,{
+        headers: new Headers({
+          'Content-type':'application/json',
+          Accept: "application/vnd.github+json",
+          Authorization: `token ${jwtToken}`,
+        }),
+      });
+      return await response.json();
+    },
+
+    async getIssuesLabels(dataName:string) {
+      const response = await fetch(`${this.hostname}/issues?labels=${dataName}`,{
+        headers: new Headers({
+          'Content-type':'application/json',
+          Accept: "application/vnd.github+json",
+          Authorization: `token ${jwtToken}`,
+        }),
+      });
       return await response.json();
     },
 

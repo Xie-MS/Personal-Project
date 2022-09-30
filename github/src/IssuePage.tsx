@@ -11,6 +11,7 @@ import { useState, useEffect, useRef } from "react";
 import {IssueOpenedIcon, LinkExternalIcon, CheckIcon, XIcon, ChevronRightIcon,ChevronLeftIcon, CommentIcon   } from "@primer/octicons-react"
 
 import api from "./api";
+import IssueLabelList from "./IssueLabelList";
 
 function IssuePage() {
 const[filtersMenu, setFiletersMenu] = useState(false);
@@ -20,24 +21,60 @@ const[sortMenu, setSortMenu] = useState(false);
 const[mobileMenuBG, setMobileMenuBG] = useState(false);
 const[noSearch, setNoSearch] = useState(false);
 const[clearSearch, setClearSearch]:any = useState();
+const[assigneeName, setAssigneeName] = useState("");
+const[sortSelectName, setSortSelectName] = useState("");
+const[date, setDate] = useState("created");
+const[sort, setSort] = useState("desc");
+
 
 const[renderData, setRenderData]:any = useState([]);
 const[sortSelect, setsortSelect]:any = useState(null);
 
+const assigneeUserName:any = useRef<HTMLParagraphElement | null>(null);
+
 const Filters = ["Open issues and pull requests","Your issues","Your Pull requests","Everything assigned to you","Everything mentioning you"];
+const SortsSelect = ["Newest", "Oldest", "Most commented", "Least commented", "Recently updated", "Least recently updated"];
+
 
 useEffect(() =>{
+  if(sortSelect === "Newest"){
+    setSort("desc")
+    setDate("created")
+  }
+  else if(sortSelect === "Oldest"){
+    setSort("asc")
+    setDate("created")
+  }
+  else if(sortSelect === "Most commented"){
+    setSort("desc")
+    setDate("comments")
+  }
+  else if(sortSelect === "Least commented"){
+    setSort("asc")
+    setDate("comments")
+  }
+  else if(sortSelect === "Recently updated"){
+    setSort("desc")
+    setDate("updateed")
+  }
+  else if(sortSelect === "Least recently updated"){
+    setSort("asc")
+    setDate("updateed")
+  }
+
+
   async function getListIssues() {
     if(sortSelect === null){
       const data = await api.getListIssuesState();
       setRenderData(data);
+      console.log(renderData)
       if(data.length === 0){
         setNoSearch(true);
       }else{
         setNoSearch(false);
       }
+      console.log(data)
     }
-
     else if(sortSelect === "Your issues"){
       const data = await api.getIssuesAuthorMe()
       setRenderData(data);
@@ -46,10 +83,10 @@ useEffect(() =>{
       }else{
         setNoSearch(false);
       }
-    }
-    
-    else if(sortSelect === "Everything assigned to you"){
-      const data = await api.getIssuesAssigneeMe();
+    }    
+    else if(sortSelect === "Everything assigned to you" || sortSelect === assigneeName){
+      console.log(sortSelect ,assigneeName )
+      const data = await api.getIssuesAssigneeMe(assigneeName);
       setRenderData(data);
       if(data.length === 0){
         setNoSearch(true);
@@ -57,7 +94,6 @@ useEffect(() =>{
         setNoSearch(false);
       }
     }
-
     else if(sortSelect === "Everything mentioning you"){
       const data = await api.getIssuesMentionsMe();
       setRenderData(data);
@@ -67,10 +103,14 @@ useEffect(() =>{
         setNoSearch(false);
       }
     }
+   else if(sortSelect === sortSelectName && date !== null && sort !== null){
+      const data = await api.getIssuesSort(date,sort);
+      setRenderData(data);      
+      console.log(sortSelect)
+    }
   }
   getListIssues();
 }, [sortSelect]);
-
 
 
 function getIssues(){
@@ -107,12 +147,11 @@ function getIssues(){
 }
 
 function getLabels(index:number){
-  return renderData.map((item:any, listIndex: number) => {
-    if(renderData[index].labels.length !== 0 && index === listIndex){
-     
+  return renderData[index].labels.map((item:any, listIndex: number) => {
+    if(renderData[index].labels.length !== 0){
       return(
-        <button style={{backgroundColor: `#${renderData[index].labels[0].color}`}} className={`rounded-xl px-[7px] font-semibold text-sm md:text-xs`}>
-        {renderData[index].labels[0].name}
+        <button style={{backgroundColor: `#${renderData[index].labels[listIndex].color}`}} className={`rounded-xl px-[7px] font-semibold text-sm md:text-xs`}>
+        {renderData[index].labels[listIndex].name}
         </button>
       )
     }
@@ -197,6 +236,22 @@ function getLabels(index:number){
           
         })}
 
+    function SortSelect(){   
+      return SortsSelect.map((item:any, SortsSelectIndex: number) => {
+          return(
+            <li className="py-[7px] px-9 text-xs border-t-[1px] border-solid border-gray-300 flex justify-start items-center sm:px-4 sm:py-4 sm:text-sm" onClick={() => {setsortSelect(SortsSelect[SortsSelectIndex])
+              setSortSelectName(SortsSelect[SortsSelectIndex])
+              setFiletersMenu(false)
+              setClearSearch(true)
+              console.log(sort,date,sortSelect,sortSelectName,SortsSelect[SortsSelectIndex])}}>
+            <div className={`${sortSelect === SortsSelect[SortsSelectIndex] ? "block" : "hidden" } absolute left-3 `}>
+              <CheckIcon size={16} className="mr-2"/>
+            </div>
+              {SortsSelect[SortsSelectIndex]}
+            </li>
+          )        
+      })}
+
   return (
     <div className=" relative z-10">      
     <div className="mt-6 px-6">    
@@ -218,7 +273,7 @@ function getLabels(index:number){
           <p className="hover:underline decoration-auto">Dismiss</p>
         </button>
     <div>    
-      <div className="flex justify-between items-center mb-4  md:flex-col md:mb-0">       
+      <div className="flex justify-between items-center md:flex-col md:mb-0">       
       <div className="xl:bg-gray-100 border-[1px] border-solid border-gray-400 flex justify-between items-center rounded-lg order-0 w-[60%] relative lg:w-[46%] md:w-full md:order-2 my-6">
         <button className="flex px-4 py-[5px]" onClick={() => {
           setFiletersMenu(true)
@@ -243,7 +298,6 @@ function getLabels(index:number){
 
         }}></div> 
         <ul className={`${filtersMenu ? "visible" : "invisible"} bg-white border-[1px] absolute left-auto top-[40px] border-solid border-gray-400 rounded-lg z-10 sm:fixed sm:top-[25%] sm:left-[16%] px-4 text-sm w-[70%]`}>
-          {/* //sm:z-10 absolute w-[85%] h-[40%] top-auto left-auto */}
           <li className="flex justify-between items-center border-b-[1px] border-solid border-gray-400 py-[7px] pl-4 pr-[7px] text-xs sm:font-semibold px-4 sm:py-4">
             <p>Filiter Issues</p>
             <p onClick={() => {setFiletersMenu(false)
@@ -256,7 +310,6 @@ function getLabels(index:number){
             <p>View advanced search syntax</p>
             </li>
         </ul>
-        
         <input type="text"
         defaultValue={"is:issue"}
         className=" text-sm bg-gray-100 pr-3 pl-8 py-[5px] bg-[url('../src/img/search.svg')] bg-no-repeat bg-[center_left_4px] bg-auto border-l-[1px] border-solid border-gray-400 w-full rounded-r-lg h-[30px]"
@@ -340,42 +393,7 @@ function getLabels(index:number){
               Label
               <img src={SortDown} alt="" className="hidden" />
             </button>
-            <ul className={`${labelMenu ? "block" : "hidden"} absolute top-[25px] left-[-7px] bg-white border-[1px] border-solid border-gray-400 rounded-lg sm:fixed sm:top-[25%] sm:left-[6.5%] px-4 text-sm w-[87%] z-10`}>
-              <li className="px-4 py-[7px] text-xs font-semibold flex justify-between items-center border-b-[1px] border-solid border-gray-400 sm:font-semibold px-4 sm:py-4">
-                <p>Filter by label</p>
-                <p onClick={() => {
-                  setLabelMenu(false)
-                  setMobileMenuBG(false)                  
-                  }}>X</p>
-                </li>
-              <li className="px-2 py-2 border-b-[1px] border-solid border-gray-400 sm:px-4 py-4">
-              <input type="text" defaultValue="Filter labels" className="py-[5px] px-3 bg-white border-[1px] border-solid border-gray-400 rounded-lg text-xs w-full sm:font-semibold sm:w-full"/>
-              </li>
-              <li className="py-[7px] px-4 text-xs border-b-[1px] border-solid border-gray-400 flex justify-start items-center sm:font-semibold px-4 sm:py-4">
-              <div className="invisible">
-                <CheckIcon size={16} className="mr-2"/>
-              </div>
-                Unlabeled
-              </li>
-              <li className="py-[7px] px-4 border-b-[1px] border-solid border-gray-400 text-xs flex justify-start items-center sm:font-semibold px-4 sm:py-4">
-              <div className="invisible">
-                <CheckIcon size={16} className="mr-2"/>
-              </div>
-                <div className="flex items-starts">
-                  <p className="bg-[#BFDADC] border-b-[1px] border-solid border-gray-400 rounded-full w-4 h-4 mr-2"/>
-                  <p>0921<br />0921test</p> 
-                </div>
-              </li>
-              <li className="py-[7px] px-4 text-xs flex justify-start items-center sm:font-semibold px-4 sm:py-4">
-              <div className="invisible">
-                <CheckIcon size={16} className="mr-2"/>
-              </div>
-              <div className="flex justify-start items-start sm:flex">
-              <p className="bg-[#FBCA04] border-b-[1px] border-solid border-gray-400 rounded-full w-4 h-4 mr-2"/>
-                <p>test</p>
-              </div>
-              </li>
-            </ul>
+                <IssueLabelList labelMenu={labelMenu} setLabelMenu={setLabelMenu} sortSelect={sortSelect} setsortSelect={setsortSelect} setRenderData={setRenderData} renderData={renderData} clearSearch={clearSearch} setClearSearch={setClearSearch}/>
             <button className="flex justify-center items-center px-4 text-[#57606a] md:hidden hover:text-black">
               Projects
               <img src={SortDown} alt="" />
@@ -394,7 +412,7 @@ function getLabels(index:number){
               Assignee
               <img src={SortDown} alt="" className="hidden"/>
             </button>
-            <ul className={`${assigneMenu ? "block" : "hidden"} absolute top-[25px] right-[60px] bg-white border-[1px] border-solid border-gray-300 rounded-lg w-[275px] sm:sm:fixed sm:top-[1%] sm:left-[4%] sm:bottom-[35%] px-4 text-sm sm:w-[92%]`}>
+            <ul className={`${assigneMenu ? "block" : "hidden"} absolute top-[25px] right-[60px] bg-white border-[1px] border-solid border-gray-300 rounded-lg w-[275px] sm:sm:fixed sm:top-[1%] sm:left-[4%] sm:bottom-[35%] px-4 text-sm sm:w-[92%]`} >
               <li className="px-4 py-[7px] text-xs font-semibold flex justify-between items-center sm:font-semibold sm:px-4 sm:py-4">
                 <p>Filter by who's assigned</p>
                 <p onClick={() =>{setAssigne(false)
@@ -410,14 +428,18 @@ function getLabels(index:number){
               </div>
                 Assigned to nobody
               </li>
-              <li className="py-[7px] px-4 border-t-[1px] border-solid border-gray-300 text-xs flex justify-start items-center sm:px-4 sm:py-4">
-              <div className="invisible">
+              <li className="py-[7px] px-4 border-t-[1px] border-solid border-gray-300 text-xs flex justify-start items-center sm:px-4 sm:py-4"  onClick={() =>{setAssigneeName(assigneeUserName.current?.outerText)
+              setAssigne(false)
+              setsortSelect(assigneeUserName.current?.outerText)
+              setClearSearch(true)
+              console.log(assigneeUserName.current?.outerText,assigneeName,sortSelect)}}>
+              <div className={`${assigneeUserName.current?.outerText === sortSelect ? "visible" : "invisible" }`}>
                 <CheckIcon size={16} className="mr-2"/>
               </div>
                 <div className="flex items-center justify-start">
                   <img src={UserImg} alt="" className="w-[9%] rounded-full mr-2"/>
                   <div className="flex items-center justify-center">
-                  <p className="mr-2 font-semibold">Xie-MS</p> 
+                  <p className="mr-2 font-semibold" ref={assigneeUserName}>Xie-MS</p> 
                   <p>xms_7104</p>
                   </div>
                 </div>
@@ -440,42 +462,7 @@ function getLabels(index:number){
                 <p onClick={() => {setSortMenu(false)
                 setMobileMenuBG(false)}}>X</p>
                 </li>
-              <li className="py-[7px] px-4 text-xs border-t-[1px] border-solid border-gray-300 flex justify-start items-center sm:px-4 sm:py-4 sm:text-sm">
-              <div className="invisible">
-                <CheckIcon size={16} className="mr-2"/>
-              </div>
-                Newest
-              </li>
-              <li className="py-[7px] px-4 text-xs border-t-[1px] border-solid border-gray-300 flex justify-start items-center sm:px-4 sm:py-4 sm:text-sm">
-              <div className="invisible">
-                <CheckIcon size={16} className="mr-2"/>
-              </div>
-                Oldest
-              </li>
-              <li className="py-[7px] px-4 text-xs border-t-[1px] border-solid border-gray-300 flex justify-start items-center sm:px-4 sm:py-4 sm:text-sm">
-              <div className="invisible">
-                <CheckIcon size={16} className="mr-2"/>
-              </div>
-                Most commented
-              </li>
-              <li className="py-[7px] px-4 text-xs border-t-[1px] border-solid border-gray-300 flex justify-start items-center sm:px-4 sm:py-4 sm:text-sm">
-              <div className="invisible">
-                <CheckIcon size={16} className="mr-2"/>
-              </div>
-                Least commented
-              </li>
-              <li className="py-[7px] px-4 text-xs border-t-[1px] border-solid border-gray-300 flex justify-start items-center sm:px-4 sm:py-4 sm:text-sm">
-              <div className="invisible">
-                <CheckIcon size={16} className="mr-2"/>
-              </div>
-                Recently updated
-              </li>
-              <li className="py-[7px] px-4 text-xs border-t-[1px] border-solid border-gray-300 flex justify-start items-center sm:px-4 sm:py-4 sm:text-sm">
-              <div className="invisible">
-                <CheckIcon size={16} className="mr-2"/>
-              </div>
-                Least recently updated
-              </li>
+              {SortSelect()}
             </ul>
           </div>
           </div>
