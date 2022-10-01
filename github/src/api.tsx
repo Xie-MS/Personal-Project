@@ -153,7 +153,7 @@ const api = {
     return await response.json();
   },
 
-  async SearchAll(q: any) {
+  async SearchAll(q: string) {
     const response = await fetch(`${this.hostname}/issues?${q}`, {
       headers: new Headers({
         "Content-type": "application/json",
@@ -161,6 +161,20 @@ const api = {
         Authorization: `token ${jwtToken}`,
       }),
     });
+    return await response.json();
+  },
+
+  async SearchIssues(IssuesName: string) {
+    const response = await fetch(
+      `https://api.github.com/search/issues?q=repo:Xie-Ms/Personal-Project%20${IssuesName}`,
+      {
+        headers: new Headers({
+          "Content-type": "application/json",
+          Accept: "application/vnd.github+json",
+          Authorization: `token ${jwtToken}`,
+        }),
+      }
+    );
     return await response.json();
   },
 

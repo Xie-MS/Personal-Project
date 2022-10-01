@@ -21,6 +21,7 @@ import {
 import api from "./api";
 import IssueLabelList from "./IssueLabelList";
 import { cpSync } from "fs";
+import { ResultType } from "@remix-run/router/dist/utils";
 
 function IssuePage() {
   const [filtersMenu, setFiletersMenu] = useState(false);
@@ -40,6 +41,7 @@ function IssuePage() {
   const [firstpage, setFirstpage] = useState(false);
   const [endpage, setEndpage] = useState(true);
   const [labeslSelectName, setLabeslSelectName] = useState("");
+  const [inputIssueName, setInputIssueName] = useState("");
 
   const [renderData, setRenderData]: any = useState([]);
   const [allSearchInformation, setAllSearchInformation] = useState<any>([]);
@@ -190,6 +192,10 @@ function IssuePage() {
         const data = await api.SearchAll(query);
         setRenderData(data);
         console.log(sortSelect, query);
+      } else if (sortSelect === inputIssueName) {
+        const data = await api.SearchIssues(inputIssueName);
+        let items: any;
+        setRenderData(data.items);
       }
     }
 
@@ -415,6 +421,19 @@ function IssuePage() {
     }
   }
 
+  function getInputIssueName(e: any) {
+    setInputIssueName(e.target.value);
+    console.log(inputIssueName);
+  }
+
+  function InputIssueName(e: any) {
+    if (e.key === "Enter") {
+      setsortSelect(inputIssueName);
+      setClearSearch(true);
+      console.log(inputIssueName, sortSelect);
+    }
+  }
+
   return (
     <div className=" relative z-10">
       <div className="mt-6 px-6">
@@ -509,7 +528,10 @@ function IssuePage() {
                 defaultValue={"is:issue"}
                 className=" text-sm bg-gray-100 pr-3 pl-8 py-[5px] bg-[url('../src/img/search.svg')] bg-no-repeat bg-[center_left_4px] bg-auto border-l-[1px] border-solid border-gray-400 w-full rounded-r-lg h-[30px]"
                 onChange={(e) => {
-                  console.log(e.target.value);
+                  getInputIssueName(e);
+                }}
+                onKeyDown={(e) => {
+                  InputIssueName(e);
                 }}
               />
             </div>
