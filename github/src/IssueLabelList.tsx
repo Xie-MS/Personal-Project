@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import { CheckIcon } from "@primer/octicons-react";
 
 import api from "./api";
+import { array, element } from "prop-types";
 
 function IssueLabelList({
   labelMenu,
@@ -14,6 +15,14 @@ function IssueLabelList({
   setRenderData,
   clearSearch,
   setClearSearch,
+  allSearchInformation,
+  setAllSearchInformation,
+  labelSelectOption,
+  setLabelSelectOption,
+  noSearch,
+  setNoSearch,
+  labeslSelectName,
+  setLabeslSelectName,
 }: {
   labelMenu: boolean;
   setLabelMenu: React.Dispatch<React.SetStateAction<boolean>>;
@@ -23,20 +32,42 @@ function IssueLabelList({
   setRenderData: any;
   clearSearch: boolean;
   setClearSearch: React.Dispatch<React.SetStateAction<boolean>>;
+  allSearchInformation: any;
+  setAllSearchInformation: any;
+  labelSelectOption: any;
+  setLabelSelectOption: any;
+  noSearch: boolean;
+  setNoSearch: any;
+  labeslSelectName: string;
+  setLabeslSelectName: any;
 }) {
   const [labelData, setLabelData]: any = useState([]);
   const [mobileMenuBG, setMobileMenuBG] = useState(false);
-  const [labeslSelectName, setLabeslSelectName] = useState("");
   const [labeslSelectDescription, setLabeslSelectDescription] = useState("");
-  const [labelSelectOption, setLabelSelectOption]: any = useState([]);
+  const [labeslSelectOption, setLabeslSelectOption] = useState(true);
+  const [labeslSelectArray, setLabeslSelectArray]: any = useState([]);
+
+  const labeslDataArray: any[] = [];
+
+  const labeslInput = useRef<HTMLInputElement | null>(null);
 
   useEffect(() => {
     async function getListLabels() {
-      const data = await api.getLabels();
-      setLabelData(data);
+      if (labeslSelectName === "") {
+        const data = await api.getLabels();
+        setLabelData(data);
+      } else if (labeslSelectName !== "") {
+        const data = await api.getIssuesLabels(labeslSelectName);
+        setLabelData(data);
+        if (data.length === 0) {
+          setNoSearch(true);
+        } else {
+          setNoSearch(false);
+        }
+      }
     }
     getListLabels();
-  }, []);
+  }, [sortSelect]);
 
   useEffect(() => {
     async function getListIssues() {
@@ -49,12 +80,29 @@ function IssueLabelList({
   }, [sortSelect]);
 
   function LabelsSelect() {
-    return labelData.map((item: any, LablesSelectIndex: number) => {
+    return labelData.map((_item: any, LablesSelectIndex: number) => {
+      if (labelData[LablesSelectIndex].description === "") {
+        labeslDataArray.push(labelData[LablesSelectIndex].name);
+      } else {
+        labeslDataArray.push(
+          labelData[LablesSelectIndex].name,
+          labelData[LablesSelectIndex].description
+        );
+      }
+
       return (
         <li
-          className="relative py-[7px] border-b-[1px] border-solid border-gray-400 text-xs flex justify-start items-center w-[266px] sm:font-semibold px-4 sm:py-4"
+          className={`
+          ${
+            labeslSelectOption ||
+            (labeslDataArray.toLocaleString().includes(labeslSelectName) &&
+              labelData[LablesSelectIndex].name
+                .toLocaleString()
+                .includes(labeslSelectName))
+              ? "flex"
+              : "hidden"
+          } relative py-[7px] border-b-[1px] border-solid border-gray-400 text-xs justify-start items-center w-[266px] sm:font-semibold px-4 sm:py-4`}
           onClick={() => {
-            setLabeslSelectName(labelData[LablesSelectIndex].name);
             setLabeslSelectDescription(
               labelData[LablesSelectIndex].description
             );
@@ -63,8 +111,10 @@ function IssueLabelList({
               ...labelSelectOption,
               labelData[LablesSelectIndex].name,
             ]);
+            setLabeslSelectName(labelData[LablesSelectIndex].name);
             setClearSearch(true);
-            console.log(labelSelectOption);
+            setLabelMenu(false);
+            setLabeslSelectOption(true);
           }}
         >
           <div
@@ -94,6 +144,38 @@ function IssueLabelList({
     });
   }
 
+  function LabelsSelectInput(e: any) {
+    if (e.target.value === "") {
+      setLabeslSelectOption(true);
+    } else if (
+      labeslDataArray.toLocaleString().includes(e.target.value.toLowerCase())
+    ) {
+      setLabeslSelectName(e.target.value);
+      setLabeslSelectOption(false);
+      console.log(
+        labeslDataArray
+          .toLocaleString()
+          .includes(e.target.value.toLocaleString())
+      );
+    } else if (
+      labeslDataArray
+        .toLocaleString()
+        .includes(e.target.value.toLocaleString()) === false
+    ) {
+      setLabeslSelectName(e.target.value);
+      setLabeslSelectOption(false);
+    }
+  }
+
+  function LabelsSelectInputClick(e: any) {
+    if (e.key === "Enter") {
+      setLabelSelectOption([...labelSelectOption, labeslInput.current?.value]);
+      setsortSelect(labeslInput.current?.value);
+      setClearSearch(true);
+      setLabelMenu(false);
+    }
+  }
+
   return (
     <ul
       className={`${
@@ -116,6 +198,13 @@ function IssueLabelList({
           type="text"
           defaultValue="Filter labels"
           className="py-[5px] px-3 bg-white border-[1px] border-solid border-gray-400 rounded-lg text-xs w-full sm:font-semibold sm:w-full"
+          ref={labeslInput}
+          onChange={(e) => {
+            LabelsSelectInput(e);
+          }}
+          onKeyDown={(e) => {
+            LabelsSelectInputClick(e);
+          }}
         />
       </li>
       <li className="py-[7px] px-4 text-xs border-b-[1px] border-solid border-gray-400 flex justify-start items-center sm:font-semibold px-4 sm:py-4">

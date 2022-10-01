@@ -20,6 +20,7 @@ import {
 
 import api from "./api";
 import IssueLabelList from "./IssueLabelList";
+import { cpSync } from "fs";
 
 function IssuePage() {
   const [filtersMenu, setFiletersMenu] = useState(false);
@@ -29,17 +30,24 @@ function IssuePage() {
   const [mobileMenuBG, setMobileMenuBG] = useState(false);
   const [noSearch, setNoSearch] = useState(false);
   const [clearSearch, setClearSearch]: any = useState();
-  const [assigneeName, setAssigneeName] = useState("");
-  const [assigneeInputValue, setAssigneeInputValue] = useState("");
+  const [assigneeName, setAssigneeName] = useState("Xie-MS");
   const [assigneeLI, setAssigneeLI] = useState(true);
   const [sortSelectName, setSortSelectName] = useState("");
-  const [date, setDate] = useState("created");
-  const [sort, setSort] = useState("desc");
+  const [date, setDate] = useState("");
+  const [sort, setSort] = useState("");
+  const [labelSelectOption, setLabelSelectOption]: any = useState([]);
+  const [page, setPage] = useState(1);
+  const [firstpage, setFirstpage] = useState(false);
+  const [endpage, setEndpage] = useState(true);
+  const [labeslSelectName, setLabeslSelectName] = useState("");
 
   const [renderData, setRenderData]: any = useState([]);
-  const [sortSelect, setsortSelect]: any = useState(null);
+  const [allSearchInformation, setAllSearchInformation] = useState<any>([]);
+  const [query, setQuery] = useState<any>();
+  const [sortSelect, setsortSelect]: any = useState("");
 
   const assigneeUserName: any = useRef<HTMLParagraphElement | null>(null);
+  const AssigneeOnChange = useRef<HTMLInputElement | null>(null);
 
   const Filters = [
     "Open issues and pull requests",
@@ -56,6 +64,53 @@ function IssuePage() {
     "Recently updated",
     "Least recently updated",
   ];
+
+  useEffect(() => {
+    console.log(allSearchInformation.length);
+    if (allSearchInformation.length >= 0) {
+      if (
+        assigneeName === sortSelect ||
+        sortSelect === "Everything assigned to you"
+      ) {
+        setAllSearchInformation([
+          ...allSearchInformation,
+          "assignee=" + assigneeName,
+        ]);
+      } else if (sortSelect === "Your issues") {
+        setAllSearchInformation([...allSearchInformation, "creator=Xie-MS"]);
+      } else if (sortSelect === "Everything mentioning you") {
+        setAllSearchInformation([...allSearchInformation, "mentioned=Xie-MS"]);
+      } else if (sortSelect === sortSelectName && date !== "" && sort !== "") {
+        setAllSearchInformation([
+          ...allSearchInformation,
+          `sort=${date}-${sort}`,
+        ]);
+      } else if (sortSelect === labeslSelectName && labeslSelectName !== "") {
+        setAllSearchInformation([
+          ...allSearchInformation,
+          `labels=${labeslSelectName}`,
+        ]);
+      }
+      setQuery(allSearchInformation);
+      console.log(allSearchInformation.length, query, sortSelect);
+
+      if (
+        query !== undefined &&
+        allSearchInformation.length > 1 &&
+        query !== sortSelect
+      ) {
+        for (let i = 1; i < allSearchInformation.length; i++) {
+          allSearchInformation[i] = "&" + allSearchInformation[i];
+          console.log(allSearchInformation);
+        }
+        setQuery(`?${allSearchInformation.join("")}`);
+        setsortSelect(`?${allSearchInformation.join("")}`);
+        console.log(query, sortSelect);
+      }
+      console.log(query, sortSelect);
+      // setsortSelect(query);
+    }
+  }, [sortSelect]);
 
   useEffect(() => {
     if (sortSelect === "Newest") {
@@ -79,18 +134,17 @@ function IssuePage() {
     }
 
     async function getListIssues() {
-      if (sortSelect === null) {
-        const data = await api.getListIssuesState();
+      console.log(sortSelect, page);
+      if (sortSelect === page && page !== null) {
+        const data = await api.getListIssuesState(page);
         setRenderData(data);
-        console.log(renderData);
         if (data.length === 0) {
           setNoSearch(true);
         } else {
           setNoSearch(false);
         }
-        console.log(data);
       } else if (sortSelect === "Your issues") {
-        const data = await api.getIssuesAuthorMe();
+        const data = await api.getYourIssues();
         setRenderData(data);
         if (data.length === 0) {
           setNoSearch(true);
@@ -101,7 +155,6 @@ function IssuePage() {
         sortSelect === "Everything assigned to you" ||
         sortSelect === assigneeName
       ) {
-        console.log(sortSelect, assigneeName);
         const data = await api.getIssuesAssigneeMe(assigneeName);
         setRenderData(data);
         if (data.length === 0) {
@@ -125,8 +178,21 @@ function IssuePage() {
         const data = await api.getIssuesSort(date, sort);
         setRenderData(data);
         console.log(sortSelect);
+      } else if (
+        sortSelect === sortSelectName &&
+        date !== null &&
+        sort !== null
+      ) {
+        const data = await api.getIssuesSort(date, sort);
+        setRenderData(data);
+        console.log(sortSelect);
+      } else if (sortSelect === query) {
+        const data = await api.SearchAll(query);
+        setRenderData(data);
+        console.log(sortSelect, query);
       }
     }
+
     getListIssues();
   }, [sortSelect]);
 
@@ -310,13 +376,6 @@ function IssuePage() {
             setSortSelectName(SortsSelect[SortsSelectIndex]);
             setFiletersMenu(false);
             setClearSearch(true);
-            console.log(
-              sort,
-              date,
-              sortSelect,
-              sortSelectName,
-              SortsSelect[SortsSelectIndex]
-            );
           }}
         >
           <div
@@ -353,14 +412,7 @@ function IssuePage() {
     if (e.key === "Enter") {
       setAssigneeName(e.target.value);
       setsortSelect(e.target.value);
-      console.log("aaaa", assigneeName, sortSelect);
     }
-    // if(assigneeUserName.current?.outerText.toLowerCase().includes(e.target.value.toLowerCase())){
-    //   setAssigneeLI(true)
-    //   setAssigneeName(assigneeUserName.current?.outerText)
-    // }else if(assigneeUserName.current?.outerText.toLowerCase().includes(e.target.value.toLowerCase()) === false){
-    //   setAssigneeLI(false)
-    // }
   }
 
   return (
@@ -378,7 +430,7 @@ function IssuePage() {
                   Now, GitHub will help potential first-time contributors{" "}
                   <a href="#" className="text-blue-500">
                     discover issues
-                  </a>{" "}
+                  </a>
                   labeled with
                   <button className="text-white bg-indigo-600 rounded-xl text-xs w-24 h-[18px] px-[7px] ml-1">
                     good first issue
@@ -500,8 +552,10 @@ function IssuePage() {
               <p
                 className="font-semibold hover:cursor-pointer hover:text-[#0969da]"
                 onClick={() => {
-                  setsortSelect(null);
+                  setsortSelect(page);
                   setClearSearch(false);
+                  setAllSearchInformation([]);
+                  setLabelSelectOption([]);
                 }}
               >
                 Clear current search query, filters, and sorts
@@ -566,6 +620,14 @@ function IssuePage() {
                   renderData={renderData}
                   clearSearch={clearSearch}
                   setClearSearch={setClearSearch}
+                  allSearchInformation={allSearchInformation}
+                  setAllSearchInformation={setAllSearchInformation}
+                  labelSelectOption={labelSelectOption}
+                  setLabelSelectOption={setLabelSelectOption}
+                  noSearch={noSearch}
+                  setNoSearch={setNoSearch}
+                  labeslSelectName={labeslSelectName}
+                  setLabeslSelectName={setLabeslSelectName}
                 />
                 <button className="flex justify-center items-center px-4 text-[#57606a] md:hidden hover:text-black">
                   Projects
@@ -615,6 +677,7 @@ function IssuePage() {
                       type="text"
                       defaultValue="Filter users"
                       className="py-[5px] px-3 bg-white border-[1px] border-solid border-gray-300 rounded-lg text-xs w-full"
+                      ref={AssigneeOnChange}
                       onChange={(e) => {
                         AssigneeInput(e);
                       }}
@@ -638,7 +701,6 @@ function IssuePage() {
                       setAssigne(false);
                       setsortSelect("Xie-MS");
                       setClearSearch(true);
-                      console.log(assigneeUserName.current?.outerText);
                     }}
                   >
                     <div
@@ -721,40 +783,62 @@ function IssuePage() {
               No results matched your search.
             </p>
             <p className="mb-[10px]">
-              You could search{" "}
+              You could search
               <a href="#" className="text-[#0969da]">
                 all of GitHub
-              </a>{" "}
-              or try an{" "}
+              </a>
+              or try an
               <a href="#" className="text-[#0969da]">
                 advanced search
               </a>
-              .
             </p>
           </div>
         </div>
 
         <div className="visible my-4 flex justify-center items-center">
-          <button className="flex justify-start items-center px-[10px] py-[5px] ">
+          <button
+            className="flex justify-start items-center px-[10px] py-[5px]"
+            onClick={() => {
+              setPage(page - 1);
+              setsortSelect(page - 1);
+
+              if (page <= 2) {
+                setEndpage(true);
+                setFirstpage(false);
+                console.log("AAA", page);
+              } else if (page > 2) {
+                setFirstpage(true);
+                console.log("BBB", page);
+              }
+            }}
+          >
             <ChevronLeftIcon
               size={16}
-              className="fill-[#0969da] sm: fill-[#8c959f]"
+              className={`fill-${firstpage ? "[#0969da]" : "[#8c959f]"}`}
             />
-            <p className="text-[#0969da] sm:text-[#8c959f]">previous</p>
+            <p className={`text-${firstpage ? "[#0969da]" : "[#8c959f]"}`}>
+              previous
+            </p>
           </button>
-          <div className="flex justify-center items-center sm:hidden">
-            <button className="px-[10px] py-[5px]">
-              <p className="w-8 h-8 flex justify-center items-center">1</p>
-            </button>
-            <button className="px-[10px] py-[5px]">
-              <p className="w-8 h-8 flex justify-center items-center bg-[#0969da] text-white rounded-md">
-                2
-              </p>
-            </button>
-          </div>
-          <button className="flex justify-start items-center px-[10px] py-[5px]">
-            <p className="text-[#0969da]">Next</p>
-            <ChevronRightIcon size={16} fill={"#0969da"} />
+          <button
+            className="flex justify-start items-center px-[10px] py-[5px]"
+            onClick={() => {
+              setPage(page + 1);
+              setsortSelect(page + 1);
+              setFirstpage(true);
+              console.log(page);
+              if (page >= 2) {
+                setEndpage(false);
+              }
+            }}
+          >
+            <p className={`text-${endpage ? "[#0969da]" : "[#8c959f]"}`}>
+              Next
+            </p>
+            <ChevronRightIcon
+              size={16}
+              className={`fill-${endpage ? "[#0969da]" : "[#8c959f]"}`}
+            />
           </button>
         </div>
 
