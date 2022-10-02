@@ -1,5 +1,4 @@
 //import username
-import { LoggedOut } from "./stories/Page.stories";
 
 let jwtToken: string;
 function getProfile() {
@@ -175,6 +174,17 @@ const api = {
         }),
       }
     );
+    return await response.json();
+  },
+
+  async ClosedIssues() {
+    const response = await fetch(`${this.hostname}/issues?state=closed`, {
+      headers: new Headers({
+        "Content-type": "application/json",
+        Accept: "application/vnd.github+json",
+        Authorization: `token ${jwtToken}`,
+      }),
+    });
     return await response.json();
   },
 

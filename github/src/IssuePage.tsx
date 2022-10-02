@@ -7,6 +7,7 @@ import Check from "../src/img/check.svg";
 import UserImg from "../src/img/userImg.png";
 import Light from "../src/img/light.svg";
 import { useState, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 
 import {
   IssueOpenedIcon,
@@ -16,12 +17,15 @@ import {
   ChevronRightIcon,
   ChevronLeftIcon,
   CommentIcon,
+  CheckCircleIcon,
+  CircleSlashIcon,
 } from "@primer/octicons-react";
 
 import api from "./api";
 import IssueLabelList from "./IssueLabelList";
 
 function IssuePage() {
+  const navigate = useNavigate();
   const [filtersMenu, setFiletersMenu] = useState(false);
   const [labelMenu, setLabelMenu] = useState(false);
   const [assigneMenu, setAssigne] = useState(false);
@@ -40,6 +44,7 @@ function IssuePage() {
   const [endpage, setEndpage] = useState(true);
   const [labeslSelectName, setLabeslSelectName] = useState("");
   const [inputIssueName, setInputIssueName] = useState("");
+  const [state, setState] = useState("open");
 
   const [renderData, setRenderData]: any = useState([]);
   const [allSearchInformation, setAllSearchInformation] = useState<any>([]);
@@ -133,8 +138,10 @@ function IssuePage() {
 
     async function getListIssues() {
       console.log(sortSelect, page);
-      if (sortSelect === page && page !== null) {
+      console.log("aa");
+      if (sortSelect === page && page !== null && state === "open") {
         const data = await api.getListIssuesState(page);
+        console.log("aaaa");
         setRenderData(data);
         if (data.length === 0) {
           setNoSearch(true);
@@ -176,14 +183,6 @@ function IssuePage() {
         const data = await api.getIssuesSort(date, sort);
         setRenderData(data);
         console.log(sortSelect);
-      } else if (
-        sortSelect === sortSelectName &&
-        date !== null &&
-        sort !== null
-      ) {
-        const data = await api.getIssuesSort(date, sort);
-        setRenderData(data);
-        console.log(sortSelect);
       } else if (sortSelect === query) {
         const data = await api.SearchAll(query);
         setRenderData(data);
@@ -192,6 +191,14 @@ function IssuePage() {
         const data = await api.SearchIssues(inputIssueName);
         let items: any;
         setRenderData(data.items);
+      } else if (sortSelect === "closed") {
+        const data = await api.ClosedIssues();
+        setRenderData(data);
+        console.log(data, "AAA");
+      } else if (labeslSelectName !== "" && labeslSelectName === sortSelect) {
+        console.log("###");
+        const data = await api.getIssuesLabels(labeslSelectName);
+        setRenderData(data);
       }
     }
 
@@ -204,17 +211,40 @@ function IssuePage() {
         return (
           <>
             <div
-              style={{ border: "revert" }}
               className={`${
                 noSearch ? "hidden" : "flex"
-              } justify-between items-center border-b-[1px] border-r-[1px] border-l-[1px] border-slate-300"`}
+              } justify-between items-center border-b-[1px] border-r-[1px] border-l-[1px] border-slate-200 border-solid`}
             >
               <div className="flex justify-start items-start pl-4">
                 <div className="py-2">
                   <input type="checkbox" className="flex md:hidden" />
                 </div>
-                <div className="pt-2 pl-4">
+                <div
+                  className={`${
+                    state === "open" ? "block" : "hidden"
+                  } pt-2 pl-4`}
+                >
                   <IssueOpenedIcon size={16} fill="green" />
+                </div>
+                <div
+                  className={`${
+                    state !== "open" &&
+                    renderData[index].state_reason === "not_planned"
+                      ? "block"
+                      : "hidden"
+                  } pt-2 pl-4`}
+                >
+                  <CheckCircleIcon size={16} fill="purple" />
+                </div>
+                <div
+                  className={`${
+                    state !== "open" &&
+                    renderData[index].state_reason === "completed"
+                      ? "block"
+                      : "hidden"
+                  } pt-2 pl-4`}
+                >
+                  <CircleSlashIcon size={16} fill="gray" />
                 </div>
                 <div className="block justify-center items-center px-2 py-2">
                   <div className="flex justify-start items-center md:block">
@@ -347,12 +377,13 @@ function IssuePage() {
     return Filters.map((item: any, FiltersDSelectIndex: number) => {
       return (
         <li
-          className="flex justify-start items-center border-b-[1px] border-solid border-gray-400 py-[7px] pl-9 pr-[7px] text-xs sm:px-4 sm:py-4"
+          className="flex justify-start items-center border-b-[1px] border-solid border-gray-400 py-[7px] pl-9 pr-[7px] text-xs sm:pr-4 sm:py-4"
           onClick={() => {
             setAssigneeName("Xie-MS");
             setsortSelect(Filters[FiltersDSelectIndex]);
             setFiletersMenu(false);
             setClearSearch(true);
+            setMobileMenuBG(false);
           }}
         >
           <div
@@ -372,12 +403,14 @@ function IssuePage() {
     return SortsSelect.map((item: any, SortsSelectIndex: number) => {
       return (
         <li
-          className="py-[7px] px-9 text-xs border-t-[1px] border-solid border-gray-300 flex justify-start items-center sm:px-4 sm:py-4 sm:text-sm"
+          className="py-[7px] px-9 text-xs border-t-[1px] border-solid border-gray-300 flex justify-start items-center sm:py-4 sm:text-sm"
           onClick={() => {
             setsortSelect(SortsSelect[SortsSelectIndex]);
             setSortSelectName(SortsSelect[SortsSelectIndex]);
             setFiletersMenu(false);
             setClearSearch(true);
+            setSortMenu(false);
+            setMobileMenuBG(false);
           }}
         >
           <div
@@ -534,7 +567,12 @@ function IssuePage() {
 
             <div className="flex justify-between items-center md:w-full">
               <div className="flex justify-between  border-[1px] border-solid border-gray-400 rounded-md h-[30px] w-[270px] md:w-auto">
-                <button className="flex justify-evenly items-center px-4 py-[5px] bg-white rounded-l-md border-r-[1px] border-solid border-gray-400 text-sm">
+                <button
+                  className="flex justify-evenly items-center px-4 py-[5px] bg-white rounded-l-md border-r-[1px] border-solid border-gray-400 text-sm"
+                  onClick={() => {
+                    navigate(`/LabelManagement`);
+                  }}
+                >
                   <img src={LabelsImage} alt="" className="w-1/5 text-sm" />
                   Labels
                   <p className=" px-[6px] bg-gray-200 rounded-xl w-6 h-6 border-[1px] border-solid border-gray-50 flex justify-center items-center md:hidden">
@@ -550,8 +588,10 @@ function IssuePage() {
                 </button>
               </div>
 
-              <button className="px-4 py-[5px] text-white bg-green-600 border-[1px] border-solid border-gray-400 rounded-md h-[30px] text-sm lg:ml-[15px]">
-                <p className="flex md:hidden">New issue</p>
+              <button className="flex justify-center items-center ml-2 px-4 py-[5px] text-white bg-green-600 border-[1px] border-solid border-gray-400 rounded-md h-[30px] text-sm lg:ml-[15px]">
+                <p className="flex justify-center items-center md:hidden">
+                  New issue
+                </p>
                 <p className="hidden md:flex">New</p>
               </button>
             </div>
@@ -580,11 +620,24 @@ function IssuePage() {
               </p>
             </button>
             <div className="hidden justify-start items-center lg:flex mb-4">
-              <button className="flex justify-center items-center">
+              <button
+                className="flex justify-center items-center"
+                onClick={() => {
+                  setsortSelect(page);
+                  setState("open");
+                }}
+              >
                 <img src={issueOpened} alt="" className="mr-1 w-1/4" />
-                <p className="text-sm">3 Open</p>
+                <p className="text-sm">31 Open</p>
               </button>
-              <button className="flex justify-center items-center ml-[10px]">
+              <button
+                className="flex justify-center items-center ml-[10px]"
+                onClick={() => {
+                  setsortSelect("closed");
+                  setState("closed");
+                  console.log(sortSelect, "BBB");
+                }}
+              >
                 <img src={Check} alt="" className="mr-1 w-1/5" />
                 <p className="text-sm">2 Closed</p>
               </button>
@@ -595,11 +648,24 @@ function IssuePage() {
               <div className="flex justify-start items-center">
                 <input type="checkbox" className="flex mr-4 md:hidden" />
                 <div className="flex justify-start items-center lg:hidden">
-                  <button className="flex justify-center items-center">
+                  <button
+                    className="flex justify-center items-center"
+                    onClick={() => {
+                      setsortSelect(page);
+                      setState("open");
+                    }}
+                  >
                     <img src={issueOpened} alt="" className="mr-1 w-1/4" />
-                    <p className="text-sm">3 Open</p>
+                    <p className="text-sm">31 Open</p>
                   </button>
-                  <button className="flex justify-center items-center ml-[10px]">
+                  <button
+                    className="flex justify-center items-center ml-[10px]"
+                    onClick={() => {
+                      setsortSelect("closed");
+                      setState("closed");
+                      console.log(sortSelect, "CCC");
+                    }}
+                  >
                     <img src={Check} alt="" className="mr-1 w-1/5" />
                     <p className="text-sm">2 Closed</p>
                   </button>
@@ -646,6 +712,8 @@ function IssuePage() {
                   setNoSearch={setNoSearch}
                   labeslSelectName={labeslSelectName}
                   setLabeslSelectName={setLabeslSelectName}
+                  mobileMenuBG={mobileMenuBG}
+                  setMobileMenuBG={setMobileMenuBG}
                 />
                 <button className="flex justify-center items-center px-4 text-[#57606a] md:hidden hover:text-black">
                   Projects

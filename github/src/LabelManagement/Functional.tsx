@@ -42,39 +42,39 @@ function Product() {
   return (
     <Functional>
       <FunctionalImgandText>
-        <FunctionalImg src={CodeImage} />
+        <FunctionalImg src={CodeImage} alt="" />
         <p>code</p>
       </FunctionalImgandText>
       <FunctionalImgandText>
-        <FunctionalImg src={IssueImage} />
+        <FunctionalImg src={IssueImage} alt="" />
         <p>Issues</p>
       </FunctionalImgandText>
       <FunctionalImgandText>
-        <FunctionalImg src={PRImage} />
+        <FunctionalImg src={PRImage} alt="" />
         <p>Pull requests</p>
       </FunctionalImgandText>
       <FunctionalImgandText>
-        <FunctionalImg src={ActionImage} />
+        <FunctionalImg src={ActionImage} alt="" />
         <p>Actions</p>
       </FunctionalImgandText>
       <FunctionalImgandText>
-        <FunctionalImg src={ProjectsImage} />
+        <FunctionalImg src={ProjectsImage} alt="" />
         <p>Projects</p>
       </FunctionalImgandText>
       <FunctionalImgandText>
-        <FunctionalImg src={WikiImage} />
+        <FunctionalImg src={WikiImage} alt="" />
         <p>Wiki</p>
       </FunctionalImgandText>
       <FunctionalImgandText>
-        <FunctionalImg src={SecurityImage} />
+        <FunctionalImg src={SecurityImage} alt="" />
         <p>Security</p>
       </FunctionalImgandText>
       <FunctionalImgandText>
-        <FunctionalImg src={InsightsImage} />
+        <FunctionalImg src={InsightsImage} alt="" />
         <p>Insights</p>
       </FunctionalImgandText>
       <FunctionalImgandText>
-        <FunctionalImg src={SettingImage} />
+        <FunctionalImg src={SettingImage} alt="" />
         <p>Settings</p>
       </FunctionalImgandText>
     </Functional>

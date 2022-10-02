@@ -40,7 +40,7 @@ function Product() {
         Xie-MS
       </MobileMenuTextAndImg>
       <MobileMenuTextAndImg>
-        <MobileMenuImg src={SingOut} />
+        <MobileMenuImg src={SingOut} alt="" />
         Sign out
       </MobileMenuTextAndImg>
     </MobileMenuUl>

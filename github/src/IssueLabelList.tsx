@@ -22,6 +22,8 @@ function IssueLabelList({
   setNoSearch,
   labeslSelectName,
   setLabeslSelectName,
+  mobileMenuBG,
+  setMobileMenuBG,
 }: {
   labelMenu: boolean;
   setLabelMenu: React.Dispatch<React.SetStateAction<boolean>>;
@@ -39,9 +41,10 @@ function IssueLabelList({
   setNoSearch: any;
   labeslSelectName: string;
   setLabeslSelectName: any;
+  mobileMenuBG: boolean;
+  setMobileMenuBG: any;
 }) {
   const [labelData, setLabelData]: any = useState([]);
-  const [mobileMenuBG, setMobileMenuBG] = useState(false);
   const [labeslSelectOption, setLabeslSelectOption] = useState(true);
 
   const labeslDataArray: any[] = [];
@@ -54,12 +57,13 @@ function IssueLabelList({
       if (labeslSelectName === "") {
         const data = await api.getLabels();
         setLabelData(data);
-      } else if (labeslSelectName !== "") {
+      } else if (labeslSelectName !== "" && labeslSelectName === sortSelect) {
         console.log(labeslName);
         const data = await api.getIssuesLabels(labeslSelectName);
         let labels: any;
         setLabelData(data[0].labels);
-        console.log(data[0].labels[0], labelData);
+        setRenderData(data);
+
         if (data.length === 0) {
           setNoSearch(true);
         } else {
@@ -70,18 +74,8 @@ function IssueLabelList({
     getListLabels();
   }, [sortSelect]);
 
-  useEffect(() => {
-    async function getListIssues() {
-      if (labeslSelectName !== "") {
-        const data = await api.getIssuesLabels(labeslSelectName);
-        setRenderData(data);
-      }
-    }
-    getListIssues();
-  }, [sortSelect]);
-
   function LabelsSelect() {
-    console.log(labelData);
+    console.log(labelData, renderData);
     return labelData.map((_item: any, LablesSelectIndex: number) => {
       if (labelData[LablesSelectIndex].description === "") {
         labeslDataArray.push(labelData[LablesSelectIndex].name);
@@ -104,7 +98,7 @@ function IssueLabelList({
                 .includes(labelData[LablesSelectIndex].name))
               ? "flex"
               : "hidden"
-          } relative py-[7px] border-b-[1px] border-solid border-gray-400 text-xs justify-start items-center w-[266px] sm:font-semibold px-4 sm:py-4`}
+          } relative py-[7px] border-b-[1px] border-solid border-gray-400 text-xs justify-start items-center w-[266px] sm:font-semibold sm:py-4 sm:w-full sm:pl-11 pr-4`}
           onClick={() => {
             setsortSelect(labelData[LablesSelectIndex].name);
             setLabelSelectOption([
@@ -114,6 +108,7 @@ function IssueLabelList({
             setLabeslSelectName(labelData[LablesSelectIndex].name);
             setClearSearch(true);
             setLabelMenu(false);
+            setMobileMenuBG(false);
           }}
         >
           <div
@@ -174,21 +169,21 @@ function IssueLabelList({
     <ul
       className={`${
         labelMenu ? "block" : "hidden"
-      } w-[300px] h-[446px] absolute top-[25px] left-[-7px] bg-white border-[1px] border-solid border-gray-400 rounded-lg sm:fixed sm:top-[25%] sm:left-[6.5%] px-4 text-sm sm:w-[87%] z-10`}
+      } w-[300px] h-[446px] absolute top-[25px] left-[-7px] bg-white border-[1px] border-solid border-gray-400 rounded-lg sm:fixed sm:top-[15%] sm:left-[6.5%] px-4 text-sm sm:w-[87%] z-10 sm:h-auto`}
     >
-      <li className="px-4 py-[7px] text-xs font-semibold flex justify-between items-center border-b-[1px] border-solid border-gray-400 sm:font-semibold px-4 sm:py-4">
+      <li className="px-4 py-[7px] text-xs font-semibold flex justify-between items-center border-b-[1px] border-solid border-gray-400 sm:font-semibold sm:px-4 sm:py-4 sm:w-full">
         <p>Filter by label</p>
         <p
           onClick={() => {
             setLabelMenu(false);
-            setMobileMenuBG(false);
             setLabeslSelectName("");
+            setMobileMenuBG(false);
           }}
         >
           X
         </p>
       </li>
-      <li className="px-2 py-2 border-b-[1px] border-solid border-gray-400 sm:px-4 py-4">
+      <li className="px-2 py-2 border-b-[1px] border-solid border-gray-400 sm:px-4 sm:py-4 sm:w-full">
         <input
           type="text"
           defaultValue="Filter labels"
@@ -202,7 +197,7 @@ function IssueLabelList({
           }}
         />
       </li>
-      <li className="py-[7px] px-4 text-xs border-b-[1px] border-solid border-gray-400 flex justify-start items-center sm:font-semibold px-4 sm:py-4">
+      <li className="py-[7px] px-4 text-xs border-b-[1px] border-solid border-gray-400 flex justify-start items-center sm:font-semibold sm:px-4 sm:py-4 sm:w-full">
         <div className="invisible">
           <CheckIcon size={16} className="mr-2" />
         </div>

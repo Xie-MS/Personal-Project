@@ -61,15 +61,15 @@ function Product() {
   return (
     <HeaderRightUl>
       <li>
-        <BellImg src={BellImage} />
+        <BellImg src={BellImage} alt="" />
       </li>
       <More>
         <MoreText>＋</MoreText>
-        <SortDownImg src={SortWhite} />
+        <SortDownImg src={SortWhite} alt="" />
       </More>
       <Pofile>
-        <UserImg src={LogoImage} />
-        <SortDownImgUser src={SortWhite} />
+        <UserImg src={LogoImage} alt="" />
+        <SortDownImgUser src={SortWhite} alt="" />
       </Pofile>
     </HeaderRightUl>
   );

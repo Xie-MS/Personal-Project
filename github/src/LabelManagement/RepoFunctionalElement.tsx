@@ -73,32 +73,32 @@ function Product() {
     <FunctionalElement>
       <li>
         <PinBtn>
-          <FunctionalElementImg src={PinImage} />
+          <FunctionalElementImg src={PinImage} alt="" />
           Pin
         </PinBtn>
       </li>
       <li>
         <FunctionalElementBtn>
-          <FunctionalElementImg src={UnwatchImage} />
+          <FunctionalElementImg src={UnwatchImage} alt="" />
           Unwatch
           <FunctionalElementNum>1</FunctionalElementNum>
-          <UnWatchImg src={SortDownImage} />
+          <UnWatchImg src={SortDownImage} alt="" />
         </FunctionalElementBtn>
       </li>
       <ForkAndStar>
         <FunctionalElementBtn>
-          <ForkAndStarImg src={ForkImage} />
+          <ForkAndStarImg src={ForkImage} alt="" />
           Fork
           <FunctionalElementNum>0</FunctionalElementNum>
-          <UnWatchImg src={SortDownImage} />
+          <UnWatchImg src={SortDownImage} alt="" />
         </FunctionalElementBtn>
       </ForkAndStar>
       <ForkAndStar>
         <FunctionalElementBtn>
-          <ForkAndStarImg src={StarImage} />
+          <ForkAndStarImg src={StarImage} alt="" />
           Star
           <FunctionalElementNum>0</FunctionalElementNum>
-          <UnWatchImg src={SortDownImage} />
+          <UnWatchImg src={SortDownImage} alt="" />
         </FunctionalElementBtn>
       </ForkAndStar>
     </FunctionalElement>

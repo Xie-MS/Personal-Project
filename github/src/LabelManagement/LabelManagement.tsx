@@ -1137,11 +1137,11 @@ function LabelManagement() {
           <MenuLeftUl>
             <MenuBtn>
               <Labels>
-                <LabelsImg src={LabelsImage} />
+                <LabelsImg src={LabelsImage} alt="" />
                 Labels
               </Labels>
               <Milestones>
-                <LabelsImg src={Milestone} />
+                <LabelsImg src={Milestone} alt="" />
                 Milestones
               </Milestones>
             </MenuBtn>
@@ -1246,12 +1246,12 @@ function LabelManagement() {
             <LabelTitleEvent>
               <LabelTitleEventBtn onClick={() => showSortList()}>
                 Sort
-                <LableListTitleImg src={SortDown} />
+                <LableListTitleImg src={SortDown} alt="" />
               </LabelTitleEventBtn>
               <LabelTitleEventUl sortActive={sortActive}>
                 <LabelTitleEventLiTitle>Sort</LabelTitleEventLiTitle>
                 <LabelTitleEventLiTitleDefault>
-                  <LabelTitleEventLiTitleImg src={CheckImage} />
+                  <LabelTitleEventLiTitleImg src={CheckImage} alt="" />
                   Alphabetically
                 </LabelTitleEventLiTitleDefault>
                 <LabelTitleEventLi>Reverse alphabetically</LabelTitleEventLi>

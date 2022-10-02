@@ -51,11 +51,11 @@ function Product() {
   return (
     <HeaderRightUl>
       <li>
-        <BellImg src={BellImage} />
+        <BellImg src={BellImage} alt="" />
       </li>
       <More>
         <MoreText>＋</MoreText>
-        <SortDownImg src={SortWhite} />
+        <SortDownImg src={SortWhite} alt="" />
       </More>
       <Pofile>Sign In</Pofile>
     </HeaderRightUl>

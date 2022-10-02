@@ -55,11 +55,11 @@ function Product() {
     <>
       <MenuBtn>
         <Labels>
-          <LabelsImg src={LabelsImage} />
+          <LabelsImg src={LabelsImage} alt="" />
           Labels
         </Labels>
         <Milestones>
-          <LabelsImg src={Milestone} />
+          <LabelsImg src={Milestone} alt="" />
           Milestones
         </Milestones>
       </MenuBtn>
