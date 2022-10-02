@@ -96,7 +96,6 @@ function IssuePage() {
         ]);
       }
       setQuery(allSearchInformation);
-      console.log(allSearchInformation.length, query, sortSelect);
 
       if (
         query !== undefined &&
@@ -105,13 +104,10 @@ function IssuePage() {
       ) {
         for (let i = 1; i < allSearchInformation.length; i++) {
           allSearchInformation[i] = "&" + allSearchInformation[i];
-          console.log(allSearchInformation);
         }
         setQuery(`?${allSearchInformation.join("")}`);
         setsortSelect(`?${allSearchInformation.join("")}`);
-        console.log(query, sortSelect);
       }
-      console.log(query, sortSelect);
     }
   }, [sortSelect]);
 
@@ -137,11 +133,8 @@ function IssuePage() {
     }
 
     async function getListIssues() {
-      console.log(sortSelect, page);
-      console.log("aa");
       if (sortSelect === page && page !== null && state === "open") {
         const data = await api.getListIssuesState(page);
-        console.log("aaaa");
         setRenderData(data);
         if (data.length === 0) {
           setNoSearch(true);
@@ -182,11 +175,9 @@ function IssuePage() {
       ) {
         const data = await api.getIssuesSort(date, sort);
         setRenderData(data);
-        console.log(sortSelect);
       } else if (sortSelect === query) {
         const data = await api.SearchAll(query);
         setRenderData(data);
-        console.log(sortSelect, query);
       } else if (sortSelect === inputIssueName) {
         const data = await api.SearchIssues(inputIssueName);
         let items: any;
@@ -194,9 +185,7 @@ function IssuePage() {
       } else if (sortSelect === "closed") {
         const data = await api.ClosedIssues();
         setRenderData(data);
-        console.log(data, "AAA");
       } else if (labeslSelectName !== "" && labeslSelectName === sortSelect) {
-        console.log("###");
         const data = await api.getIssuesLabels(labeslSelectName);
         setRenderData(data);
       }
@@ -291,13 +280,12 @@ function IssuePage() {
     const IssuesTime = new Date(renderData[index].created_at);
     const reduce = NewTime.getTime() - IssuesTime.getTime();
     const days = Math.floor(reduce / (24 * 3600 * 1000));
-    const leave1 = reduce % (24 * 3600 * 1000); //計算天數後剩余的毫秒數
-    const hours = Math.floor(leave1 / (3600 * 1000)); //計算相差分鐘數
-    const leave2 = leave1 % (3600 * 1000); //計算小時數後剩余的毫秒數
-    const minutes = Math.floor(leave2 / (60 * 1000)); //計算相差秒數
-    const leave3 = leave2 % (60 * 1000); //計算分鐘數後剩余的毫秒數
+    const leave1 = reduce % (24 * 3600 * 1000);
+    const hours = Math.floor(leave1 / (3600 * 1000));
+    const leave2 = leave1 % (3600 * 1000);
+    const minutes = Math.floor(leave2 / (60 * 1000));
+    const leave3 = leave2 % (60 * 1000);
     const seconds = Math.round(leave3 / 1000);
-    // console.log(" 相差 "+days+"天 "+hours+"小時 "+minutes+" 分鐘"+seconds+" 秒")
 
     return renderData.map((item: any, CreateTimeIndex: number) => {
       if (days > 0 && index === CreateTimeIndex) {
@@ -452,14 +440,12 @@ function IssuePage() {
 
   function getInputIssueName(e: any) {
     setInputIssueName(e.target.value);
-    console.log(inputIssueName);
   }
 
   function InputIssueName(e: any) {
     if (e.key === "Enter") {
       setsortSelect(inputIssueName);
       setClearSearch(true);
-      console.log(inputIssueName, sortSelect);
     }
   }
 
@@ -635,7 +621,6 @@ function IssuePage() {
                 onClick={() => {
                   setsortSelect("closed");
                   setState("closed");
-                  console.log(sortSelect, "BBB");
                 }}
               >
                 <img src={Check} alt="" className="mr-1 w-1/5" />
@@ -663,7 +648,6 @@ function IssuePage() {
                     onClick={() => {
                       setsortSelect("closed");
                       setState("closed");
-                      console.log(sortSelect, "CCC");
                     }}
                   >
                     <img src={Check} alt="" className="mr-1 w-1/5" />
@@ -891,10 +875,8 @@ function IssuePage() {
               if (page <= 2) {
                 setEndpage(true);
                 setFirstpage(false);
-                console.log("AAA", page);
               } else if (page > 2) {
                 setFirstpage(true);
-                console.log("BBB", page);
               }
             }}
           >
@@ -912,7 +894,6 @@ function IssuePage() {
               setPage(page + 1);
               setsortSelect(page + 1);
               setFirstpage(true);
-              console.log(page);
               if (page >= 2) {
                 setEndpage(false);
               }

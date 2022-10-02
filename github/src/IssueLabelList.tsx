@@ -61,7 +61,6 @@ function IssueLabelList({
   }, [sortSelect]);
 
   function LabelsSelect() {
-    console.log(labelData, renderData);
     return labelData.map((_item: any, LablesSelectIndex: number) => {
       if (labelData[LablesSelectIndex].description === "") {
         labeslDataArray.push(labelData[LablesSelectIndex].name);
