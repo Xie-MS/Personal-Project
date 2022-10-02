@@ -1,5 +1,5 @@
 import React from "react";
-import SortDown from "../src/img/SortDown.svg";
+
 import LabelsImage from "../src/img/Labels.svg";
 import Milestone from "../src/img/milestone.svg";
 import issueOpened from "../src/img/issueOpened.svg";
@@ -19,6 +19,7 @@ import {
   CommentIcon,
   CheckCircleIcon,
   CircleSlashIcon,
+  ChevronDownIcon,
 } from "@primer/octicons-react";
 
 import api from "./api";
@@ -500,7 +501,7 @@ function IssuePage() {
                 }}
               >
                 Filters
-                <img src={SortDown} alt="" />
+                <ChevronDownIcon size={16} />
               </button>
               <div
                 className={`${
@@ -658,7 +659,7 @@ function IssuePage() {
               <div className="flex justify-center items-center relative sm:w-full justify-around">
                 <button className="flex justify-center items-center px-4 text-[#57606a] md:text-sm hover:text-black">
                   Author
-                  <img src={SortDown} alt="" className="hidden" />
+                  <ChevronDownIcon size={16} className="hidden" />
                 </button>
                 <button
                   className="flex justify-center items-center px-4 text-[#57606a] md:text-sm hover:text-black"
@@ -677,7 +678,7 @@ function IssuePage() {
                   }}
                 >
                   Label
-                  <img src={SortDown} alt="" className="hidden" />
+                  <ChevronDownIcon size={16} className="hidden" />
                 </button>
                 <IssueLabelList
                   labelMenu={labelMenu}
@@ -701,11 +702,11 @@ function IssuePage() {
                 />
                 <button className="flex justify-center items-center px-4 text-[#57606a] md:hidden hover:text-black">
                   Projects
-                  <img src={SortDown} alt="" />
+                  <ChevronDownIcon size={16} />
                 </button>
                 <button className="flex justify-center items-center px-4 text-[#57606a] md:hidden hover:text-black">
                   Milestones
-                  <img src={SortDown} alt="" />
+                  <ChevronDownIcon size={16} />
                 </button>
                 <button
                   className="flex justify-center items-center px-4 text-[#57606a] md:text-sm hover:text-black"
@@ -724,7 +725,7 @@ function IssuePage() {
                   }}
                 >
                   Assignee
-                  <img src={SortDown} alt="" className="hidden" />
+                  <ChevronDownIcon size={16} className="hidden" />
                 </button>
                 <ul
                   className={`${
@@ -817,7 +818,7 @@ function IssuePage() {
                   }}
                 >
                   Sort
-                  <img src={SortDown} alt="" className="hidden" />
+                  <ChevronDownIcon size={16} className="hidden" />
                 </button>
                 <ul
                   className={`${

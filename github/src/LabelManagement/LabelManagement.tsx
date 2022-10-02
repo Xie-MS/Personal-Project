@@ -5,12 +5,12 @@ import { useDispatch, useSelector } from "react-redux";
 
 import api from "../api";
 
-import SortDown from "../../src/img/SortDown.svg";
 import LabelsImage from "../../src/img/Labels.svg";
 import Milestone from "../../src/img/milestone.svg";
 import SearchImage from "../../src/img/search.svg";
 import CheckImage from "../../src/img/check.svg";
 import ChangeColorImage from "../../src/img/change.png";
+import { ChevronDownIcon } from "@primer/octicons-react";
 
 const Container = styled.div`
   margin-top: 24px;
@@ -1246,12 +1246,12 @@ function LabelManagement() {
             <LabelTitleEvent>
               <LabelTitleEventBtn onClick={() => showSortList()}>
                 Sort
-                <LableListTitleImg src={SortDown} alt="" />
+                <ChevronDownIcon size={16} />
               </LabelTitleEventBtn>
               <LabelTitleEventUl sortActive={sortActive}>
                 <LabelTitleEventLiTitle>Sort</LabelTitleEventLiTitle>
                 <LabelTitleEventLiTitleDefault>
-                  <LabelTitleEventLiTitleImg src={CheckImage} alt="" />
+                  <ChevronDownIcon size={16} />
                   Alphabetically
                 </LabelTitleEventLiTitleDefault>
                 <LabelTitleEventLi>Reverse alphabetically</LabelTitleEventLi>
