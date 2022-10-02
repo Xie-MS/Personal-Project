@@ -20,8 +20,6 @@ import {
 
 import api from "./api";
 import IssueLabelList from "./IssueLabelList";
-import { cpSync } from "fs";
-import { ResultType } from "@remix-run/router/dist/utils";
 
 function IssuePage() {
   const [filtersMenu, setFiletersMenu] = useState(false);
@@ -68,7 +66,6 @@ function IssuePage() {
   ];
 
   useEffect(() => {
-    console.log(allSearchInformation.length);
     if (allSearchInformation.length >= 0) {
       if (
         assigneeName === sortSelect ||
@@ -110,7 +107,6 @@ function IssuePage() {
         console.log(query, sortSelect);
       }
       console.log(query, sortSelect);
-      // setsortSelect(query);
     }
   }, [sortSelect]);
 

@@ -1,8 +1,8 @@
 import styled from "styled-components";
 import React from "react";
 
-import LabelsImage from "./img/Labels.svg";
-import Milestone from "./img/milestone.svg";
+import LabelsImage from "../src/img/Labels.svg";
+import Milestone from "../src/img/milestone.svg";
 
 const MenuBtn = styled.li`
   border: 1px solid #000;
@@ -43,7 +43,7 @@ const Milestones = styled.button`
   border: none;
   width: 122px;
   padding: 5px 0px;
-  margin-left:0px;
+  margin-left: 0px;
   &:focus {
     background-color: #0969da;
     color: white;
@@ -53,16 +53,16 @@ const Milestones = styled.button`
 function Product() {
   return (
     <>
-    <MenuBtn>
+      <MenuBtn>
         <Labels>
-        <LabelsImg src={LabelsImage} />
-        Labels
+          <LabelsImg src={LabelsImage} />
+          Labels
         </Labels>
         <Milestones>
-        <LabelsImg src={Milestone} />
-        Milestones
+          <LabelsImg src={Milestone} />
+          Milestones
         </Milestones>
-    </MenuBtn>
+      </MenuBtn>
     </>
   );
 }

@@ -2,11 +2,11 @@ import styled from "styled-components";
 import React from "react";
 import { useRef, useState } from "react";
 
-import ChangeColorImage from "./img/change.png";
+import ChangeColorImage from "../src/img/change.png";
 
 type CreateLabelboolean = {
-    active: boolean;
-  };
+  active: boolean;
+};
 
 const CreateLable = styled.div<CreateLabelboolean>`
   display: block;
@@ -27,19 +27,19 @@ const CreateLable = styled.div<CreateLabelboolean>`
 `;
 
 type CreateButton = {
-    CreateActive: boolean;
-  };
-  
-  const CreateCreateLabel = styled.button<CreateButton>`
-    width: 107.5px;
-    height: 30px;
-    pad: 5px 16px;
-    border: 1px solid rgba(0, 0, 0, 0.25);
-    border-radius: 10px;
-    background-color: ${(props) => (props.CreateActive ? "#94d3a2" : "#2da44e")};
-    text-align: center;
-    color: white;
-  `;
+  CreateActive: boolean;
+};
+
+const CreateCreateLabel = styled.button<CreateButton>`
+  width: 107.5px;
+  height: 30px;
+  pad: 5px 16px;
+  border: 1px solid rgba(0, 0, 0, 0.25);
+  border-radius: 10px;
+  background-color: ${(props) => (props.CreateActive ? "#94d3a2" : "#2da44e")};
+  text-align: center;
+  color: white;
+`;
 
 const CreateLableTitle = styled.div`
   margin-bottom: 8px;
@@ -90,13 +90,12 @@ const CreateInformationInputUl = styled.ul`
 `;
 
 const CreateInformationInputUlTotal = styled.div`
-display:flex;
-justify-content: center;
-align-items: end;
-margin: 16px 0px;
-position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: end;
+  margin: 16px 0px;
+  position: relative;
 `;
-
 
 const CreateInformationInputText = styled.li`
   display: flex;
@@ -255,125 +254,120 @@ const CreateCancel = styled.button`
   }
 `;
 
-
-
-function Product({index,item ,onClick , onChange}:any) {
-    const [active, setActive] = useState(false);
-    const [newLabelsSelectColor, setNewLabelsSelectColor]: any =
+function Product({ index, item, onClick, onChange }: any) {
+  const [active, setActive] = useState(false);
+  const [newLabelsSelectColor, setNewLabelsSelectColor]: any =
     useState("#FBCA04");
-    const Description = useRef<HTMLInputElement | null>(null);
-    const [selectColorMenuActive, setSelectColorMenuActive]: any =
+  const Description = useRef<HTMLInputElement | null>(null);
+  const [selectColorMenuActive, setSelectColorMenuActive]: any =
     useState(false);
-    const SeleceColor = useRef<HTMLInputElement | null>(null);
-    const [errorColorValue, setErrorColorValue]: any = useState(false);
-    const [createActive, setCreateActive]: any = useState(true);
-    const [updateUpdateColor, setupdateUpdateColor]: any = useState();
+  const SeleceColor = useRef<HTMLInputElement | null>(null);
+  const [errorColorValue, setErrorColorValue]: any = useState(false);
+  const [createActive, setCreateActive]: any = useState(true);
+  const [updateUpdateColor, setupdateUpdateColor]: any = useState();
 
   return (
     <CreateLable active={active}>
-    <CreateLableTitle>
-      <CreateLableTitleBtn color={newLabelsSelectColor}>
-        Label preview
-      </CreateLableTitleBtn>
-    </CreateLableTitle>
-    <CreateInformation>
-      <CreateInformationLeft>
-        <CreateInformationInputUl>
-          <CreateInformationInputText>
-            Label name
-          </CreateInformationInputText>
-          <CreateInformationInput>
-            <CreateInformationInputName
+      <CreateLableTitle>
+        <CreateLableTitleBtn color={newLabelsSelectColor}>
+          Label preview
+        </CreateLableTitleBtn>
+      </CreateLableTitle>
+      <CreateInformation>
+        <CreateInformationLeft>
+          <CreateInformationInputUl>
+            <CreateInformationInputText>Label name</CreateInformationInputText>
+            <CreateInformationInput>
+              <CreateInformationInputName
+                type="text"
+                placeholder="Label name"
+                onChange={(e) => {
+                  if (onChange) {
+                    onChange(e);
+                  }
+                }}
+              />
+            </CreateInformationInput>
+          </CreateInformationInputUl>
+          <CreateInformationInputUl>
+            <CreateInformationInputText>Description</CreateInformationInputText>
+            <CreateInformationInput>
+              <CreateInformationInputDescription
+                type="text"
+                placeholder="Description（optional）"
+                ref={Description}
+              />
+            </CreateInformationInput>
+          </CreateInformationInputUl>
+          <CreateInformationInputUlTotal>
+            <CreateInformationInputUl>
+              <CreateInformationInputText>Color</CreateInformationInputText>
+              <CreateInformationInput
+                onClick={() => {
+                  if (onClick) {
+                    onClick();
+                  }
+                }}
+              />
+              <CreateInformationChangeColor
+                color={newLabelsSelectColor}
+                onClick={() => {
+                  if (onClick) {
+                    onClick();
+                  }
+                }}
+              />
+            </CreateInformationInputUl>
+            <CreateInformationInputColor
               type="text"
-              placeholder="Label name"
+              value={newLabelsSelectColor}
+              ref={SeleceColor}
+              onClick={() => {
+                setSelectColorMenuActive(true);
+              }}
+              errorColorValue={errorColorValue}
               onChange={(e) => {
                 if (onChange) {
-                    onChange(e);
+                  onChange(e);
                 }
               }}
             />
-          </CreateInformationInput>
-        </CreateInformationInputUl>
-        <CreateInformationInputUl>
-          <CreateInformationInputText>
-            Description
-          </CreateInformationInputText>
-          <CreateInformationInput>
-            <CreateInformationInputDescription
-              type="text"
-              placeholder="Description（optional）"
-              ref={Description}
-            />
-          </CreateInformationInput>
-        </CreateInformationInputUl>
-        <CreateInformationInputUlTotal>
-        <CreateInformationInputUl>
-          <CreateInformationInputText>Color</CreateInformationInputText>
-          <CreateInformationInput
-            onClick={() => {
-                if (onClick) {
-                  onClick();
-                }
-              }}
-          />
-          <CreateInformationChangeColor
-            color={newLabelsSelectColor}
-            onClick={() => {
-                if (onClick) {
-                  onClick();
-                }
-              }}
-          />
-          </CreateInformationInputUl>
-          <CreateInformationInputColor
-            type="text"
-            value={newLabelsSelectColor}
-            ref={SeleceColor}
-            
-            onClick={()=>{
-              setSelectColorMenuActive(true);
-            }}
-            errorColorValue={errorColorValue}
-            onChange={(e) => {
-                if (onChange) {
-                    onChange(e);
-                }
-              }}
-          />
-          <ColorList selectColorMenuActive={selectColorMenuActive}>
-            <ColorListP>Choose from default colors:</ColorListP>
-            <li> 
-        <ColorBtn
-          key={index}
-          color={item}
-          onClick={() => {
-            setNewLabelsSelectColor({ item }.item);
-            setupdateUpdateColor({ item }.item)
-            if (selectColorMenuActive === true) {
-              setSelectColorMenuActive(false);
-            } else {
-              setSelectColorMenuActive(true);
-            }
-          }} /></li>
-          </ColorList>
+            <ColorList selectColorMenuActive={selectColorMenuActive}>
+              <ColorListP>Choose from default colors:</ColorListP>
+              <li>
+                <ColorBtn
+                  key={index}
+                  color={item}
+                  onClick={() => {
+                    setNewLabelsSelectColor({ item }.item);
+                    setupdateUpdateColor({ item }.item);
+                    if (selectColorMenuActive === true) {
+                      setSelectColorMenuActive(false);
+                    } else {
+                      setSelectColorMenuActive(true);
+                    }
+                  }}
+                />
+              </li>
+            </ColorList>
           </CreateInformationInputUlTotal>
-      </CreateInformationLeft>
-      <CreateInformationRight>
-        <CreateCancel onClick={() => setActive(false)}>Cancel</CreateCancel>
-        <CreateCreateLabel
-          CreateActive={createActive}
-          disabled={createActive}
-          onClick={() => {
-          if (onClick) {
-            onClick();
-          }
-        }}
-        >
-          Create label
-        </CreateCreateLabel>
-      </CreateInformationRight>
-    </CreateInformation>
-  </CreateLable>
+        </CreateInformationLeft>
+        <CreateInformationRight>
+          <CreateCancel onClick={() => setActive(false)}>Cancel</CreateCancel>
+          <CreateCreateLabel
+            CreateActive={createActive}
+            disabled={createActive}
+            onClick={() => {
+              if (onClick) {
+                onClick();
+              }
+            }}
+          >
+            Create label
+          </CreateCreateLabel>
+        </CreateInformationRight>
+      </CreateInformation>
+    </CreateLable>
   );
 }
 

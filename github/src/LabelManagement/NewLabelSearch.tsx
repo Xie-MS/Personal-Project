@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import React from "react";
 
-import SearchImage from "./img/search.svg";
+import SearchImage from "../src/img/search.svg";
 
 const Search = styled.li`
   padding: 0px 24px 0px 8px;
@@ -27,7 +27,7 @@ const SearchInput = styled.input`
 function Product() {
   return (
     <Search>
-        <SearchInput value="Search all labels" />
+      <SearchInput value="Search all labels" />
     </Search>
   );
 }

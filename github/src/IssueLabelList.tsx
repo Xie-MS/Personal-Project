@@ -4,7 +4,6 @@ import { useState, useEffect, useRef } from "react";
 import { CheckIcon } from "@primer/octicons-react";
 
 import api from "./api";
-import { array, element } from "prop-types";
 
 function IssueLabelList({
   labelMenu,
@@ -43,13 +42,12 @@ function IssueLabelList({
 }) {
   const [labelData, setLabelData]: any = useState([]);
   const [mobileMenuBG, setMobileMenuBG] = useState(false);
-  const [labeslSelectDescription, setLabeslSelectDescription] = useState("");
   const [labeslSelectOption, setLabeslSelectOption] = useState(true);
-  const [labeslSelectArray, setLabeslSelectArray]: any = useState([]);
 
   const labeslDataArray: any[] = [];
 
   const labeslInput = useRef<HTMLInputElement | null>(null);
+  const labeslName: any = useRef<HTMLLIElement | null>(null);
 
   useEffect(() => {
     async function getListLabels() {
@@ -57,8 +55,11 @@ function IssueLabelList({
         const data = await api.getLabels();
         setLabelData(data);
       } else if (labeslSelectName !== "") {
+        console.log(labeslName);
         const data = await api.getIssuesLabels(labeslSelectName);
-        setLabelData(data);
+        let labels: any;
+        setLabelData(data[0].labels);
+        console.log(data[0].labels[0], labelData);
         if (data.length === 0) {
           setNoSearch(true);
         } else {
@@ -80,6 +81,7 @@ function IssueLabelList({
   }, [sortSelect]);
 
   function LabelsSelect() {
+    console.log(labelData);
     return labelData.map((_item: any, LablesSelectIndex: number) => {
       if (labelData[LablesSelectIndex].description === "") {
         labeslDataArray.push(labelData[LablesSelectIndex].name);
@@ -92,20 +94,18 @@ function IssueLabelList({
 
       return (
         <li
+          ref={labeslName}
           className={`
           ${
             labeslSelectOption ||
             (labeslDataArray.toLocaleString().includes(labeslSelectName) &&
               labelData[LablesSelectIndex].name
                 .toLocaleString()
-                .includes(labeslSelectName))
+                .includes(labelData[LablesSelectIndex].name))
               ? "flex"
               : "hidden"
           } relative py-[7px] border-b-[1px] border-solid border-gray-400 text-xs justify-start items-center w-[266px] sm:font-semibold px-4 sm:py-4`}
           onClick={() => {
-            setLabeslSelectDescription(
-              labelData[LablesSelectIndex].description
-            );
             setsortSelect(labelData[LablesSelectIndex].name);
             setLabelSelectOption([
               ...labelSelectOption,
@@ -114,7 +114,6 @@ function IssueLabelList({
             setLabeslSelectName(labelData[LablesSelectIndex].name);
             setClearSearch(true);
             setLabelMenu(false);
-            setLabeslSelectOption(true);
           }}
         >
           <div
@@ -152,11 +151,6 @@ function IssueLabelList({
     ) {
       setLabeslSelectName(e.target.value);
       setLabeslSelectOption(false);
-      console.log(
-        labeslDataArray
-          .toLocaleString()
-          .includes(e.target.value.toLocaleString())
-      );
     } else if (
       labeslDataArray
         .toLocaleString()
@@ -188,6 +182,7 @@ function IssueLabelList({
           onClick={() => {
             setLabelMenu(false);
             setMobileMenuBG(false);
+            setLabeslSelectName("");
           }}
         >
           X
