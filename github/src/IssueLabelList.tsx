@@ -54,22 +54,8 @@ function IssueLabelList({
 
   useEffect(() => {
     async function getListLabels() {
-      if (labeslSelectName === "") {
-        const data = await api.getLabels();
-        setLabelData(data);
-      } else if (labeslSelectName !== "" && labeslSelectName === sortSelect) {
-        console.log(labeslName);
-        const data = await api.getIssuesLabels(labeslSelectName);
-        let labels: any;
-        setLabelData(data[0].labels);
-        setRenderData(data);
-
-        if (data.length === 0) {
-          setNoSearch(true);
-        } else {
-          setNoSearch(false);
-        }
-      }
+      const data = await api.getLabels();
+      setLabelData(data);
     }
     getListLabels();
   }, [sortSelect]);
@@ -95,7 +81,7 @@ function IssueLabelList({
             (labeslDataArray.toLocaleString().includes(labeslSelectName) &&
               labelData[LablesSelectIndex].name
                 .toLocaleString()
-                .includes(labelData[LablesSelectIndex].name))
+                .includes(labeslInput.current?.value))
               ? "flex"
               : "hidden"
           } relative py-[7px] border-b-[1px] border-solid border-gray-400 text-xs justify-start items-center w-[266px] sm:font-semibold sm:py-4 sm:w-full sm:pl-11 pr-4`}
