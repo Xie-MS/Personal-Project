@@ -71,10 +71,6 @@ function IssuePage() {
     "Least recently updated",
   ];
 
-  // useEffect(() => {
-  //   setsortSelect(query);
-  // }, [query]);
-
   useEffect(() => {
     let newQuery: string[] = [];
     if (
@@ -91,13 +87,7 @@ function IssuePage() {
     } else if (sortSelect === labeslSelectName && labeslSelectName !== "") {
       newQuery = [...allSearchInformation, `labels=${labeslSelectName}`];
     }
-    console.log(newQuery, allSearchInformation);
-    setAllSearchInformation(newQuery);
-    setLabeslSelectLength(newQuery.length);
-    console.log(allSearchInformation);
   }, [sortSelect]);
-
-  console.log(allSearchInformation.length, labeslSelectLength);
 
   useEffect(() => {
     async function getListIssues() {
@@ -118,56 +108,59 @@ function IssuePage() {
         } else {
           setNoSearch(false);
         }
-      }
-      // } else if (sortSelect === "Your issues") {
-      //   const data = await api.getYourIssues();
-      //   setRenderData(data);
-      //   if (data.length === 0) {
-      //     setNoSearch(true);
-      //   } else {
-      //     setNoSearch(false);
-      //   }
-      // } else if (
-      //   sortSelect === "Everything assigned to you" ||
-      //   sortSelect === assigneeName
-      // ) {
-      //   const data = await api.getIssuesAssigneeMe(assigneeName);
-      //   setRenderData(data);
-      //   if (data.length === 0) {
-      //     setNoSearch(true);
-      //   } else {
-      //     setNoSearch(false);
-      //   }
-      // }
-      // else if (sortSelect === "Everything mentioning you") {
-      //   const data = await api.getIssuesMentionsMe();
-      //   setRenderData(data);
-      //   if (data.length === 0) {
-      //     setNoSearch(true);
-      //   } else {
-      //     setNoSearch(false);
-      //   }
-      // }
-      // else if (
-      //   sortSelect === sortSelectName &&
-      //   date !== null &&
-      //   sort !== null
-      // ) {
-      //   const data = await api.getIssuesSort(date, sort);
-      //   setRenderData(data);
-      // }
-      // else if (newQuery !== "" && allSearchInformation.length >= 1) {
-      //   const data = await api.SearchAll(newQuery);
-      //   setRenderData(data);
-      //   console.log(123);
-      // }
-      else if (
+      } else if (
+        sortSelect === "Your issues" &&
+        allSearchInformation.length !== labeslSelectLength
+      ) {
+        const data = await api.getYourIssues();
+        setRenderData(data);
+        if (data.length === 0) {
+          setNoSearch(true);
+        } else {
+          setNoSearch(false);
+        }
+      } else if (
+        sortSelect === "Everything assigned to you" ||
+        (sortSelect === assigneeName &&
+          allSearchInformation.length !== labeslSelectLength)
+      ) {
+        const data = await api.getIssuesAssigneeMe(assigneeName);
+        setRenderData(data);
+        if (data.length === 0) {
+          setNoSearch(true);
+        } else {
+          setNoSearch(false);
+        }
+      } else if (
+        sortSelect === "Everything mentioning you" &&
+        allSearchInformation.length !== labeslSelectLength
+      ) {
+        const data = await api.getIssuesMentionsMe();
+        setRenderData(data);
+        if (data.length === 0) {
+          setNoSearch(true);
+        } else {
+          setNoSearch(false);
+        }
+      } else if (
+        sortSelect === sortSelectName &&
+        date !== null &&
+        sort !== null &&
+        allSearchInformation.length !== labeslSelectLength
+      ) {
+        const data = await api.getIssuesSort(date, sort);
+        setRenderData(data);
+      } else if (
         newQuery !== "" &&
-        allSearchInformation.length === labeslSelectLength
+        allSearchInformation.length >= 1 &&
+        allSearchInformation.length !== labeslSelectLength
       ) {
         const data = await api.SearchAll(newQuery);
         setRenderData(data);
-        console.log("aaa", data);
+        console.log(123);
+      } else if (newQuery !== "") {
+        const data = await api.SearchAll(newQuery);
+        setRenderData(data);
       } else if (sortSelect === inputIssueName) {
         const data = await api.SearchIssues(inputIssueName);
         let items: any;
@@ -177,11 +170,14 @@ function IssuePage() {
         const data = await api.ClosedIssues();
         setRenderData(data);
         console.log("ccc");
+      } else if (
+        labeslSelectName !== "" &&
+        labeslSelectName === sortSelect &&
+        allSearchInformation.length !== labeslSelectLength
+      ) {
+        const data = await api.getIssuesLabels(labeslSelectName);
+        setRenderData(data);
       }
-      // else if (labeslSelectName !== "" && labeslSelectName === sortSelect) {
-      //   const data = await api.getIssuesLabels(labeslSelectName);
-      //   setRenderData(data);
-      // }
     }
 
     getListIssues();
