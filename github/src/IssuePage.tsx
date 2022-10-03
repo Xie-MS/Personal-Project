@@ -44,9 +44,10 @@ function IssuePage() {
   const [firstpage, setFirstpage] = useState(false);
   const [endpage, setEndpage] = useState(true);
   const [labeslSelectName, setLabeslSelectName] = useState("");
+  const [labeslSelectLength, setLabeslSelectLength] = useState(0);
   const [inputIssueName, setInputIssueName] = useState("");
   const [state, setState] = useState("open");
-
+  console.log(labeslSelectLength);
   const [renderData, setRenderData]: any = useState([]);
   const [allSearchInformation, setAllSearchInformation] = useState<any>([]);
 
@@ -90,21 +91,23 @@ function IssuePage() {
     } else if (sortSelect === labeslSelectName && labeslSelectName !== "") {
       newQuery = [...allSearchInformation, `labels=${labeslSelectName}`];
     }
-
+    console.log(newQuery, allSearchInformation);
     setAllSearchInformation(newQuery);
+    setLabeslSelectLength(newQuery.length);
     console.log(allSearchInformation);
   }, [sortSelect]);
 
-  console.log(allSearchInformation.length);
+  console.log(allSearchInformation.length, labeslSelectLength);
 
   useEffect(() => {
     async function getListIssues() {
-      let newQuery: string[] | string = [];
+      let newQuery: string[] | string | any = [];
       if (allSearchInformation.length > 1) {
-        for (let i = 1; i < allSearchInformation.length; i++) {
+        for (let i = 0; i < allSearchInformation.length; i++) {
           newQuery[i] = "&" + allSearchInformation[i];
         }
       }
+      console.log(newQuery);
       newQuery = `${newQuery.join("")}`;
 
       if (sortSelect === page && page !== null && state === "open") {
@@ -158,17 +161,22 @@ function IssuePage() {
       //   setRenderData(data);
       //   console.log(123);
       // }
-      else if (newQuery !== "") {
+      else if (
+        newQuery !== "" &&
+        allSearchInformation.length === labeslSelectLength
+      ) {
         const data = await api.SearchAll(newQuery);
         setRenderData(data);
-        console.log(123);
+        console.log("aaa", data);
       } else if (sortSelect === inputIssueName) {
         const data = await api.SearchIssues(inputIssueName);
         let items: any;
         setRenderData(data.items);
+        console.log("bbb");
       } else if (sortSelect === "closed") {
         const data = await api.ClosedIssues();
         setRenderData(data);
+        console.log("ccc");
       }
       // else if (labeslSelectName !== "" && labeslSelectName === sortSelect) {
       //   const data = await api.getIssuesLabels(labeslSelectName);
