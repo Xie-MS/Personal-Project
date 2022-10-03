@@ -101,7 +101,7 @@ function IssueLabelList({
               labelSelectOption.includes(labelData[LablesSelectIndex].name)
                 ? "block"
                 : "hidden"
-            } absolute left-3 `}
+            } absolute`}
           >
             <CheckIcon size={16} className="mr-2" />
           </div>

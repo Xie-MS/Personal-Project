@@ -153,11 +153,12 @@ function IssuePage() {
       //   const data = await api.getIssuesSort(date, sort);
       //   setRenderData(data);
       // }
-      else if (newQuery !== "" && allSearchInformation.length === 1) {
-        const data = await api.SearchAll(newQuery);
-        setRenderData(data);
-        console.log(123);
-      } else if (newQuery !== "" && allSearchInformation.length >= 2) {
+      // else if (newQuery !== "" && allSearchInformation.length >= 1) {
+      //   const data = await api.SearchAll(newQuery);
+      //   setRenderData(data);
+      //   console.log(123);
+      // }
+      else if (newQuery !== "") {
         const data = await api.SearchAll(newQuery);
         setRenderData(data);
         console.log(123);
