@@ -49,9 +49,8 @@ function IssuePage() {
 
   const [renderData, setRenderData]: any = useState([]);
   const [allSearchInformation, setAllSearchInformation] = useState<any>([]);
-  const [query, setQuery] = useState<any>();
-  const [sortSelect, setsortSelect]: any = useState("");
 
+  const [sortSelect, setsortSelect]: any = useState("");
   const assigneeUserName: any = useRef<HTMLParagraphElement | null>(null);
   const AssigneeOnChange = useRef<HTMLInputElement | null>(null);
 
@@ -71,69 +70,43 @@ function IssuePage() {
     "Least recently updated",
   ];
 
-  useEffect(() => {
-    if (allSearchInformation.length >= 0) {
-      if (
-        assigneeName === sortSelect ||
-        sortSelect === "Everything assigned to you"
-      ) {
-        setAllSearchInformation([
-          ...allSearchInformation,
-          "assignee=" + assigneeName,
-        ]);
-      } else if (sortSelect === "Your issues") {
-        setAllSearchInformation([...allSearchInformation, "creator=Xie-MS"]);
-      } else if (sortSelect === "Everything mentioning you") {
-        setAllSearchInformation([...allSearchInformation, "mentioned=Xie-MS"]);
-      } else if (sortSelect === sortSelectName && date !== "" && sort !== "") {
-        setAllSearchInformation([
-          ...allSearchInformation,
-          `sort=${date}-${sort}`,
-        ]);
-      } else if (sortSelect === labeslSelectName && labeslSelectName !== "") {
-        setAllSearchInformation([
-          ...allSearchInformation,
-          `labels=${labeslSelectName}`,
-        ]);
-      }
-      setQuery(allSearchInformation);
+  // useEffect(() => {
+  //   setsortSelect(query);
+  // }, [query]);
 
-      if (
-        query !== undefined &&
-        allSearchInformation.length > 1 &&
-        query !== sortSelect
-      ) {
-        for (let i = 1; i < allSearchInformation.length; i++) {
-          allSearchInformation[i] = "&" + allSearchInformation[i];
-        }
-        setQuery(`?${allSearchInformation.join("")}`);
-        setsortSelect(`?${allSearchInformation.join("")}`);
-      }
+  useEffect(() => {
+    let newQuery: string[] = [];
+    if (
+      assigneeName === sortSelect ||
+      sortSelect === "Everything assigned to you"
+    ) {
+      newQuery = [...allSearchInformation, "assignee=" + assigneeName];
+    } else if (sortSelect === "Your issues") {
+      newQuery = [...allSearchInformation, "creator=Xie-MS"];
+    } else if (sortSelect === "Everything mentioning you") {
+      newQuery = [...allSearchInformation, "mentioned=Xie-MS"];
+    } else if (sortSelect === sortSelectName && date !== "" && sort !== "") {
+      newQuery = [...allSearchInformation, `sort=${date}-${sort}`];
+    } else if (sortSelect === labeslSelectName && labeslSelectName !== "") {
+      newQuery = [...allSearchInformation, `labels=${labeslSelectName}`];
     }
+
+    setAllSearchInformation(newQuery);
+    console.log(allSearchInformation);
   }, [sortSelect]);
 
-  useEffect(() => {
-    if (sortSelect === "Newest") {
-      setSort("desc");
-      setDate("created");
-    } else if (sortSelect === "Oldest") {
-      setSort("asc");
-      setDate("created");
-    } else if (sortSelect === "Most commented") {
-      setSort("desc");
-      setDate("comments");
-    } else if (sortSelect === "Least commented") {
-      setSort("asc");
-      setDate("comments");
-    } else if (sortSelect === "Recently updated") {
-      setSort("desc");
-      setDate("updateed");
-    } else if (sortSelect === "Least recently updated") {
-      setSort("asc");
-      setDate("updateed");
-    }
+  console.log(allSearchInformation.length);
 
+  useEffect(() => {
     async function getListIssues() {
+      let newQuery: string[] | string = [];
+      if (allSearchInformation.length > 1) {
+        for (let i = 1; i < allSearchInformation.length; i++) {
+          newQuery[i] = "&" + allSearchInformation[i];
+        }
+      }
+      newQuery = `${newQuery.join("")}`;
+
       if (sortSelect === page && page !== null && state === "open") {
         const data = await api.getListIssuesState(page);
         setRenderData(data);
@@ -142,43 +115,52 @@ function IssuePage() {
         } else {
           setNoSearch(false);
         }
-      } else if (sortSelect === "Your issues") {
-        const data = await api.getYourIssues();
+      }
+      // } else if (sortSelect === "Your issues") {
+      //   const data = await api.getYourIssues();
+      //   setRenderData(data);
+      //   if (data.length === 0) {
+      //     setNoSearch(true);
+      //   } else {
+      //     setNoSearch(false);
+      //   }
+      // } else if (
+      //   sortSelect === "Everything assigned to you" ||
+      //   sortSelect === assigneeName
+      // ) {
+      //   const data = await api.getIssuesAssigneeMe(assigneeName);
+      //   setRenderData(data);
+      //   if (data.length === 0) {
+      //     setNoSearch(true);
+      //   } else {
+      //     setNoSearch(false);
+      //   }
+      // }
+      // else if (sortSelect === "Everything mentioning you") {
+      //   const data = await api.getIssuesMentionsMe();
+      //   setRenderData(data);
+      //   if (data.length === 0) {
+      //     setNoSearch(true);
+      //   } else {
+      //     setNoSearch(false);
+      //   }
+      // }
+      // else if (
+      //   sortSelect === sortSelectName &&
+      //   date !== null &&
+      //   sort !== null
+      // ) {
+      //   const data = await api.getIssuesSort(date, sort);
+      //   setRenderData(data);
+      // }
+      else if (newQuery !== "" && allSearchInformation.length === 1) {
+        const data = await api.SearchAll(newQuery);
         setRenderData(data);
-        if (data.length === 0) {
-          setNoSearch(true);
-        } else {
-          setNoSearch(false);
-        }
-      } else if (
-        sortSelect === "Everything assigned to you" ||
-        sortSelect === assigneeName
-      ) {
-        const data = await api.getIssuesAssigneeMe(assigneeName);
+        console.log(123);
+      } else if (newQuery !== "" && allSearchInformation.length >= 2) {
+        const data = await api.SearchAll(newQuery);
         setRenderData(data);
-        if (data.length === 0) {
-          setNoSearch(true);
-        } else {
-          setNoSearch(false);
-        }
-      } else if (sortSelect === "Everything mentioning you") {
-        const data = await api.getIssuesMentionsMe();
-        setRenderData(data);
-        if (data.length === 0) {
-          setNoSearch(true);
-        } else {
-          setNoSearch(false);
-        }
-      } else if (
-        sortSelect === sortSelectName &&
-        date !== null &&
-        sort !== null
-      ) {
-        const data = await api.getIssuesSort(date, sort);
-        setRenderData(data);
-      } else if (sortSelect === query) {
-        const data = await api.SearchAll(query);
-        setRenderData(data);
+        console.log(123);
       } else if (sortSelect === inputIssueName) {
         const data = await api.SearchIssues(inputIssueName);
         let items: any;
@@ -186,14 +168,15 @@ function IssuePage() {
       } else if (sortSelect === "closed") {
         const data = await api.ClosedIssues();
         setRenderData(data);
-      } else if (labeslSelectName !== "" && labeslSelectName === sortSelect) {
-        const data = await api.getIssuesLabels(labeslSelectName);
-        setRenderData(data);
       }
+      // else if (labeslSelectName !== "" && labeslSelectName === sortSelect) {
+      //   const data = await api.getIssuesLabels(labeslSelectName);
+      //   setRenderData(data);
+      // }
     }
 
     getListIssues();
-  }, [sortSelect]);
+  }, [sortSelect, allSearchInformation]);
 
   function getIssues() {
     return renderData.map((item: any, index: number) => {
@@ -400,6 +383,27 @@ function IssuePage() {
             setClearSearch(true);
             setSortMenu(false);
             setMobileMenuBG(false);
+            if (SortsSelect[SortsSelectIndex] === "Newest") {
+              setSort("desc");
+              setDate("created");
+            } else if (SortsSelect[SortsSelectIndex] === "Oldest") {
+              setSort("asc");
+              setDate("created");
+            } else if (SortsSelect[SortsSelectIndex] === "Most commented") {
+              setSort("desc");
+              setDate("comments");
+            } else if (SortsSelect[SortsSelectIndex] === "Least commented") {
+              setSort("asc");
+              setDate("comments");
+            } else if (SortsSelect[SortsSelectIndex] === "Recently updated") {
+              setSort("desc");
+              setDate("updateed");
+            } else if (
+              SortsSelect[SortsSelectIndex] === "Least recently updated"
+            ) {
+              setSort("asc");
+              setDate("updateed");
+            }
           }}
         >
           <div
@@ -768,9 +772,9 @@ function IssuePage() {
                       assigneeLI ? "flex" : "hidden"
                     } py-[7px] px-4 border-t-[1px] border-solid border-gray-300 text-xs flex justify-start items-center sm:px-4 sm:py-4`}
                     onClick={() => {
+                      setsortSelect("Xie-MS");
                       setAssigneeName("Xie-MS");
                       setAssigne(false);
-                      setsortSelect("Xie-MS");
                       setClearSearch(true);
                     }}
                   >
