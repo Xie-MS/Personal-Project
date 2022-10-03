@@ -1,6 +1,6 @@
 import React from "react";
 
-import LabelsData from "../LabelsData";
+import LabelsData from "../LabelManagement/LabelsData";
 
 export default {
   title: "Example/LabelsData",
@@ -11,8 +11,7 @@ export default {
   },
 };
 
-const TemplateLabelsData = (args:any) => <LabelsData {...args} />;
+const TemplateLabelsData = (args: any) => <LabelsData {...args} />;
 
-
-export const Template_LabelsData:any = TemplateLabelsData.bind({});
+export const Template_LabelsData: any = TemplateLabelsData.bind({});
 Template_LabelsData.args = {};

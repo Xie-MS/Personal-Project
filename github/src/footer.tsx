@@ -51,8 +51,10 @@ const FooterRight = styled.div`
 display: flex;
 justify-content: start;
 align-items: center;
+overflow: hidden;
 @media screen and (max-width: 1011px) {
   justify-content: center;
+  overflow: hidden;
 }`;
 
 const FooterText = styled.p`
@@ -67,7 +69,7 @@ function Footers() {
   return (
     <Footer>
       <Footerleft>
-        <FooterLogo src={LogoImage} />
+        <FooterLogo src={LogoImage}  alt=""/>
         <CCText>© 2022 GitHub, Inc.</CCText>
       </Footerleft>
       <FooterRight>

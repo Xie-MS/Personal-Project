@@ -9,7 +9,6 @@ import SortWhite from "./img/SortWhite.png";
 import { useState , useEffect} from 'react';
 import { useNavigate } from "react-router-dom";
 import {supabase} from './client';
-
 const Header = styled.div`
     display: flex;
     padding: 16px;
@@ -200,7 +199,9 @@ width: 20%;`
 
 function Headers() {  
   const [mobileMenuActive, setMobileMenuActive] = useState(false);
+  const [userToken, setUserToken] = useState("");
   const navigate = useNavigate();
+
 
   function mobileMenu(){
 if(mobileMenuActive === false){
@@ -224,22 +225,30 @@ if(mobileMenuActive === false){
   async function checkUser() {    
       const user = supabase.auth.user();
       const token:any = supabase.auth.session();
-      navigate('/LabelManagement') 
       setUser(user);      
-      setUserName(token.user.identities[0].identity_data.user_name)    
+      setUserName(token.user.identities[0].identity_data.user_name)
+      setUserToken(token.provider_token)
   }
+
+  console.log(userToken)
+
+  useEffect(() => {
+    if(userToken === "")return
+    window.localStorage.setItem(`userToken`, JSON.stringify(`${userToken}`));
+  }, [userName]);
 
   async function signInWithgithub() {
      await supabase.auth.signIn({
       provider: 'github'
-     })
-     navigate('/LabelManagement') 
+     },
+     {
+      scopes: "repo gist notifications",
+    })
   }
 
   async function signOut() {
   await supabase.auth.signOut();
-      setUser(null);
-      navigate('/')            
+      setUser(null);      
   }
 
 if(user){
