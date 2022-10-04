@@ -131,7 +131,9 @@ function IssueDetailPage() {
           </div>
         </div>
       </div>
-      <div></div>
+      <div>
+        <div></div>
+      </div>
     </>
   );
 }
