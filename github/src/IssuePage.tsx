@@ -584,7 +584,12 @@ function IssuePage() {
                 </button>
               </div>
 
-              <button className="flex justify-center items-center ml-2 px-4 py-[5px] text-white bg-green-600 border-[1px] border-solid border-gray-400 rounded-md h-[30px] text-sm lg:ml-[15px]">
+              <button
+                className="flex justify-center items-center ml-2 px-4 py-[5px] text-white bg-green-600 border-[1px] border-solid border-gray-400 rounded-md h-[30px] text-sm lg:ml-[15px]"
+                onClick={() => {
+                  navigate(`/NewIssuePage`);
+                }}
+              >
                 <p className="flex justify-center items-center md:hidden">
                   New issue
                 </p>
