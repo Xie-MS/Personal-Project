@@ -1,7 +1,5 @@
 import React from "react";
 
-import { useState, useEffect, useRef } from "react";
-
 import { CheckIcon } from "@primer/octicons-react";
 
 function AssigneePage({
@@ -15,6 +13,8 @@ function AssigneePage({
   setAssigneeSelectData,
   labelSelectData,
   setLabelSelectData,
+  setTargetText,
+  targetAssigneeSpan,
 }: {
   setListClose: any;
   targetText: string;
@@ -26,6 +26,8 @@ function AssigneePage({
   setAssigneeSelectData: any;
   labelSelectData: String[];
   setLabelSelectData: any;
+  setTargetText: any;
+  targetAssigneeSpan: any;
 }) {
   function LabelsSelect() {
     if (targetText === "Assignees") {
@@ -131,53 +133,66 @@ function AssigneePage({
   }
 
   return (
-    <ul
+    <div
       className={`${
-        itemList ? "block" : "hidden"
-      } lg:w-[275px] xl:w-[275px] md:w-full overflow-auto md:h-[722px]`}
+        targetText === targetAssigneeSpan.current?.outerText
+          ? "xl:top-[40px] md:h-[775px] lg:z-20 xl:z-20 md:top-[-100px]"
+          : "xl:top-[115px] xl:z-30 md:top-[-100px] md:max-h[775px]"
+      } md:left-[2.3%] md:bottom-[25%] md:top-[-470px] text-sm md:w-[95.5%] xl:absolute top-0 bottom-0 bg-white border-[1px] border-solid border-gray-300 rounded-md xl:right-[10px] xl:h-fit lg:h-fit md:z-30`}
+      onClick={() => {
+        setListClose(false);
+        setItemList(false);
+        setTargetText("");
+      }}
     >
-      <li className="xl:px-[10px] py-2 text-xs font-semibold flex justify-between items-center">
-        <p
+      <ul
+        className={`${
+          itemList ? "block" : "hidden"
+        } lg:w-[275px] xl:w-[275px] md:w-full overflow-auto md:h-[722px]`}
+      >
+        <li className="xl:px-[10px] py-2 text-xs font-semibold flex justify-between items-center">
+          <p
+            className={`${
+              targetText === "Assignees" && itemList ? "block" : "hidden"
+            }`}
+          >
+            Assign up to 10 people to this issue
+          </p>
+          <p
+            className={`${
+              targetText === "Labels" && itemList ? "block" : "hidden"
+            }`}
+          >
+            Assign labels to this issue
+          </p>
+          <p
+            onClick={() => {
+              setListClose(false);
+              setItemList(false);
+            }}
+          >
+            X
+          </p>
+        </li>
+        <li className="xl:px-[10px] py-[10px] border-t-[1px] border-solid border-gray-300 md:px-4 md:py-4">
+          <input
+            type="text"
+            defaultValue="Type or choose a user"
+            className="xl:py-[5px] px-3 bg-white border-[1px] border-solid border-gray-300 rounded-md text-sm w-full"
+          />
+        </li>
+        <li
           className={`${
             targetText === "Assignees" && itemList ? "block" : "hidden"
-          }`}
+          } xl:bg-slate-100 xl:py-2 xl:px-[10px] text-xs border-t-[1px] border-solid xl:border-gray-300 flex justify-start items-center md:px-[10px] md:bg-slate-100 md:font-semibold`}
         >
-          Assign up to 10 people to this issue
-        </p>
-        <p
-          className={`${
-            targetText === "Labels" && itemList ? "block" : "hidden"
-          }`}
-        >
-          Assign labels to this issue
-        </p>
-        <p
-          onClick={() => {
-            setListClose(false);
-            setItemList(false);
-          }}
-        >
-          X
-        </p>
-      </li>
-      <li className="xl:px-[10px] py-[10px] border-t-[1px] border-solid border-gray-300 md:px-4 md:py-4">
-        <input
-          type="text"
-          defaultValue="Type or choose a user"
-          className="xl:py-[5px] px-3 bg-white border-[1px] border-solid border-gray-300 rounded-md text-sm w-full"
-        />
-      </li>
-      <li
-        className={`${
-          targetText === "Assignees" && itemList ? "block" : "hidden"
-        } xl:bg-slate-100 xl:py-2 xl:px-[10px] text-xs border-t-[1px] border-solid xl:border-gray-300 flex justify-start items-center md:px-[10px] md:bg-slate-100 md:font-semibold`}
-      >
-        Suggeations
-      </li>
-      <div className="overflow-y-auto md:max-h[607px] lg:max-h[270px] xl:max-h[270px]">
-        {LabelsSelect()}
-      </div>
-    </ul>
+          Suggeations
+        </li>
+        <div className="overflow-y-auto md:max-h[607px] lg:max-h[270px] xl:max-h[270px]">
+          {LabelsSelect()}
+        </div>
+      </ul>
+    </div>
   );
 }
 
