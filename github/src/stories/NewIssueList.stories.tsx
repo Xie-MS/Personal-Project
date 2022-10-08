@@ -14,4 +14,15 @@ export default {
 const CreateIssue_ItemList = (args: any) => <CreateIssueItemList {...args} />;
 
 export const ItemList: any = CreateIssue_ItemList.bind({});
-ItemList.args = {};
+ItemList.args = {
+  data: [
+    {
+      name: "Xie-MS",
+      avatar_url: "https://avatars.githubusercontent.com/u/82010307?s=80&v=4",
+    },
+    {
+      name: "emil0519",
+      avatar_url: "https://avatars.githubusercontent.com/u/97882056?v=4",
+    },
+  ],
+};

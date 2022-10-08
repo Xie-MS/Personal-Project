@@ -1,4 +1,8 @@
 import React from "react";
+import { marked } from "marked";
+import ReactMarkdown from "react-markdown";
+import ReactDom from "react-dom";
+import remarkGfm from "remark-gfm";
 
 import {
   TypographyIcon,
@@ -25,6 +29,7 @@ import UserImg from "../src/img/userImg.png";
 function CreateNewIssue({
   preview,
   setPreview,
+  issueContainer,
   setIssueContainer,
   issueTitle,
   setIssueTitle,
@@ -32,11 +37,88 @@ function CreateNewIssue({
 }: {
   preview: boolean;
   setPreview: any;
+  issueContainer: string;
   setIssueContainer: any;
   issueTitle: string;
   setIssueTitle: any;
   setIssue: any;
 }) {
+  console.log(issueContainer);
+  function PreviewText() {
+    if (issueContainer === "") {
+      return <p className="text-sm">Nothing to preview</p>;
+    } else {
+      let markedText = marked.parse(issueContainer);
+      console.log(marked.parse(issueContainer));
+      return (
+        <ReactMarkdown
+          children={issueContainer}
+          components={{
+            em: ({ node, ...props }) => (
+              <i style={{ fontStyle: "italic" }} {...props} />
+            ),
+            strong: ({ node, ...props }) => (
+              <b style={{ fontWeight: "bolder" }} {...props} />
+            ),
+            h1: ({ node, ...props }) => (
+              <h1 style={{ fontSize: "1.75em" }} {...props} />
+            ),
+            h2: ({ node, ...props }) => (
+              <h2 style={{ fontSize: "1.5em" }} {...props} />
+            ),
+            h3: ({ node, ...props }) => (
+              <h3 style={{ fontSize: "1.25em" }} {...props} />
+            ),
+            ul: ({ node, ...props }) => (
+              <ul
+                style={{ listStyle: "disc", paddingLeft: "16px" }}
+                {...props}
+              />
+            ),
+            li: ({ node, ...props }) => <li {...props} />,
+            ol: ({ node, ...props }) => (
+              <ol
+                style={{ listStyle: "auto", paddingLeft: "16px" }}
+                {...props}
+              />
+            ),
+            blockquote: ({ node, ...props }) => (
+              <blockquote
+                style={{
+                  padding: "0px 14px",
+                  borderLeft: "0.25em solid #d0d7de",
+                }}
+                {...props}
+              />
+            ),
+            code: ({ node, ...props }) => (
+              <code
+                style={{
+                  padding: "0.2em 0.4em",
+                  margin: 0,
+                  fontSize: "85%",
+                  borderRadius: "6px",
+                  background: "rgba(175,184,193,0.2)",
+                }}
+                {...props}
+              />
+            ),
+            input: ({ node, ...props }) => (
+              <input
+                type="checkbox"
+                style={{
+                  margin: "0 0.2em 0.25em -1.6em",
+                  verticalAlign: "middle",
+                }}
+                {...props}
+              />
+            ),
+          }}
+        />
+      );
+    }
+  }
+
   return (
     <div className="lg:relative flex justify-evenly items-start xl:flex relative">
       <div className="md:hidden lg:block w-[7.24%] xl:block">
@@ -52,7 +134,6 @@ function CreateNewIssue({
                 className="px-3 py-[5px] border-[1px] border-solid border-gray-400 bg-slate-50 rounded-md w-full lg:focus:bg-white lg:focus:border-[#218bff] xl:focus:bg-white xl:focus:border-blue-400"
                 onChange={(e) => {
                   setIssueTitle(e.target.value);
-                  console.log(e.target.value);
                 }}
               />
             </div>
@@ -96,7 +177,12 @@ function CreateNewIssue({
                       <TypographyIcon size={16} />
                       <ChevronDownIcon size={16} />
                     </summary>
-                    <button className="ml-[5px] mr-1 py-2 px-1">
+                    <button
+                      className="ml-[5px] mr-1 py-2 px-1"
+                      onClick={() => {
+                        console.log("_" + issueContainer + "_");
+                      }}
+                    >
                       <HeadingIcon size={16} />
                     </button>
                     <button className="ml-[5px] mr-1 py-2 px-1">
@@ -118,21 +204,46 @@ function CreateNewIssue({
                 </div>
                 <div className="flex justify-between items-start">
                   <div className="md:hidden lg:flex xl:flex">
-                    <button className="ml-[5px] mr-1 py-2 px-1 lg:py-1 lg:px-1 lg:ml-[6px] lg:mx-1 xl:py-1 xl:px-1 xl:ml-[6px] xl:mx-1">
+                    <button
+                      className="ml-[5px] mr-1 py-2 px-1 lg:py-1 lg:px-1 lg:ml-[6px] lg:mx-1 xl:py-1 xl:px-1 xl:ml-[6px] xl:mx-1"
+                      onClick={() => {
+                        setIssueContainer("### " + issueContainer);
+                      }}
+                    >
                       <HeadingIcon size={16} />
                     </button>
-                    <button className="ml-[5px] mr-1 py-2 px-1 lg:py-1 lg:px-1 lg:ml-[6px] lg:mx-1 xl:py-1 xl:px-1 xl:ml-[6px] xl:mx-1">
+                    <button
+                      className="ml-[5px] mr-1 py-2 px-1 lg:py-1 lg:px-1 lg:ml-[6px] lg:mx-1 xl:py-1 xl:px-1 xl:ml-[6px] xl:mx-1"
+                      onClick={() => {
+                        setIssueContainer("**" + issueContainer + "**");
+                      }}
+                    >
                       <BoldIcon size={16} />
                     </button>
-                    <button className="ml-[5px] mr-1 py-2 px-1 lg:py-1 lg:px-1 lg:ml-[6px] lg:mx-1 xl:py-1 xl:px-1 xl:ml-[6px] xl:mx-1">
+                    <button
+                      className="ml-[5px] mr-1 py-2 px-1 lg:py-1 lg:px-1 lg:ml-[6px] lg:mx-1 xl:py-1 xl:px-1 xl:ml-[6px] xl:mx-1"
+                      onClick={() => {
+                        setIssueContainer("_" + issueContainer + "_");
+                      }}
+                    >
                       <ItalicIcon size={16} />
                     </button>
                   </div>
                   <div className="md:hidden lg:flex">
-                    <button className="ml-[5px] mr-1 py-2 px-1 lg:py-1 lg:px-1 lg:ml-[6px] lg:mx-1 xl:py-1 xl:px-1 xl:ml-[6px] xl:mx-1">
+                    <button
+                      className="ml-[5px] mr-1 py-2 px-1 lg:py-1 lg:px-1 lg:ml-[6px] lg:mx-1 xl:py-1 xl:px-1 xl:ml-[6px] xl:mx-1"
+                      onClick={() => {
+                        setIssueContainer("- " + issueContainer);
+                      }}
+                    >
                       <ListUnorderedIcon size={16} />
                     </button>
-                    <button className="ml-[5px] mr-1 py-2 px-1 lg:py-1 lg:px-1 lg:ml-[6px] lg:mx-1 xl:py-1 xl:px-1 xl:ml-[6px] xl:mx-1">
+                    <button
+                      className="ml-[5px] mr-1 py-2 px-1 lg:py-1 lg:px-1 lg:ml-[6px] lg:mx-1 xl:py-1 xl:px-1 xl:ml-[6px] xl:mx-1"
+                      onClick={() => {
+                        setIssueContainer("1. " + issueContainer);
+                      }}
+                    >
                       <ListOrderedIcon size={16} />
                     </button>
                     <button className="ml-[5px] mr-1 py-2 px-1 lg:py-1 lg:px-1 lg:ml-[6px] lg:mx-1 xl:py-1 xl:px-1 xl:ml-[6px] xl:mx-1">
@@ -141,13 +252,28 @@ function CreateNewIssue({
                   </div>
                   <div>
                     <div>
-                      <button className="ml-[5px] py-2 px-2 lg:py-1 lg:px-1 lg:ml-[6px] lg:mx-1 xl:py-1 xl:px-1 xl:ml-[6px] xl:mx-1">
+                      <button
+                        className="ml-[5px] py-2 px-2 lg:py-1 lg:px-1 lg:ml-[6px] lg:mx-1 xl:py-1 xl:px-1 xl:ml-[6px] xl:mx-1"
+                        onClick={() => {
+                          setIssueContainer("> " + issueContainer);
+                        }}
+                      >
                         <QuoteIcon size={16} />
                       </button>
-                      <button className="ml-[5px] py-2 px-2 lg:py-1 lg:px-1 lg:ml-[6px] lg:mx-1 xl:py-1 xl:px-1 xl:ml-[6px] xl:mx-1">
+                      <button
+                        className="ml-[5px] py-2 px-2 lg:py-1 lg:px-1 lg:ml-[6px] lg:mx-1 xl:py-1 xl:px-1 xl:ml-[6px] xl:mx-1"
+                        onClick={() => {
+                          setIssueContainer("`" + issueContainer + "`");
+                        }}
+                      >
                         <CodeIcon size={16} />
                       </button>
-                      <button className="ml-[5px] py-2 px-2 lg:py-1 lg:px-1 lg:ml-[6px] lg:mx-1 xl:py-1 xl:px-1 xl:ml-[6px] xl:mx-1">
+                      <button
+                        className="ml-[5px] py-2 px-2 lg:py-1 lg:px-1 lg:ml-[6px] lg:mx-1 xl:py-1 xl:px-1 xl:ml-[6px] xl:mx-1"
+                        onClick={() => {
+                          setIssueContainer("[" + issueContainer + "](url)");
+                        }}
+                      >
                         <LinkIcon size={16} />
                       </button>
                     </div>
@@ -180,7 +306,7 @@ function CreateNewIssue({
                   <textarea
                     cols="30"
                     rows="10"
-                    defaultValue="Leave a comment"
+                    value={issueContainer}
                     className="md:h-[200px] px-2 py-2 border-[1px] md:border-b-[0px] border-solid border-gray-400 bg-slate-100 rounded-md w-full lg:focus:bg-white lg:border-b-[1px] border-t-[0px] border-r-[0px] border-l-[0px] lg:border-dashed lg:h-[200px] lg:rounded-b-[0px] xl:focus:bg-white xl:border-dashed xl:h-[200px] xl:rounded-b-[0px]"
                     onChange={(e) => {
                       setIssueContainer(e.target.value);
@@ -188,23 +314,28 @@ function CreateNewIssue({
                   />
                 </div>
                 <div className="md:hidden lg:absolute bottom-0 flex justify-between items-center w-full px-[6px] py-[6px] lg:h-[30px]  xl:absolute xl:h-[30px]">
-                  <button>
-                    <p className="lg:text-sm xl:text-sm">
-                      Attach files by dragging & dropping, selectimg or pasting
-                      them.
-                    </p>
-                  </button>
-                  <button>
-                    <MarkdownIcon size={16} />
-                  </button>
+                  {/* <input
+                    accept=".gif,.jpeg,.jpg,.mov,.mp4,.png,.svg,.webm,.csv,.docx,.fodg,.fodp,.fods,.fodt,.gz,.log,.md,.odf,.odg,.odp,.ods,.odt,.pdf,.pptx,.tgz,.txt,.xls,.xlsx,.zip"
+                    type="file"
+                    multiple
+                  /> */}
+
+                  <p className="lg:text-sm xl:text-sm">
+                    Attach files by dragging & dropping, selectimg or pasting
+                    them.
+                  </p>
+
+                  <MarkdownIcon size={16} />
                 </div>
               </div>
+
               <div
                 className={`${
                   preview ? "block" : "hidden"
                 } px-2 pb-2 w-full h-[191px] border-b-[2px] border-solid border-[#d0d7de]`}
               >
-                <p className="text-sm">Nothing to preview</p>
+                <p className="text-sm"></p>
+                {PreviewText()}
               </div>
               <div className="md:hidden">
                 <div className="flex justify-between items-center mt-2">

@@ -1254,8 +1254,28 @@ body{
     position: absolute;
   }
 
+  .xl\:relative {
+    position: relative;
+  }
+
   .xl\:top-\[45px\] {
     top: 45px;
+  }
+
+  .xl\:top-\[40px\] {
+    top: 40px;
+  }
+
+  .xl\:right-\[10px\] {
+    right: 10px;
+  }
+
+  .xl\:bottom-0 {
+    bottom: 0px;
+  }
+
+  .xl\:left-0 {
+    left: 0px;
   }
 
   .xl\:top-\[65px\] {
@@ -1266,16 +1286,8 @@ body{
     right: 0px;
   }
 
-  .xl\:top-\[40px\] {
-    top: 40px;
-  }
-
   .xl\:top-\[115px\] {
     top: 115px;
-  }
-
-  .xl\:right-\[10px\] {
-    right: 10px;
   }
 
   .xl\:z-20 {
@@ -1362,14 +1374,14 @@ body{
     height: 30px;
   }
 
-  .xl\:h-\[270px\] {
-    height: 270px;
-  }
-
   .xl\:h-fit {
     height: -webkit-fit-content;
     height: -moz-fit-content;
     height: fit-content;
+  }
+
+  .xl\:h-\[270px\] {
+    height: 270px;
   }
 
   .xl\:w-\[9\%\] {
@@ -1388,16 +1400,20 @@ body{
     width: 100%;
   }
 
+  .xl\:w-\[277px\] {
+    width: 277px;
+  }
+
+  .xl\:w-\[275px\] {
+    width: 275px;
+  }
+
   .xl\:w-\[14px\] {
     width: 14px;
   }
 
   .xl\:w-\[256px\] {
     width: 256px;
-  }
-
-  .xl\:w-\[275px\] {
-    width: 275px;
   }
 
   .xl\:items-end {
@@ -1630,14 +1646,14 @@ body{
     height: 30px;
   }
 
-  .lg\:h-\[270px\] {
-    height: 270px;
-  }
-
   .lg\:h-fit {
     height: -webkit-fit-content;
     height: -moz-fit-content;
     height: fit-content;
+  }
+
+  .lg\:h-\[270px\] {
+    height: 270px;
   }
 
   .lg\:w-\[88\.7\%\] {
@@ -1656,16 +1672,16 @@ body{
     width: 46%;
   }
 
+  .lg\:w-\[275px\] {
+    width: 275px;
+  }
+
   .lg\:w-\[9\%\] {
     width: 9%;
   }
 
   .lg\:w-\[240px\] {
     width: 240px;
-  }
-
-  .lg\:w-\[275px\] {
-    width: 275px;
   }
 
   .lg\:items-end {
@@ -1858,12 +1874,12 @@ body{
     height: 83.5px;
   }
 
-  .md\:h-\[607px\] {
-    height: 607px;
-  }
-
   .md\:h-\[722px\] {
     height: 722px;
+  }
+
+  .md\:h-\[607px\] {
+    height: 607px;
   }
 
   .md\:w-\[5\%\] {
@@ -2232,4 +2248,4 @@ section .tip-wrapper svg path {
 }
 
 
-/*# sourceMappingURL=main.9092300a.css.map*/
+/*# sourceMappingURL=main.efb1cf65.css.map*/

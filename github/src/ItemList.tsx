@@ -2,10 +2,35 @@ import React from "react";
 
 import { useState } from "react";
 import { CheckIcon, GearIcon } from "@primer/octicons-react";
-import UserImg from "../src/img/userImg.png";
 
-function ItemListData() {
+function ItemListData({ data }: { data: any }) {
   const [Close, setClose] = useState(false);
+  function Assignee() {
+    return data.map((_item: any, Index: number) => {
+      return (
+        <div className="overflow-y-auto md:max-h[607px] lg:max-h[270px] xl:max-h[270px]">
+          <li className="xl:py-2 px-2 border-t-[1px] border-solid border-gray-300 text-xs flex justify-start items-center md:pl-5 md:pr-2 md:py-4">
+            <div className="block">
+              <CheckIcon size={16} className="mr-2" />
+            </div>
+            <div className="xl:flex items-center justify-start">
+              <img
+                src={`${data[Index].avatar_url}`}
+                alt=""
+                className="xl:w-[9%] md:w-[5%] rounded-full mr-2"
+              />
+              <div className="xl:flex items-center justify-center">
+                <p className="xl:mr-2 font-semibold xl:text-sm">
+                  {data[Index].name}
+                </p>
+              </div>
+            </div>
+          </li>
+        </div>
+      );
+    });
+  }
+
   return (
     <>
       <div className="md:pt-4 lg:pt-0 xl:pt-0 xl:relative w-[270px]">
@@ -50,23 +75,7 @@ function ItemListData() {
           <li className="block xl:bg-slate-100 xl:py-2 xl:px-[10px] text-xs border-t-[1px] border-solid xl:border-gray-300 flex justify-start items-center md:px-[10px] md:bg-slate-100 md:font-semibold">
             Suggeations
           </li>
-          <div className="overflow-y-auto md:max-h[607px] lg:max-h[270px] xl:max-h[270px]">
-            <li className="xl:py-2 px-2 border-t-[1px] border-solid border-gray-300 text-xs flex justify-start items-center md:pl-5 md:pr-2 md:py-4">
-              <div className="block">
-                <CheckIcon size={16} className="mr-2" />
-              </div>
-              <div className="xl:flex items-center justify-start">
-                <img
-                  src={UserImg}
-                  alt=""
-                  className="xl:w-[9%] md:w-[5%] rounded-full mr-2"
-                />
-                <div className="xl:flex items-center justify-center">
-                  <p className="xl:mr-2 font-semibold xl:text-sm">Xie-MS</p>
-                </div>
-              </div>
-            </li>
-          </div>
+          {Assignee()}
         </ul>
       </div>
     </>

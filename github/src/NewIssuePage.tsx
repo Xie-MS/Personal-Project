@@ -15,7 +15,7 @@ function NewIssuePage() {
   const [itemList, setItemList] = useState(false);
   const [targetText, setTargetText]: any = useState("");
   const [issueTitle, setIssueTitle]: any = useState("");
-  const [issueContainer, setIssueContainer]: any = useState("");
+  const [issueContainer, setIssueContainer]: any = useState("Leave a comment");
 
   const [renderAssigneeData, setRenderAssigneeData]: any = useState([]);
   const [renderLabelData, setRenderLabelData]: any = useState([]);
@@ -123,6 +123,7 @@ function NewIssuePage() {
       <CreateNewIssue
         preview={preview}
         setPreview={setPreview}
+        issueContainer={issueContainer}
         setIssueContainer={setIssueContainer}
         issueTitle={issueTitle}
         setIssueTitle={setIssueTitle}
