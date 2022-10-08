@@ -1,5 +1,7 @@
 import React from "react";
 
+import { useState, useRef } from "react";
+
 import { CheckIcon } from "@primer/octicons-react";
 
 function AssigneePage({
@@ -15,6 +17,7 @@ function AssigneePage({
   setLabelSelectData,
   setTargetText,
   targetAssigneeSpan,
+  targetLabelSpan,
 }: {
   setListClose: any;
   targetText: string;
@@ -28,13 +31,76 @@ function AssigneePage({
   setLabelSelectData: any;
   setTargetText: any;
   targetAssigneeSpan: any;
+  targetLabelSpan: any;
 }) {
+  const [assignee, setAssignee]: any = useState(true);
+  const [assigneeInputName, setAssigneeInputName]: any = useState("");
+  const [labelsInputSelect, setLabelsInputSelect]: any = useState("");
+
+  const AssigneeName = useRef<HTMLParagraphElement | null>(null);
+  const LabelName = useRef<HTMLParagraphElement | null>(null);
+
+  console.log(labelsInputSelect);
+
+  function AssigneeInput(e: any) {
+    if (
+      AssigneeName.current?.outerText
+        .toLowerCase()
+        .includes(e.target.value.toLowerCase())
+    ) {
+      setAssigneeInputName(e.target.value);
+    } else {
+      setAssigneeInputName(e.target.value);
+    }
+  }
+
+  function AssigneeInputClick(e: any) {
+    if (e.key === "Enter") {
+      if (assigneeSelectData.includes(e.target.value)) {
+        const assigneeSelectNum = assigneeSelectData.indexOf(e.target.value);
+        assigneeSelectData.splice(assigneeSelectNum, 1);
+      } else {
+        setAssigneeSelectData([...assigneeSelectData, e.target.value]);
+      }
+    }
+  }
+
+  function LabelInputClick(e: any) {
+    if (e.key === "Enter") {
+      if (labelSelectData.includes(e.target.value)) {
+        const labelSelectNum = labelSelectData.indexOf(e.target.value);
+        labelSelectData.splice(labelSelectNum, 1);
+      } else {
+        setLabelSelectData([...labelSelectData, e.target.value]);
+      }
+    }
+  }
+
+  function LabelInput(e: any) {
+    if (
+      LabelName.current?.outerText
+        .toLowerCase()
+        .includes(e.target.value.toLowerCase())
+    ) {
+      setLabelsInputSelect(e.target.value);
+    } else {
+      setLabelsInputSelect(e.target.value);
+    }
+  }
+
   function LabelsSelect() {
     if (targetText === "Assignees") {
       return renderAssigneeData.map((_item: any, ItemIndex: number) => {
         return (
           <li
-            className="xl:py-2 px-2 border-t-[1px] border-solid border-gray-300 text-xs flex justify-start items-center md:pl-5 md:pr-2 md:py-4"
+            className={`${
+              renderAssigneeData[ItemIndex].login
+                .toString()
+                .toLowerCase()
+                .includes(assigneeInputName.toString().toLowerCase())
+                ? "flex"
+                : "hidden"
+            } xl:py-2 px-2 border-t-[1px] border-solid border-gray-300 text-xs justify-start items-center md:pl-5 md:pr-2 md:py-4`}
             onClick={() => {
               if (
                 assigneeSelectData.includes(renderAssigneeData[ItemIndex].login)
@@ -71,7 +137,10 @@ function AssigneePage({
                 className="xl:w-[9%] md:w-[5%] rounded-full mr-2"
               />
               <div className="xl:flex items-center justify-center">
-                <p className="xl:mr-2 font-semibold xl:text-sm">
+                <p
+                  className="xl:mr-2 font-semibold xl:text-sm"
+                  ref={AssigneeName}
+                >
                   {renderAssigneeData[ItemIndex].login}
                 </p>
               </div>
@@ -83,7 +152,14 @@ function AssigneePage({
       return renderLabelData.map((_item: any, ItemIndex: number) => {
         return (
           <li
-            className="xl:py-2 px-2 border-t-[1px] border-solid border-gray-300 text-xs flex justify-start items-center md:pl-5 md:pr-2 md:py-4"
+            className={`${
+              renderLabelData[ItemIndex].name
+                .toString()
+                .toLowerCase()
+                .includes(labelsInputSelect.toString().toLowerCase())
+                ? "flex"
+                : "hidden"
+            } xl:py-2 px-2 border-t-[1px] border-solid border-gray-300 text-xs justify-start items-center md:pl-5 md:pr-2 md:py-4`}
             onClick={() => {
               if (labelSelectData.includes(renderLabelData[ItemIndex].name)) {
                 const labelSelectNum = labelSelectData.indexOf(
@@ -118,7 +194,7 @@ function AssigneePage({
                   }}
                   className="xl:w-[14px] h-[14px] rounded-full mr-2 mt-[2px]"
                 />
-                <p className="xl:mr-2 font-semibold xl:text-sm">
+                <p className="xl:mr-2 font-semibold xl:text-sm" ref={LabelName}>
                   {renderLabelData[ItemIndex].name}
                 </p>
               </div>
@@ -138,7 +214,7 @@ function AssigneePage({
         targetText === targetAssigneeSpan.current?.outerText
           ? "xl:top-[40px] md:h-[775px] lg:z-20 xl:z-20 md:top-[-100px]"
           : "xl:top-[115px] xl:z-30 md:top-[-100px] md:max-h[775px]"
-      } md:left-[2.3%] md:bottom-[25%] md:top-[-470px] text-sm md:w-[95.5%] xl:absolute top-0 bottom-0 bg-white border-[1px] border-solid border-gray-300 rounded-md xl:right-[10px] xl:h-fit lg:h-fit md:z-30`}
+      } md:left-[2.3%] md:bottom-[25%] md:top-[-470px] text-sm md:w-[95.5%] xl:absolute top-0 bottom-0 bg-white border-[1px] border-solid border-gray-300 rounded-md xl:right-[10px] xl:h-fit lg:h-fit md:z-30 xl:z-30 lg:z-30`}
       onClick={() => {
         setListClose(false);
         setItemList(false);
@@ -165,20 +241,31 @@ function AssigneePage({
           >
             Assign labels to this issue
           </p>
-          <p
-            onClick={() => {
-              setListClose(false);
-              setItemList(false);
-            }}
-          >
-            X
-          </p>
         </li>
         <li className="xl:px-[10px] py-[10px] border-t-[1px] border-solid border-gray-300 md:px-4 md:py-4">
           <input
             type="text"
-            defaultValue="Type or choose a user"
+            defaultValue={`${
+              targetText === targetAssigneeSpan.current?.outerText
+                ? "Type or choose a user"
+                : "Filter labels"
+            }`}
             className="xl:py-[5px] px-3 bg-white border-[1px] border-solid border-gray-300 rounded-md text-sm w-full"
+            onKeyDown={(e) => {
+              if (targetText === targetAssigneeSpan.current?.outerText) {
+                console.log(targetText, targetAssigneeSpan.current?.outerText);
+                AssigneeInputClick(e);
+              } else if (targetText === targetLabelSpan.current?.outerText) {
+                LabelInputClick(e);
+              }
+            }}
+            onChange={(e) => {
+              if (targetText === targetAssigneeSpan.current?.outerText) {
+                AssigneeInput(e);
+              } else if (targetText === targetLabelSpan.current?.outerText) {
+                LabelInput(e);
+              }
+            }}
           />
         </li>
         <li

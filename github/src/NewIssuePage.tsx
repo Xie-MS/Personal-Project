@@ -16,6 +16,7 @@ function NewIssuePage() {
   const [targetText, setTargetText]: any = useState("");
   const [issueTitle, setIssueTitle]: any = useState("");
   const [issueContainer, setIssueContainer]: any = useState("Leave a comment");
+  const [markDownBtn, setmarkDownBtn]: any = useState(true);
 
   const [renderAssigneeData, setRenderAssigneeData]: any = useState([]);
   const [renderLabelData, setRenderLabelData]: any = useState([]);
@@ -128,6 +129,8 @@ function NewIssuePage() {
         issueTitle={issueTitle}
         setIssueTitle={setIssueTitle}
         setIssue={setIssue}
+        markDownBtn={markDownBtn}
+        setmarkDownBtn={setmarkDownBtn}
       />
       <div className="md:w-full lg:w-[240px] xl:w-[256px]">
         <div className="md:pt-4 lg:pt-0 xl:pt-0">
@@ -154,7 +157,7 @@ function NewIssuePage() {
         <div
           className={`${
             itemList ? "block" : "hidden"
-          } md:bg-black md:opacity-60 top-0 bottom-0 left-0 right-0 fixed md:z-10`}
+          } md:bg-black md:opacity-60 top-0 bottom-0 left-0 right-0 fixed md:z-10 xl:z-0 lg:z-0`}
           onClick={() => {
             setListClose(false);
             setItemList(false);
@@ -167,6 +170,7 @@ function NewIssuePage() {
           targetText={targetText}
           setTargetText={setTargetText}
           targetAssigneeSpan={targetAssigneeSpan}
+          targetLabelSpan={targetLabelSpan}
           renderAssigneeData={renderAssigneeData}
           renderLabelData={renderLabelData}
           assigneeSelectData={assigneeSelectData}

@@ -4,6 +4,8 @@ import ReactMarkdown from "react-markdown";
 import ReactDom from "react-dom";
 import remarkGfm from "remark-gfm";
 
+import { useState, useEffect, useRef } from "react";
+
 import {
   TypographyIcon,
   QuoteIcon,
@@ -34,6 +36,8 @@ function CreateNewIssue({
   issueTitle,
   setIssueTitle,
   setIssue,
+  markDownBtn,
+  setmarkDownBtn,
 }: {
   preview: boolean;
   setPreview: any;
@@ -42,12 +46,16 @@ function CreateNewIssue({
   issueTitle: string;
   setIssueTitle: any;
   setIssue: any;
+  markDownBtn: boolean;
+  setmarkDownBtn: any;
 }) {
-  console.log(issueContainer);
+  const Imgfile = useRef<HTMLInputElement | null | any>(null);
+  const [imgURL, setImgURL]: any = useState("");
+
   function PreviewText() {
-    if (issueContainer === "") {
+    if (issueContainer === "" || issueContainer === "Leave a comment") {
       return <p className="text-sm">Nothing to preview</p>;
-    } else {
+    } else if (issueContainer !== "" && imgURL !== "") {
       let markedText = marked.parse(issueContainer);
       console.log(marked.parse(issueContainer));
       return (
@@ -116,6 +124,8 @@ function CreateNewIssue({
           }}
         />
       );
+    } else if (imgURL !== "") {
+      <img src={imgURL} alt="" />;
     }
   }
 
@@ -126,7 +136,7 @@ function CreateNewIssue({
       </div>
       <div className="md:w-full lg:w-[88.7%] xl:w-[88.7%]">
         <div>
-          <div className="md:h-[328px] md:border-[0px] lg:border-[1px] lg:border-solid lg:border-gray-200 lg:rounded-md lg:h-[417px] lg:mb-2 xl:border-[1px] xl:border-solid xl:border-gray-200 xl:rounded-md xl:h-[417px] xl:mb-2">
+          <div className="md:h-auto md:border-[0px] lg:border-[1px] lg:border-solid lg:border-gray-200 lg:rounded-md lg:h-auto lg:mb-2 xl:border-[1px] xl:border-solid xl:border-gray-200 xl:rounded-md xl:h-auto xl:mb-2">
             <div className="md:mb-4 md:px-0 md:py-0 lg:mb-0 lg:px-2 lg:py-2 xl:mb-0 xl:px-2 xl:py-2">
               <input
                 type="text"
@@ -148,6 +158,7 @@ function CreateNewIssue({
                     } py-2 px-5 md:border-[1px] border-solid md:w-[50%] lg:w-auto lg:border-[1px] lg:border-b-[0px] lg:border-gray-200 lg:rounded-t-md xl:w-auto xl:border-[1px] xl:border-b-[0px] xl:border-gray-200 xl:rounded-t-md`}
                     onClick={() => {
                       setPreview(false);
+                      setmarkDownBtn(true);
                     }}
                   >
                     <p className="lg:text-sm xl:text-sm">Write</p>
@@ -160,6 +171,7 @@ function CreateNewIssue({
                     } py-2 px-5 md:border-t-[1px] md:border-r-[1px] md:border-b-[1px] border-solid border-gray-400 md:w-[50%] lg:w-auto xl:w-auto`}
                     onClick={() => {
                       setPreview(true);
+                      setmarkDownBtn(false);
                     }}
                   >
                     <p className="lg:text-sm xl:text-sm">Preview</p>
@@ -171,7 +183,11 @@ function CreateNewIssue({
               </div>
 
               <div className="flex justify-between items-start pt-2 px-2 mb-2 lg:mb-0 xl:mb-0">
-                <div className="md:block lg:hidden xl:hidden">
+                <div
+                  className={`${
+                    markDownBtn ? "md:block" : "md:hidden"
+                  } md:block lg:hidden xl:hidden`}
+                >
                   <details>
                     <summary className="flex ml-[5px] mr-1 py-2 px-1">
                       <TypographyIcon size={16} />
@@ -180,21 +196,41 @@ function CreateNewIssue({
                     <button
                       className="ml-[5px] mr-1 py-2 px-1"
                       onClick={() => {
-                        console.log("_" + issueContainer + "_");
+                        setIssueContainer("### " + issueContainer);
                       }}
                     >
                       <HeadingIcon size={16} />
                     </button>
-                    <button className="ml-[5px] mr-1 py-2 px-1">
+                    <button
+                      className="ml-[5px] mr-1 py-2 px-1"
+                      onClick={() => {
+                        setIssueContainer("**" + issueContainer + "**");
+                      }}
+                    >
                       <BoldIcon size={16} />
                     </button>
-                    <button className="ml-[5px] mr-1 py-2 px-1">
+                    <button
+                      className="ml-[5px] mr-1 py-2 px-1"
+                      onClick={() => {
+                        setIssueContainer("_" + issueContainer + "_");
+                      }}
+                    >
                       <ItalicIcon size={16} />
                     </button>
-                    <button className="ml-[5px] mr-1 py-2 px-1">
+                    <button
+                      className="ml-[5px] mr-1 py-2 px-1"
+                      onClick={() => {
+                        setIssueContainer("- " + issueContainer);
+                      }}
+                    >
                       <ListUnorderedIcon size={16} />
                     </button>
-                    <button className="ml-[5px] mr-1 py-2 px-1">
+                    <button
+                      className="ml-[5px] mr-1 py-2 px-1"
+                      onClick={() => {
+                        setIssueContainer("1. " + issueContainer);
+                      }}
+                    >
                       <ListOrderedIcon size={16} />
                     </button>
                     <button className="ml-[5px] mr-1 py-2 px-1">
@@ -251,7 +287,7 @@ function CreateNewIssue({
                     </button>
                   </div>
                   <div>
-                    <div>
+                    <div className={`${markDownBtn ? "md:flex" : "md:hidden"}`}>
                       <button
                         className="ml-[5px] py-2 px-2 lg:py-1 lg:px-1 lg:ml-[6px] lg:mx-1 xl:py-1 xl:px-1 xl:ml-[6px] xl:mx-1"
                         onClick={() => {
@@ -279,13 +315,37 @@ function CreateNewIssue({
                     </div>
                   </div>
 
-                  <div>
+                  <div className={`${markDownBtn ? "md:flex" : "md:hidden"}`}>
                     <button className="ml-[5px] py-2 px-2 lg:py-1 lg:px-1 lg:ml-[6px] lg:mx-1 xl:py-1 xl:px-1 xl:ml-[6px] xl:mx-1">
                       <MentionIcon size={16} />
                     </button>
-                    <button className="ml-[5px] py-2 px-2 lg:py-1 lg:px-1 lg:ml-[6px] lg:mx-1 xl:py-1 xl:px-1 xl:ml-[6px] xl:mx-1">
+                    <input
+                      type="file"
+                      className="hidden"
+                      ref={Imgfile}
+                      accept=".gif,.jpeg,.jpg,.mov,.mp4,.png,.svg,.webm,.csv,.docx,.fodg,.fodp,.fods,.fodt,.gz,.log,.md,.odf,.odg,.odp,.ods,.odt,.pdf,.pptx,.tgz,.txt,.xls,.xlsx,.zip"
+                      multiple
+                      onChange={() => {
+                        const file = Imgfile.current?.files;
+                        if (file[0] !== undefined) {
+                          setImgURL(URL.createObjectURL(file[0]));
+                          setIssueContainer(
+                            `![${file[0].name}](${URL.createObjectURL(
+                              file[0]
+                            )})`
+                          );
+                        }
+                      }}
+                    />
+                    <button
+                      className="ml-[5px] py-2 px-2 lg:py-1 lg:px-1 lg:ml-[6px] lg:mx-1 xl:py-1 xl:px-1 xl:ml-[6px] xl:mx-1"
+                      onClick={() => {
+                        Imgfile.current?.click();
+                      }}
+                    >
                       <FileMediaIcon size={16} />
                     </button>
+
                     <button className="ml-[5px] py-2 px-2 lg:py-1 lg:px-1 lg:ml-[6px] lg:mx-1 xl:py-1 xl:px-1 xl:ml-[6px] xl:mx-1">
                       <CrossReferenceIcon size={16} />
                     </button>
@@ -307,32 +367,53 @@ function CreateNewIssue({
                     cols="30"
                     rows="10"
                     value={issueContainer}
-                    className="md:h-[200px] px-2 py-2 border-[1px] md:border-b-[0px] border-solid border-gray-400 bg-slate-100 rounded-md w-full lg:focus:bg-white lg:border-b-[1px] border-t-[0px] border-r-[0px] border-l-[0px] lg:border-dashed lg:h-[200px] lg:rounded-b-[0px] xl:focus:bg-white xl:border-dashed xl:h-[200px] xl:rounded-b-[0px]"
+                    className="md:leading-snug md:h-[200px] px-2 py-2 border-[1px] md:border-b-[0px] border-solid border-gray-400 bg-slate-100 rounded-md w-full lg:focus:bg-white lg:border-b-[1px] border-t-[0px] border-r-[0px] border-l-[0px] lg:border-dashed lg:h-[200px] lg:leading-snug lg:rounded-b-[0px] xl:focus:bg-white xl:border-dashed xl:h-[200px] xl:leading-snug xl:rounded-b-[0px]"
                     onChange={(e) => {
                       setIssueContainer(e.target.value);
                     }}
                   />
                 </div>
                 <div className="md:hidden lg:absolute bottom-0 flex justify-between items-center w-full px-[6px] py-[6px] lg:h-[30px]  xl:absolute xl:h-[30px]">
-                  {/* <input
-                    accept=".gif,.jpeg,.jpg,.mov,.mp4,.png,.svg,.webm,.csv,.docx,.fodg,.fodp,.fods,.fodt,.gz,.log,.md,.odf,.odg,.odp,.ods,.odt,.pdf,.pptx,.tgz,.txt,.xls,.xlsx,.zip"
-                    type="file"
-                    multiple
-                  /> */}
+                  <div className="xl:h-auto lg:h-auto">
+                    <input
+                      type="file"
+                      className="hidden"
+                      ref={Imgfile}
+                      accept=".gif,.jpeg,.jpg,.mov,.mp4,.png,.svg,.webm,.csv,.docx,.fodg,.fodp,.fods,.fodt,.gz,.log,.md,.odf,.odg,.odp,.ods,.odt,.pdf,.pptx,.tgz,.txt,.xls,.xlsx,.zip"
+                      multiple
+                      onChange={() => {
+                        const file = Imgfile.current?.files;
+                        if (file[0] !== undefined) {
+                          setImgURL(URL.createObjectURL(file[0]));
+                          setIssueContainer(
+                            `![${file[0].name}](${URL.createObjectURL(
+                              file[0]
+                            )})`
+                          );
+                        }
+                      }}
+                    />
+                    <button
+                      className="flex justify-between items-center w-full"
+                      onClick={() => {
+                        Imgfile.current?.click();
+                      }}
+                    >
+                      <p className="lg:text-sm xl:text-sm">
+                        Attach files by dragging & dropping, selectimg or
+                        pasting them.
+                      </p>
 
-                  <p className="lg:text-sm xl:text-sm">
-                    Attach files by dragging & dropping, selectimg or pasting
-                    them.
-                  </p>
-
-                  <MarkdownIcon size={16} />
+                      <MarkdownIcon size={16} />
+                    </button>
+                  </div>
                 </div>
               </div>
 
               <div
                 className={`${
                   preview ? "block" : "hidden"
-                } px-2 pb-2 w-full h-[191px] border-b-[2px] border-solid border-[#d0d7de]`}
+                } px-2 pb-2 w-full min-h-[191px] border-b-[2px] border-solid border-[#d0d7de] md:min-h-[270px]`}
               >
                 <p className="text-sm"></p>
                 {PreviewText()}
@@ -382,3 +463,6 @@ function CreateNewIssue({
 }
 
 export default CreateNewIssue;
+function readAsDataURL(arg0: any) {
+  throw new Error("Function not implemented.");
+}
