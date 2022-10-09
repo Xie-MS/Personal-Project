@@ -1,6 +1,6 @@
 import React from "react";
 
-import CreateNewIssue from "../CreateNewIssue";
+import CreateNewIssue from "../NewIssue";
 
 export default {
   title: "Example/CreateNewIssue",

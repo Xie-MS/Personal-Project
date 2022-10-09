@@ -1,10 +1,4 @@
-import React, { Dispatch, SetStateAction } from "react";
-import { marked } from "marked";
-import ReactMarkdown from "react-markdown";
-import ReactDom from "react-dom";
-import remarkGfm from "remark-gfm";
-
-import { useState, useEffect, useRef } from "react";
+import React from "react";
 
 import {
   TypographyIcon,
@@ -24,7 +18,6 @@ import {
   ChevronDownIcon,
   InfoIcon,
   MarkdownIcon,
-  IssueOpenedIcon,
 } from "@primer/octicons-react";
 
 import UserImg from "../src/img/userImg.png";
@@ -58,175 +51,6 @@ function CreateNewIssue({
   setTargetText: any;
   renderIssueData: any;
 }) {
-  const Imgfile = useRef<HTMLInputElement | null | any>(null);
-  const [imgURL, setImgURL]: any = useState("");
-  const [tagsClose, setTagsClose]: any = useState(true);
-  const [issueClose, setIssueClose]: any = useState(true);
-  const [tagsName, setTagsName]: any = useState("");
-  const [issueNum, setIssueNum]: any = useState(-1);
-
-  function PreviewText() {
-    if (issueContainer === "" || issueContainer === "Leave a comment") {
-      return <p className="text-sm">Nothing to preview</p>;
-    } else if (
-      issueContainer !== "" &&
-      imgURL === "" &&
-      tagsName === "" &&
-      issueNum === -1
-    ) {
-      return (
-        <ReactMarkdown
-          children={issueContainer}
-          components={{
-            em: ({ node, ...props }) => (
-              <i style={{ fontStyle: "italic" }} {...props} />
-            ),
-            strong: ({ node, ...props }) => (
-              <b style={{ fontWeight: "bolder" }} {...props} />
-            ),
-            h1: ({ node, ...props }) => (
-              <h1 style={{ fontSize: "1.75em" }} {...props} />
-            ),
-            h2: ({ node, ...props }) => (
-              <h2 style={{ fontSize: "1.5em" }} {...props} />
-            ),
-            h3: ({ node, ...props }) => (
-              <h3 style={{ fontSize: "1.25em" }} {...props} />
-            ),
-            ul: ({ node, ...props }) => (
-              <ul
-                style={{ listStyle: "disc", paddingLeft: "16px" }}
-                {...props}
-              />
-            ),
-            li: ({ node, ...props }) => <li {...props} />,
-            ol: ({ node, ...props }) => (
-              <ol
-                style={{ listStyle: "auto", paddingLeft: "16px" }}
-                {...props}
-              />
-            ),
-            blockquote: ({ node, ...props }) => (
-              <blockquote
-                style={{
-                  padding: "0px 14px",
-                  borderLeft: "0.25em solid #d0d7de",
-                }}
-                {...props}
-              />
-            ),
-            code: ({ node, ...props }) => (
-              <code
-                style={{
-                  padding: "0.2em 0.4em",
-                  margin: 0,
-                  fontSize: "85%",
-                  borderRadius: "6px",
-                  background: "rgba(175,184,193,0.2)",
-                }}
-                {...props}
-              />
-            ),
-            input: ({ node, ...props }) => (
-              <input
-                type="checkbox"
-                style={{
-                  margin: "0 0.2em 0.25em -1.6em",
-                  verticalAlign: "middle",
-                }}
-                {...props}
-              />
-            ),
-          }}
-        />
-      );
-    } else if (
-      issueContainer !== "" &&
-      imgURL !== "" &&
-      tagsName === "" &&
-      issueNum === -1
-    ) {
-      console.log(imgURL);
-      return <img src={imgURL} alt="" />;
-    } else if (
-      issueContainer !== "" &&
-      imgURL === "" &&
-      tagsName !== "" &&
-      issueNum === -1
-    ) {
-      return (
-        <p className="font-semibold hover:decoration-1">
-          {" "}
-          <a href={`https://github.com/${tagsName}`} className="text-md">
-            {issueContainer}
-          </a>
-        </p>
-      );
-    } else if (
-      issueContainer !== "" &&
-      issueNum !== -1 &&
-      imgURL === "" &&
-      tagsName === ""
-    ) {
-      return (
-        <p className="text-[#0969da]">
-          {" "}
-          <a
-            href={`https://github.com/Xie-Ms/Personal-Project/issues/${issueNum}`}
-            className="text-md"
-          >
-            {issueContainer}
-          </a>
-        </p>
-      );
-    }
-  }
-
-  function TagAssigneeName() {
-    if (issueContainer.includes("@") && tagsClose) {
-      setTargetText("Assignees");
-      return renderAssigneeData.map((_item: any, TagIndex: number) => {
-        return (
-          <li
-            className="text-md w-[200px] h-[25px] flex justify-start items-center text-black hover:bg-[#0969da] hover:text-white cursor-pointer"
-            onClick={() => {
-              setIssueContainer("@" + renderAssigneeData[TagIndex].login + " ");
-              setTagsName(renderAssigneeData[TagIndex].login);
-              setTagsClose(false);
-              setIssueNum(-1);
-            }}
-          >
-            @{renderAssigneeData[TagIndex].login}
-          </li>
-        );
-      });
-    }
-  }
-
-  function TagIssue() {
-    if (issueContainer.includes("#") && issueClose) {
-      setTargetText("Issues");
-      return renderIssueData
-        .slice(0, 5)
-        .map((_item: any, IssueIndex: number) => {
-          return (
-            <li
-              className="text-md w-[200px] h-[25px] flex justify-start items-center text-black hover:bg-[#0969da] hover:text-white cursor-pointer"
-              onClick={() => {
-                setIssueContainer("#" + renderIssueData[IssueIndex].number);
-                setIssueClose(false);
-                setIssueNum(renderIssueData[IssueIndex].number);
-              }}
-            >
-              <IssueOpenedIcon size={16} fill="green" className="mr-2 ml-2" />
-              <p className="mr-2">#{renderIssueData[IssueIndex].number}</p>
-              <p className="mr-2">@{renderIssueData[IssueIndex].title}</p>
-            </li>
-          );
-        });
-    }
-  }
-
   return (
     <div className="lg:relative flex justify-evenly items-start xl:flex relative">
       <div className="md:hidden lg:block w-[7.24%] xl:block">
@@ -295,9 +119,6 @@ function CreateNewIssue({
                       className="ml-[5px] mr-1 py-2 px-1"
                       onClick={() => {
                         setIssueContainer("### " + issueContainer);
-                        setIssueNum(-1);
-                        setImgURL("");
-                        setTagsName("");
                       }}
                     >
                       <HeadingIcon size={16} />
@@ -306,9 +127,6 @@ function CreateNewIssue({
                       className="ml-[5px] mr-1 py-2 px-1"
                       onClick={() => {
                         setIssueContainer("**" + issueContainer + "**");
-                        setIssueNum(-1);
-                        setImgURL("");
-                        setTagsName("");
                       }}
                     >
                       <BoldIcon size={16} />
@@ -317,9 +135,6 @@ function CreateNewIssue({
                       className="ml-[5px] mr-1 py-2 px-1"
                       onClick={() => {
                         setIssueContainer("_" + issueContainer + "_");
-                        setIssueNum(-1);
-                        setImgURL("");
-                        setTagsName("");
                       }}
                     >
                       <ItalicIcon size={16} />
@@ -328,9 +143,6 @@ function CreateNewIssue({
                       className="ml-[5px] mr-1 py-2 px-1"
                       onClick={() => {
                         setIssueContainer("- " + issueContainer);
-                        setIssueNum(-1);
-                        setImgURL("");
-                        setTagsName("");
                       }}
                     >
                       <ListUnorderedIcon size={16} />
@@ -339,9 +151,6 @@ function CreateNewIssue({
                       className="ml-[5px] mr-1 py-2 px-1"
                       onClick={() => {
                         setIssueContainer("1. " + issueContainer);
-                        setIssueNum(-1);
-                        setImgURL("");
-                        setTagsName("");
                       }}
                     >
                       <ListOrderedIcon size={16} />
@@ -357,9 +166,6 @@ function CreateNewIssue({
                       className="ml-[5px] mr-1 py-2 px-1 lg:py-1 lg:px-1 lg:ml-[6px] lg:mx-1 xl:py-1 xl:px-1 xl:ml-[6px] xl:mx-1"
                       onClick={() => {
                         setIssueContainer("### " + issueContainer);
-                        setIssueNum(-1);
-                        setImgURL("");
-                        setTagsName("");
                       }}
                     >
                       <HeadingIcon size={16} />
@@ -368,9 +174,6 @@ function CreateNewIssue({
                       className="ml-[5px] mr-1 py-2 px-1 lg:py-1 lg:px-1 lg:ml-[6px] lg:mx-1 xl:py-1 xl:px-1 xl:ml-[6px] xl:mx-1"
                       onClick={() => {
                         setIssueContainer("**" + issueContainer + "**");
-                        setIssueNum(-1);
-                        setImgURL("");
-                        setTagsName("");
                       }}
                     >
                       <BoldIcon size={16} />
@@ -379,9 +182,6 @@ function CreateNewIssue({
                       className="ml-[5px] mr-1 py-2 px-1 lg:py-1 lg:px-1 lg:ml-[6px] lg:mx-1 xl:py-1 xl:px-1 xl:ml-[6px] xl:mx-1"
                       onClick={() => {
                         setIssueContainer("_" + issueContainer + "_");
-                        setIssueNum(-1);
-                        setImgURL("");
-                        setTagsName("");
                       }}
                     >
                       <ItalicIcon size={16} />
@@ -392,9 +192,6 @@ function CreateNewIssue({
                       className="ml-[5px] mr-1 py-2 px-1 lg:py-1 lg:px-1 lg:ml-[6px] lg:mx-1 xl:py-1 xl:px-1 xl:ml-[6px] xl:mx-1"
                       onClick={() => {
                         setIssueContainer("- " + issueContainer);
-                        setIssueNum(-1);
-                        setImgURL("");
-                        setTagsName("");
                       }}
                     >
                       <ListUnorderedIcon size={16} />
@@ -403,9 +200,6 @@ function CreateNewIssue({
                       className="ml-[5px] mr-1 py-2 px-1 lg:py-1 lg:px-1 lg:ml-[6px] lg:mx-1 xl:py-1 xl:px-1 xl:ml-[6px] xl:mx-1"
                       onClick={() => {
                         setIssueContainer("1. " + issueContainer);
-                        setIssueNum(-1);
-                        setImgURL("");
-                        setTagsName("");
                       }}
                     >
                       <ListOrderedIcon size={16} />
@@ -420,9 +214,6 @@ function CreateNewIssue({
                         className="ml-[5px] py-2 px-2 lg:py-1 lg:px-1 lg:ml-[6px] lg:mx-1 xl:py-1 xl:px-1 xl:ml-[6px] xl:mx-1"
                         onClick={() => {
                           setIssueContainer("> " + issueContainer);
-                          setIssueNum(-1);
-                          setImgURL("");
-                          setTagsName("");
                         }}
                       >
                         <QuoteIcon size={16} />
@@ -431,9 +222,6 @@ function CreateNewIssue({
                         className="ml-[5px] py-2 px-2 lg:py-1 lg:px-1 lg:ml-[6px] lg:mx-1 xl:py-1 xl:px-1 xl:ml-[6px] xl:mx-1"
                         onClick={() => {
                           setIssueContainer("`" + issueContainer + "`");
-                          setIssueNum(-1);
-                          setImgURL("");
-                          setTagsName("");
                         }}
                       >
                         <CodeIcon size={16} />
@@ -442,8 +230,6 @@ function CreateNewIssue({
                         className="ml-[5px] py-2 px-2 lg:py-1 lg:px-1 lg:ml-[6px] lg:mx-1 xl:py-1 xl:px-1 xl:ml-[6px] xl:mx-1"
                         onClick={() => {
                           setIssueContainer("[" + issueContainer + "](url)");
-                          setIssueNum(-1);
-                          setTagsName("");
                         }}
                       >
                         <LinkIcon size={16} />
@@ -456,8 +242,6 @@ function CreateNewIssue({
                       className="ml-[5px] py-2 px-2 lg:py-1 lg:px-1 lg:ml-[6px] lg:mx-1 xl:py-1 xl:px-1 xl:ml-[6px] xl:mx-1"
                       onClick={() => {
                         setIssueContainer("@");
-                        setIssueNum(-1);
-                        setImgURL("");
                       }}
                     >
                       <MentionIcon size={16} />
@@ -465,38 +249,14 @@ function CreateNewIssue({
                     <input
                       type="file"
                       className="hidden"
-                      ref={Imgfile}
                       accept=".gif,.jpeg,.jpg,.mov,.mp4,.png,.svg,.webm,.csv,.docx,.fodg,.fodp,.fods,.fodt,.gz,.log,.md,.odf,.odg,.odp,.ods,.odt,.pdf,.pptx,.tgz,.txt,.xls,.xlsx,.zip"
                       multiple
-                      onChange={() => {
-                        const file = Imgfile.current?.files;
-                        if (file[0] !== undefined) {
-                          setImgURL(URL.createObjectURL(file[0]));
-                          setIssueContainer(
-                            `![${file[0].name}](${URL.createObjectURL(
-                              file[0]
-                            )})`
-                          );
-                        }
-                      }}
                     />
-                    <button
-                      className="ml-[5px] py-2 px-2 lg:py-1 lg:px-1 lg:ml-[6px] lg:mx-1 xl:py-1 xl:px-1 xl:ml-[6px] xl:mx-1"
-                      onClick={() => {
-                        Imgfile.current?.click();
-                      }}
-                    >
+                    <button className="ml-[5px] py-2 px-2 lg:py-1 lg:px-1 lg:ml-[6px] lg:mx-1 xl:py-1 xl:px-1 xl:ml-[6px] xl:mx-1">
                       <FileMediaIcon size={16} />
                     </button>
 
-                    <button
-                      className="ml-[5px] py-2 px-2 lg:py-1 lg:px-1 lg:ml-[6px] lg:mx-1 xl:py-1 xl:px-1 xl:ml-[6px] xl:mx-1"
-                      onClick={() => {
-                        setIssueContainer("#");
-                        setTagsName("");
-                        setImgURL("");
-                      }}
-                    >
+                    <button className="ml-[5px] py-2 px-2 lg:py-1 lg:px-1 lg:ml-[6px] lg:mx-1 xl:py-1 xl:px-1 xl:ml-[6px] xl:mx-1">
                       <CrossReferenceIcon size={16} />
                     </button>
                     <button className="ml-[5px] py-2 px-2 lg:py-1 lg:px-1 lg:ml-[6px] lg:mx-1 xl:py-1 xl:px-1 xl:ml-[6px] xl:mx-1">
@@ -524,49 +284,14 @@ function CreateNewIssue({
                   />
                 </div>
                 <ul
-                  className={`${
-                    issueContainer.includes("@") && tagsClose
-                      ? "block"
-                      : "hidden"
-                  } absolute z-30 bg-slate-100 top-[30px] left-[30px] border-[1px] border-solid  border-gray-200 rounded-md `}
-                >
-                  {TagAssigneeName()}
-                </ul>
+                  className={`block absolute z-30 bg-slate-100 top-[30px] left-[30px] border-[1px] border-solid  border-gray-200 rounded-md `}
+                ></ul>
                 <ul
-                  className={`${
-                    issueContainer.includes("#") && issueClose
-                      ? "block"
-                      : "hidden"
-                  } absolute z-30 bg-slate-100 top-[30px] left-[30px] border-[1px] border-solid  border-gray-200 rounded-md `}
-                >
-                  {TagIssue()}
-                </ul>
+                  className={`block absolute z-30 bg-slate-100 top-[30px] left-[30px] border-[1px] border-solid  border-gray-200 rounded-md `}
+                ></ul>
                 <div className="md:hidden lg:absolute bottom-0 flex justify-between items-center w-full px-[6px] py-[6px] lg:h-[30px]  xl:absolute xl:h-[30px]">
                   <div className="xl:h-auto lg:h-auto">
-                    <input
-                      type="file"
-                      className="hidden"
-                      ref={Imgfile}
-                      accept=".gif,.jpeg,.jpg,.mov,.mp4,.png,.svg,.webm,.csv,.docx,.fodg,.fodp,.fods,.fodt,.gz,.log,.md,.odf,.odg,.odp,.ods,.odt,.pdf,.pptx,.tgz,.txt,.xls,.xlsx,.zip"
-                      multiple
-                      onChange={() => {
-                        const file = Imgfile.current?.files;
-                        if (file[0] !== undefined) {
-                          setImgURL(URL.createObjectURL(file[0]));
-                          setIssueContainer(
-                            `![${file[0].name}](${URL.createObjectURL(
-                              file[0]
-                            )})`
-                          );
-                        }
-                      }}
-                    />
-                    <button
-                      className="flex justify-between items-center w-full"
-                      onClick={() => {
-                        Imgfile.current?.click();
-                      }}
-                    >
+                    <button className="flex justify-between items-center w-full">
                       <p className="lg:text-sm xl:text-sm">
                         Attach files by dragging & dropping, selectimg or
                         pasting them.
@@ -584,7 +309,6 @@ function CreateNewIssue({
                 } px-2 pb-2 w-full min-h-[191px] border-b-[2px] border-solid border-[#d0d7de] md:min-h-[270px]`}
               >
                 <p className="text-sm"></p>
-                {PreviewText()}
               </div>
               <div className="md:hidden">
                 <div className="flex justify-between items-center mt-2">
@@ -631,6 +355,3 @@ function CreateNewIssue({
 }
 
 export default CreateNewIssue;
-function readAsDataURL(arg0: any) {
-  throw new Error("Function not implemented.");
-}

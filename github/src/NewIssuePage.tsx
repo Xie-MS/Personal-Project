@@ -2,7 +2,7 @@ import React from "react";
 
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-
+import { useDispatch, useSelector } from "react-redux";
 import { GearIcon } from "@primer/octicons-react";
 
 import CreateNewIssue from "./CreateNewIssue";
@@ -29,6 +29,8 @@ function NewIssuePage() {
   const targetLabelSpan = useRef<HTMLParagraphElement | null>(null);
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const IssueData: any = useSelector((state) => state);
 
   useEffect(() => {
     async function getAssigneeList() {
@@ -115,10 +117,10 @@ function NewIssuePage() {
     });
 
     navigate(`/IssuePage`);
-    // .then((Labeldata) => {
+    // .then((targetText) => {
     //   dispatch({
-    //     type: "CreateLabels",
-    //     payload: { Labeldata },
+    //     type: "CreateIssue",
+    //     payload: { IssueData },
     //   });
     // });
   }

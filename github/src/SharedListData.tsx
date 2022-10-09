@@ -33,7 +33,6 @@ function AssigneePage({
   targetAssigneeSpan: any;
   targetLabelSpan: any;
 }) {
-  const [assignee, setAssignee]: any = useState(true);
   const [assigneeInputName, setAssigneeInputName]: any = useState("");
   const [labelsInputSelect, setLabelsInputSelect]: any = useState("");
 
@@ -51,6 +50,8 @@ function AssigneePage({
       setAssigneeInputName(e.target.value);
     }
   }
+
+  console.log(targetText === targetAssigneeSpan.current?.outerText);
 
   function AssigneeInputClick(e: any) {
     if (e.key === "Enter") {
@@ -98,7 +99,7 @@ function AssigneePage({
                 .includes(assigneeInputName.toString().toLowerCase())
                 ? "flex"
                 : "hidden"
-            } xl:py-2 px-2 border-t-[1px] border-solid border-gray-300 text-xs justify-start items-center md:pl-5 md:pr-2 md:py-4`}
+            } xl:py-2 px-2 border-t-[1px] border-solid border-gray-300 text-xs justify-start items-center md:pl-5 md:pr-2 md:py-4 xl:pl-6 lg:pl-6 lg:relative xl:relative`}
             onClick={() => {
               if (
                 assigneeSelectData.includes(renderAssigneeData[ItemIndex].login)
@@ -124,7 +125,7 @@ function AssigneePage({
                 assigneeSelectData.includes(renderAssigneeData[ItemIndex].login)
                   ? "block"
                   : "hidden"
-              }`}
+              } lg:absolute lg:left-0 xl:absolute xl:left-0 xl:mx-1 lg:mx-1`}
             >
               <CheckIcon size={16} className="mr-2" />
             </div>
@@ -221,7 +222,7 @@ function AssigneePage({
     >
       <ul
         className={`${
-          itemList ? "block" : "hidden"
+          itemList && targetText !== "" ? "block" : "hidden"
         } lg:w-[275px] xl:w-[275px] md:w-full overflow-auto md:h-[722px]`}
       >
         <li className="xl:px-[10px] py-2 text-xs font-semibold flex justify-between items-center">
@@ -243,25 +244,32 @@ function AssigneePage({
         <li className="xl:px-[10px] py-[10px] border-t-[1px] border-solid border-gray-300 md:px-4 md:py-4">
           <input
             type="text"
-            defaultValue={`${
+            defaultValue="Type or choose a user"
+            className={`${
               targetText === targetAssigneeSpan.current?.outerText
-                ? "Type or choose a user"
-                : "Filter labels"
-            }`}
-            className="xl:py-[5px] px-3 bg-white border-[1px] border-solid border-gray-300 rounded-md text-sm w-full"
+                ? "block"
+                : "hidden"
+            } xl:py-[5px] px-3 bg-white border-[1px] border-solid border-gray-300 rounded-md text-sm w-full`}
             onKeyDown={(e) => {
-              if (targetText === targetAssigneeSpan.current?.outerText) {
-                AssigneeInputClick(e);
-              } else if (targetText === targetLabelSpan.current?.outerText) {
-                LabelInputClick(e);
-              }
+              AssigneeInputClick(e);
             }}
             onChange={(e) => {
-              if (targetText === targetAssigneeSpan.current?.outerText) {
-                AssigneeInput(e);
-              } else if (targetText === targetLabelSpan.current?.outerText) {
-                LabelInput(e);
-              }
+              AssigneeInput(e);
+            }}
+          />
+          <input
+            type="text"
+            defaultValue="Filter labels"
+            className={`${
+              targetText === targetLabelSpan.current?.outerText
+                ? "block"
+                : "hidden"
+            } xl:py-[5px] px-3 bg-white border-[1px] border-solid border-gray-300 rounded-md text-sm w-full`}
+            onKeyDown={(e) => {
+              LabelInputClick(e);
+            }}
+            onChange={(e) => {
+              LabelInput(e);
             }}
           />
         </li>

@@ -47,7 +47,6 @@ function IssuePage() {
   const [labeslSelectLength, setLabeslSelectLength] = useState(0);
   const [inputIssueName, setInputIssueName] = useState("");
   const [state, setState] = useState("open");
-  console.log(labeslSelectLength);
   const [renderData, setRenderData]: any = useState([]);
   const [allSearchInformation, setAllSearchInformation] = useState<any>([]);
 
@@ -97,7 +96,6 @@ function IssuePage() {
           newQuery[i] = "&" + allSearchInformation[i];
         }
       }
-      console.log(newQuery);
       newQuery = `${newQuery.join("")}`;
 
       if (sortSelect === page && page !== null && state === "open") {
@@ -157,7 +155,6 @@ function IssuePage() {
       ) {
         const data = await api.SearchAll(newQuery);
         setRenderData(data);
-        console.log(123);
       } else if (newQuery !== "") {
         const data = await api.SearchAll(newQuery);
         setRenderData(data);
@@ -165,11 +162,9 @@ function IssuePage() {
         const data = await api.SearchIssues(inputIssueName);
         let items: any;
         setRenderData(data.items);
-        console.log("bbb");
       } else if (sortSelect === "closed") {
         const data = await api.ClosedIssues();
         setRenderData(data);
-        console.log("ccc");
       } else if (
         labeslSelectName !== "" &&
         labeslSelectName === sortSelect &&
