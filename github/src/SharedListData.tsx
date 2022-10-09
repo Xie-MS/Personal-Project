@@ -40,8 +40,6 @@ function AssigneePage({
   const AssigneeName = useRef<HTMLParagraphElement | null>(null);
   const LabelName = useRef<HTMLParagraphElement | null>(null);
 
-  console.log(labelsInputSelect);
-
   function AssigneeInput(e: any) {
     if (
       AssigneeName.current?.outerText
@@ -253,7 +251,6 @@ function AssigneePage({
             className="xl:py-[5px] px-3 bg-white border-[1px] border-solid border-gray-300 rounded-md text-sm w-full"
             onKeyDown={(e) => {
               if (targetText === targetAssigneeSpan.current?.outerText) {
-                console.log(targetText, targetAssigneeSpan.current?.outerText);
                 AssigneeInputClick(e);
               } else if (targetText === targetLabelSpan.current?.outerText) {
                 LabelInputClick(e);

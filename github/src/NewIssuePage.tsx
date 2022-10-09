@@ -20,6 +20,7 @@ function NewIssuePage() {
 
   const [renderAssigneeData, setRenderAssigneeData]: any = useState([]);
   const [renderLabelData, setRenderLabelData]: any = useState([]);
+  const [renderIssueData, setRenderIssueData]: any = useState([]);
 
   const [assigneeSelectData, setAssigneeSelectData]: any = useState([]);
   const [labelSelectData, setLabelSelectData]: any = useState([]);
@@ -37,6 +38,9 @@ function NewIssuePage() {
       } else if (targetText === targetLabelSpan.current?.outerText) {
         const data = await api.getLabels();
         setRenderLabelData(data);
+      } else if (targetText === "Issues") {
+        const data = await api.getListIssuesState(1);
+        setRenderIssueData(data);
       }
     }
     getAssigneeList();
@@ -131,6 +135,10 @@ function NewIssuePage() {
         setIssue={setIssue}
         markDownBtn={markDownBtn}
         setmarkDownBtn={setmarkDownBtn}
+        renderAssigneeData={renderAssigneeData}
+        renderLabelData={renderLabelData}
+        setTargetText={setTargetText}
+        renderIssueData={renderIssueData}
       />
       <div className="md:w-full lg:w-[240px] xl:w-[256px]">
         <div className="md:pt-4 lg:pt-0 xl:pt-0">

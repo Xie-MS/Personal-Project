@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Dispatch, SetStateAction } from "react";
 import { marked } from "marked";
 import ReactMarkdown from "react-markdown";
 import ReactDom from "react-dom";
@@ -24,6 +24,7 @@ import {
   ChevronDownIcon,
   InfoIcon,
   MarkdownIcon,
+  IssueOpenedIcon,
 } from "@primer/octicons-react";
 
 import UserImg from "../src/img/userImg.png";
@@ -38,6 +39,10 @@ function CreateNewIssue({
   setIssue,
   markDownBtn,
   setmarkDownBtn,
+  renderAssigneeData,
+  renderLabelData,
+  setTargetText,
+  renderIssueData,
 }: {
   preview: boolean;
   setPreview: any;
@@ -48,16 +53,27 @@ function CreateNewIssue({
   setIssue: any;
   markDownBtn: boolean;
   setmarkDownBtn: any;
+  renderAssigneeData: any;
+  renderLabelData: any;
+  setTargetText: any;
+  renderIssueData: any;
 }) {
   const Imgfile = useRef<HTMLInputElement | null | any>(null);
   const [imgURL, setImgURL]: any = useState("");
+  const [tagsClose, setTagsClose]: any = useState(true);
+  const [issueClose, setIssueClose]: any = useState(true);
+  const [tagsName, setTagsName]: any = useState("");
+  const [issueNum, setIssueNum]: any = useState(-1);
 
   function PreviewText() {
     if (issueContainer === "" || issueContainer === "Leave a comment") {
       return <p className="text-sm">Nothing to preview</p>;
-    } else if (issueContainer !== "" && imgURL !== "") {
-      let markedText = marked.parse(issueContainer);
-      console.log(marked.parse(issueContainer));
+    } else if (
+      issueContainer !== "" &&
+      imgURL !== "" &&
+      tagsName !== "" &&
+      issueNum !== -1
+    ) {
       return (
         <ReactMarkdown
           children={issueContainer}
@@ -126,6 +142,71 @@ function CreateNewIssue({
       );
     } else if (imgURL !== "") {
       <img src={imgURL} alt="" />;
+    } else if (tagsName !== "") {
+      return (
+        <p className="font-semibold hover:decoration-1">
+          {" "}
+          <a href={`https://github.com/${tagsName}`} className="text-md">
+            {issueContainer}
+          </a>
+        </p>
+      );
+    } else if (issueNum !== -1) {
+      return (
+        <p className="text-[#0969da]">
+          {" "}
+          <a
+            href={`https://github.com/Xie-Ms/Personal-Project/issues/${issueNum}`}
+            className="text-md"
+          >
+            {issueContainer}
+          </a>
+        </p>
+      );
+    }
+  }
+
+  function TagAssigneeName() {
+    if (issueContainer.includes("@") && tagsClose) {
+      setTargetText("Assignees");
+      return renderAssigneeData.map((_item: any, TagIndex: number) => {
+        return (
+          <li
+            className="text-md w-[200px] h-[25px] flex justify-start items-center text-black hover:bg-[#0969da] hover:text-white cursor-pointer"
+            onClick={() => {
+              setIssueContainer("@" + renderAssigneeData[TagIndex].login + " ");
+              setTagsName(renderAssigneeData[TagIndex].login);
+              setTagsClose(false);
+            }}
+          >
+            @{renderAssigneeData[TagIndex].login}
+          </li>
+        );
+      });
+    }
+  }
+
+  function TagIssue() {
+    if (issueContainer.includes("#") && issueClose) {
+      setTargetText("Issues");
+      return renderIssueData
+        .slice(0, 5)
+        .map((_item: any, IssueIndex: number) => {
+          return (
+            <li
+              className="text-md w-[200px] h-[25px] flex justify-start items-center text-black hover:bg-[#0969da] hover:text-white cursor-pointer"
+              onClick={() => {
+                setIssueContainer("#" + renderIssueData[IssueIndex].number);
+                setIssueClose(false);
+                setIssueNum(renderIssueData[IssueIndex].number);
+              }}
+            >
+              <IssueOpenedIcon size={16} fill="green" className="mr-2 ml-2" />
+              <p className="mr-2">#{renderIssueData[IssueIndex].number}</p>
+              <p className="mr-2">@{renderIssueData[IssueIndex].title}</p>
+            </li>
+          );
+        });
     }
   }
 
@@ -316,7 +397,12 @@ function CreateNewIssue({
                   </div>
 
                   <div className={`${markDownBtn ? "md:flex" : "md:hidden"}`}>
-                    <button className="ml-[5px] py-2 px-2 lg:py-1 lg:px-1 lg:ml-[6px] lg:mx-1 xl:py-1 xl:px-1 xl:ml-[6px] xl:mx-1">
+                    <button
+                      className="ml-[5px] py-2 px-2 lg:py-1 lg:px-1 lg:ml-[6px] lg:mx-1 xl:py-1 xl:px-1 xl:ml-[6px] xl:mx-1"
+                      onClick={() => {
+                        setIssueContainer("@");
+                      }}
+                    >
                       <MentionIcon size={16} />
                     </button>
                     <input
@@ -367,12 +453,30 @@ function CreateNewIssue({
                     cols="30"
                     rows="10"
                     value={issueContainer}
-                    className="md:leading-snug md:h-[200px] px-2 py-2 border-[1px] md:border-b-[0px] border-solid border-gray-400 bg-slate-100 rounded-md w-full lg:focus:bg-white lg:border-b-[1px] border-t-[0px] border-r-[0px] border-l-[0px] lg:border-dashed lg:h-[200px] lg:leading-snug lg:rounded-b-[0px] xl:focus:bg-white xl:border-dashed xl:h-[200px] xl:leading-snug xl:rounded-b-[0px]"
+                    className="relative md:leading-snug md:h-[200px] px-2 py-2 border-[1px] md:border-b-[0px] border-solid border-gray-400 bg-slate-100 rounded-md w-full lg:focus:bg-white lg:border-b-[1px] border-t-[0px] border-r-[0px] border-l-[0px] lg:border-dashed lg:h-[200px] lg:leading-snug lg:rounded-b-[0px] xl:focus:bg-white xl:border-dashed xl:h-[200px] xl:leading-snug xl:rounded-b-[0px]"
                     onChange={(e) => {
                       setIssueContainer(e.target.value);
                     }}
                   />
                 </div>
+                <ul
+                  className={`${
+                    issueContainer.includes("@") && tagsClose
+                      ? "block"
+                      : "hidden"
+                  } absolute z-30 bg-slate-100 top-[30px] left-[30px] border-[1px] border-solid  border-gray-200 rounded-md `}
+                >
+                  {TagAssigneeName()}
+                </ul>
+                <ul
+                  className={`${
+                    issueContainer.includes("#") && issueClose
+                      ? "block"
+                      : "hidden"
+                  } absolute z-30 bg-slate-100 top-[30px] left-[30px] border-[1px] border-solid  border-gray-200 rounded-md `}
+                >
+                  {TagIssue()}
+                </ul>
                 <div className="md:hidden lg:absolute bottom-0 flex justify-between items-center w-full px-[6px] py-[6px] lg:h-[30px]  xl:absolute xl:h-[30px]">
                   <div className="xl:h-auto lg:h-auto">
                     <input
