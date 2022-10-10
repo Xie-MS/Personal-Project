@@ -305,10 +305,12 @@ function IssuePage() {
         seconds > 0 &&
         index === CreateTimeIndex
       ) {
-        <p className="mt-1 text-xs">
-          #{`${renderData[CreateTimeIndex].number}`} opend {`${seconds}`}{" "}
-          seconds ago by {`${renderData[CreateTimeIndex].user.login}`}
-        </p>;
+        return (
+          <p className="mt-1 text-xs">
+            #{`${renderData[CreateTimeIndex].number}`} opend {`${seconds}`}{" "}
+            seconds ago by {`${renderData[CreateTimeIndex].user.login}`}
+          </p>
+        );
       }
     });
   }

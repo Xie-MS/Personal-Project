@@ -29,8 +29,6 @@ function NewIssuePage() {
   const targetLabelSpan = useRef<HTMLParagraphElement | null>(null);
 
   const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const IssueData: any = useSelector((state) => state);
 
   useEffect(() => {
     async function getAssigneeList() {
@@ -116,13 +114,7 @@ function NewIssuePage() {
       assignees: assigneeSelectData,
     });
 
-    navigate(`/IssuePage`);
-    // .then((targetText) => {
-    //   dispatch({
-    //     type: "CreateIssue",
-    //     payload: { IssueData },
-    //   });
-    // });
+    window.location.assign(`/IssuePage`);
   }
 
   return (
