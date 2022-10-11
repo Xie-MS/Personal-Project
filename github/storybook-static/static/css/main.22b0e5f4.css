@@ -1285,6 +1285,10 @@ body{
     top: 45px;
   }
 
+  .xl\:left-0 {
+    left: 0px;
+  }
+
   .xl\:top-\[40px\] {
     top: 40px;
   }
@@ -1295,10 +1299,6 @@ body{
 
   .xl\:bottom-0 {
     bottom: 0px;
-  }
-
-  .xl\:left-0 {
-    left: 0px;
   }
 
   .xl\:top-\[65px\] {
@@ -1558,6 +1558,10 @@ body{
     padding-top: 0px;
   }
 
+  .xl\:pl-6 {
+    padding-left: 1.5rem;
+  }
+
   .xl\:text-sm {
     font-size: 0.875rem;
     line-height: 1.25rem;
@@ -1595,6 +1599,10 @@ body{
 
   .lg\:right-0 {
     right: 0px;
+  }
+
+  .lg\:left-0 {
+    left: 0px;
   }
 
   .lg\:z-20 {
@@ -1815,6 +1823,10 @@ body{
 
   .lg\:pt-0 {
     padding-top: 0px;
+  }
+
+  .lg\:pl-6 {
+    padding-left: 1.5rem;
   }
 
   .lg\:text-sm {
@@ -2299,4 +2311,4 @@ section .tip-wrapper svg path {
 }
 
 
-/*# sourceMappingURL=main.3e2e6a10.css.map*/
+/*# sourceMappingURL=main.22b0e5f4.css.map*/

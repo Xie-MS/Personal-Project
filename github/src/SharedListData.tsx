@@ -2,7 +2,7 @@ import React from "react";
 
 import { useState, useRef } from "react";
 
-import { CheckIcon } from "@primer/octicons-react";
+import { CheckIcon, XIcon } from "@primer/octicons-react";
 
 function AssigneePage({
   setListClose,
@@ -50,8 +50,6 @@ function AssigneePage({
       setAssigneeInputName(e.target.value);
     }
   }
-
-  console.log(targetText === targetAssigneeSpan.current?.outerText);
 
   function AssigneeInputClick(e: any) {
     if (e.key === "Enter") {
@@ -158,7 +156,7 @@ function AssigneePage({
                 .includes(labelsInputSelect.toString().toLowerCase())
                 ? "flex"
                 : "hidden"
-            } xl:py-2 px-2 border-t-[1px] border-solid border-gray-300 text-xs justify-start items-center md:pl-5 md:pr-2 md:py-4`}
+            } xl:py-2 px-2 border-t-[1px] border-solid border-gray-300 text-xs justify-start items-center md:pl-5 md:pr-2 md:py-4 xl:pl-6 lg:pl-6 lg:relative xl:relative`}
             onClick={() => {
               if (labelSelectData.includes(renderLabelData[ItemIndex].name)) {
                 const labelSelectNum = labelSelectData.indexOf(
@@ -181,12 +179,12 @@ function AssigneePage({
                 labelSelectData.includes(renderLabelData[ItemIndex].name)
                   ? "block"
                   : "hidden"
-              }`}
+              } xl:absolute xl:left-0 xl:mx-1 lg:mx-1`}
             >
               <CheckIcon size={16} className="mr-2" />
             </div>
             <div className="xl:block items-center justify-start">
-              <div className="xl:flex items-center justify-center">
+              <div className="xl:flex items-center justify-start">
                 <p
                   style={{
                     backgroundColor: `#${renderLabelData[ItemIndex].color}`,
@@ -200,6 +198,15 @@ function AssigneePage({
               <p className="xl:text-xs">
                 {renderLabelData[ItemIndex].description}
               </p>
+            </div>
+            <div
+              className={`${
+                labelSelectData.includes(renderLabelData[ItemIndex].name)
+                  ? "block"
+                  : "hidden"
+              } xl:absolute xl:right-0 xl:mx-1 lg:mx-1`}
+            >
+              <XIcon size={16} />
             </div>
           </li>
         );
