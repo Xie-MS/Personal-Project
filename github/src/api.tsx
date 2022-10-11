@@ -188,6 +188,20 @@ const api = {
     return await response.json();
   },
 
+  async setIssue(data: any) {
+    const response = await fetch(`${this.hostname}/issues`, {
+      body: JSON.stringify(data),
+      headers: new Headers({
+        "Content-type": "application/json",
+        Accept: "application/vnd.github+json",
+        Authorization: `token ${jwtToken}`,
+      }),
+      method: "POST",
+    });
+    console.log(data);
+    return await response.json();
+  },
+
   async Pagination(per_page: number | string, paging: number | string) {
     const response = await fetch(
       `${this.hostname}/issues?per_page=${per_page}&page=${paging}`
@@ -200,20 +214,9 @@ const api = {
     );
     return await response.json();
   },
-  async getIssues() {
-    const response = await fetch(`${this.hostname}/issues/comments`);
-    return await response.json();
-  },
+
   async getTimeLine() {
     const response = await fetch(`${this.hostname}/issues/1/timeline`);
-    return await response.json();
-  },
-  async getIssuesComments() {
-    const response = await fetch(`${this.hostname}/issues/comments/1250060561`);
-    return await response.json();
-  },
-  async getNewIssueState() {
-    const response = await fetch(`${this.hostname}/issues/labels/enhancement`);
     return await response.json();
   },
 };

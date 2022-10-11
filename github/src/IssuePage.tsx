@@ -47,7 +47,6 @@ function IssuePage() {
   const [labeslSelectLength, setLabeslSelectLength] = useState(0);
   const [inputIssueName, setInputIssueName] = useState("");
   const [state, setState] = useState("open");
-  console.log(labeslSelectLength);
   const [renderData, setRenderData]: any = useState([]);
   const [allSearchInformation, setAllSearchInformation] = useState<any>([]);
 
@@ -97,7 +96,6 @@ function IssuePage() {
           newQuery[i] = "&" + allSearchInformation[i];
         }
       }
-      console.log(newQuery);
       newQuery = `${newQuery.join("")}`;
 
       if (sortSelect === page && page !== null && state === "open") {
@@ -157,7 +155,6 @@ function IssuePage() {
       ) {
         const data = await api.SearchAll(newQuery);
         setRenderData(data);
-        console.log(123);
       } else if (newQuery !== "") {
         const data = await api.SearchAll(newQuery);
         setRenderData(data);
@@ -165,11 +162,9 @@ function IssuePage() {
         const data = await api.SearchIssues(inputIssueName);
         let items: any;
         setRenderData(data.items);
-        console.log("bbb");
       } else if (sortSelect === "closed") {
         const data = await api.ClosedIssues();
         setRenderData(data);
-        console.log("ccc");
       } else if (
         labeslSelectName !== "" &&
         labeslSelectName === sortSelect &&
@@ -310,10 +305,12 @@ function IssuePage() {
         seconds > 0 &&
         index === CreateTimeIndex
       ) {
-        <p className="mt-1 text-xs">
-          #{`${renderData[CreateTimeIndex].number}`} opend {`${seconds}`}{" "}
-          seconds ago by {`${renderData[CreateTimeIndex].user.login}`}
-        </p>;
+        return (
+          <p className="mt-1 text-xs">
+            #{`${renderData[CreateTimeIndex].number}`} opend {`${seconds}`}{" "}
+            seconds ago by {`${renderData[CreateTimeIndex].user.login}`}
+          </p>
+        );
       }
     });
   }
@@ -584,7 +581,12 @@ function IssuePage() {
                 </button>
               </div>
 
-              <button className="flex justify-center items-center ml-2 px-4 py-[5px] text-white bg-green-600 border-[1px] border-solid border-gray-400 rounded-md h-[30px] text-sm lg:ml-[15px]">
+              <button
+                className="flex justify-center items-center ml-2 px-4 py-[5px] text-white bg-green-600 border-[1px] border-solid border-gray-400 rounded-md h-[30px] text-sm lg:ml-[15px]"
+                onClick={() => {
+                  navigate(`/NewIssuePage`);
+                }}
+              >
                 <p className="flex justify-center items-center md:hidden">
                   New issue
                 </p>
