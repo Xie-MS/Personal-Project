@@ -46,64 +46,6 @@ function NewIssuePage() {
     getAssigneeList();
   }, [targetText]);
 
-  function AssigneeSelect() {
-    if (assigneeSelectData.length !== 0) {
-      return renderAssigneeData.map(
-        (_item: any, assigneeSelectIndex: number) => {
-          return (
-            <button
-              className={`${
-                assigneeSelectData.includes(
-                  renderAssigneeData[assigneeSelectIndex].login
-                )
-                  ? "flex"
-                  : "hidden"
-              } justify-start items-center mt-2`}
-            >
-              <img
-                src={`${renderAssigneeData[assigneeSelectIndex].avatar_url}`}
-                alt=""
-                className="md:w-[5%] rounded-full mr-1 lg:w-[9%] xl:w-[9%]"
-              />
-              <p className="text-xs font-semibold">
-                {renderAssigneeData[assigneeSelectIndex].login}
-              </p>
-            </button>
-          );
-        }
-      );
-    } else if (assigneeSelectData.length === 0) {
-      return (
-        <p className="text-xs flex justify-start items-center">
-          No one—<p className="hover:text-[#0969da]">assign yourself</p>
-        </p>
-      );
-    }
-  }
-
-  function LabelseSelect() {
-    if (labelSelectData.length !== 0) {
-      return renderLabelData.map((_item: any, labelSelectIndex: number) => {
-        return (
-          <button
-            style={{
-              backgroundColor: `#${renderLabelData[labelSelectIndex].color}`,
-            }}
-            className={`${
-              labelSelectData.includes(renderLabelData[labelSelectIndex].name)
-                ? "flex"
-                : "hidden"
-            } text-xs font-semibold justify-center items-center rounded-xl border-[1px] border-solid border-gray-50 mr-1 mb-1 px-[7px] h-[20px]`}
-          >
-            {renderLabelData[labelSelectIndex].name}
-          </button>
-        );
-      });
-    } else if (labelSelectData.length === 0) {
-      return <p className="text-xs justify-start items-center">Noneyet</p>;
-    }
-  }
-
   async function setIssue() {
     const data = await api.setIssue({
       owner: "Xie-MS",
@@ -154,7 +96,6 @@ function NewIssuePage() {
               <GearIcon size={16} />
             </div>
           </div>
-          {AssigneeSelect()}
         </div>
         <div
           className={`${
@@ -198,9 +139,6 @@ function NewIssuePage() {
             >
               <GearIcon size={16} />
             </div>
-          </div>
-          <div className="lg:flex lg:justify-start lg:items-center xl:flex xl:justify-start xl:items-center">
-            {LabelseSelect()}
           </div>
         </div>
 

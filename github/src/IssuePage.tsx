@@ -221,7 +221,14 @@ function IssuePage() {
                 </div>
                 <div className="block justify-center items-center px-2 py-2">
                   <div className="flex justify-start items-center md:block">
-                    <p className="text-base font-semibold hover:text-[#0969da] hover:cursor-pointer">
+                    <p
+                      className="text-base font-semibold hover:text-[#0969da] hover:cursor-pointer"
+                      onClick={() => {
+                        navigate(
+                          `/IssueDetailPage?${renderData[index].number}`
+                        );
+                      }}
+                    >
                       {renderData[index].title}
                     </p>
                     {getLabels(index)}
