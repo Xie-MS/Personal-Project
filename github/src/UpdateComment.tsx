@@ -235,14 +235,18 @@ function CreateComment({
   }
 
   return (
-    <div className="w-full justify-evenly lg:relative flex items-start xl:flex relative mt-4">
+    <div className="md:w-full lg:w-auto xl:w-[838px] justify-start lg:relative flex items-start xl:flex relative mt-4">
       <div className="md:hidden lg:block w-[7.24%] xl:block">
-        <img src={UserImg} alt="" className="w-[70%] rounded-full sm:hidden" />
+        <img
+          src={UserImg}
+          alt=""
+          className="w-10 h-10 rounded-full sm:hidden"
+        />
       </div>
       <div className="md:w-full lg:w-[88.7%] xl:w-[88.7%]">
         <div>
           <div className="md:h-auto md:border-[0px] lg:border-[1px] lg:border-solid lg:border-gray-200 lg:rounded-md lg:h-auto lg:mb-2 xl:border-[1px] xl:border-solid xl:border-gray-200 xl:rounded-md xl:h-auto xl:mb-2">
-            <div className="block justify-start items-center w-full">
+            <div className="flex justify-between items-baseline w-full">
               <div className="md:w-full md:mt-0 md:mx-0 lg:mt-2 lg:mx-2 lg:flex lg:justify-between lg:items-end  xl:mt-2 xl:mx-2 xl:flex xl:justify-between xl:items-end">
                 <div className="lg:flex lg:justify-between lg:items-end md:w-full xl:flex xl:justify-between xl:items-end ">
                   <button
@@ -583,71 +587,16 @@ function CreateComment({
                 {PreviewText()}
               </div>
               <div className="flex justify-end items-center mt-2">
-                <div className="relative flex justify-start items-center bg-[#f6f8fa] mr-2">
-                  <button className="flex justify-between items-center px-4 py-[5px] border-t-[1px] border-b-[1px] border-l-[1px] border-solid border-gray-200 rounded-l-lg">
-                    <CheckCircleIcon
-                      size={16}
-                      fill={"purple"}
-                      className="mr-1"
-                    />
-                    <p className="text-sm">Close issue</p>
-                  </button>
-                  <div
-                    className="px-[10px] py-[5px] border-[1px] border-solid border-gray-200 rounded-lg h-[32px] w-[40px] hover:cursor-pointer"
-                    onClick={() => {
-                      if (closeIssue === false) {
-                        setCloseIssue(true);
-                      } else if (closeIssue === true) {
-                        setCloseIssue(false);
-                      }
-                    }}
-                  >
-                    <TriangleDownIcon size={16} />
-                  </div>
-                  <ul
-                    className={`${
-                      closeIssue ? "block" : "hidden"
-                    } absolute top-[38px] right-0 bg-white border-[1px] border-solid border-gray-200 rounded-r-lg`}
-                  >
-                    <li className="relative flex justify-start items-start py-2 pr-2 pl-[30px] w-[298px] h-[55px] border-b-[1px] border-solid border-gray-200">
-                      <div className="absolute left-[8px]">
-                        <CheckIcon size={16} className="mr-1" />
-                      </div>
-
-                      <div>
-                        <div className="flex justify-start items-center">
-                          <CheckCircleIcon
-                            size={16}
-                            fill={"purple"}
-                            className="mr-1"
-                          />
-                          <p className="text-sm font-semibold">
-                            Close as complteted
-                          </p>
-                        </div>
-                        <p className="text-xs">Done, closed, fixed, resolved</p>
-                      </div>
-                    </li>
-                    <li className="flex justify-start items-start py-2 pr-2 pl-[30px] w-[298px] h-[55px]">
-                      <div className="absolute left-[8px]">
-                        <CheckIcon size={16} className="mr-1" />
-                      </div>
-                      <div>
-                        <div className="flex justify-start items-center">
-                          <SkipIcon size={16} fill={"gray"} className="mr-1" />
-                          <p className="text-sm font-semibold">
-                            Close as not planned
-                          </p>
-                        </div>
-                        <p className="text-xs">
-                          Won't fix, can't repo, duplocate, state
-                        </p>
-                      </div>
-                    </li>
-                  </ul>
-                </div>
-                <button className="px-4 py-[5px] text-sm bg-[#94d3a2] border-[1px] border-solid border-gray-200 rounded-lg text-white">
-                  Comment
+                <button
+                  className="px-4 py-[5px] border-[1px] border-solid border-gray-200 text-[#cf222e] bg-[#f6f8fa] text-sm font-medium rounded-md mr-[5px]"
+                  onClick={() => {
+                    setUpdateComment("");
+                  }}
+                >
+                  Cancel
+                </button>
+                <button className="px-4 py-[5px] border-[1px] border-solid border-gray-200 text-white bg-[#2da44e] text-sm font-medium rounded-md">
+                  Update New Issue
                 </button>
               </div>
             </div>
