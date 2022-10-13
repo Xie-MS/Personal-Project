@@ -202,6 +202,17 @@ const api = {
     return await response.json();
   },
 
+  async getIssueData(IssueNum: string | undefined) {
+    const response = await fetch(`${this.hostname}/issues/${IssueNum}`, {
+      headers: new Headers({
+        "Content-type": "application/json",
+        Accept: "application/vnd.github+json",
+        Authorization: `token ${jwtToken}`,
+      }),
+    });
+    return await response.json();
+  },
+
   async Pagination(per_page: number | string, paging: number | string) {
     const response = await fetch(
       `${this.hostname}/issues?per_page=${per_page}&page=${paging}`

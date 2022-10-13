@@ -4,6 +4,8 @@ import { useState, useRef, useEffect } from "react";
 
 import { CheckIcon, XIcon } from "@primer/octicons-react";
 
+import api from "./api";
+
 function AssigneePage({
   setListClose,
   targetText,
@@ -18,6 +20,8 @@ function AssigneePage({
   setTargetText,
   targetAssigneeSpan,
   targetLabelSpan,
+  issueDetailData,
+  setIssueDetailData,
 }: {
   setListClose: any;
   targetText: string;
@@ -32,12 +36,26 @@ function AssigneePage({
   setTargetText: any;
   targetAssigneeSpan: any;
   targetLabelSpan: any;
+  issueDetailData: any;
+  setIssueDetailData: any;
 }) {
   const [assigneeInputName, setAssigneeInputName]: any = useState("");
   const [labelsInputSelect, setLabelsInputSelect]: any = useState("");
 
   const AssigneeName = useRef<HTMLParagraphElement | null>(null);
   const LabelName = useRef<HTMLParagraphElement | null>(null);
+
+  if (issueDetailData.length === 0) return <></>;
+
+  if (assigneeSelectData.length === 0 && issueDetailData.assignee !== null) {
+    setAssigneeSelectData(issueDetailData.assignee.login);
+  }
+
+  if (labelSelectData.length === 0 && issueDetailData.labels.length !== 0) {
+    return issueDetailData.labels.map((item: any) => {
+      setLabelSelectData([...item.name, item.name]);
+    });
+  }
 
   function AssigneeInput(e: any) {
     if (
@@ -213,7 +231,7 @@ function AssigneePage({
       });
     }
   }
-
+  console.log(targetText, targetAssigneeSpan.current?.outerText);
   return (
     <div
       className={`${
@@ -235,14 +253,18 @@ function AssigneePage({
         <li className="xl:px-[10px] py-2 text-xs font-semibold flex justify-between items-center">
           <p
             className={`${
-              targetText === "Assignees" && itemList ? "block" : "hidden"
+              targetText === targetAssigneeSpan.current?.outerText && itemList
+                ? "block"
+                : "hidden"
             }`}
           >
             Assign up to 10 people to this issue
           </p>
           <p
             className={`${
-              targetText === "Labels" && itemList ? "block" : "hidden"
+              targetText === targetLabelSpan.current?.outerText && itemList
+                ? "block"
+                : "hidden"
             }`}
           >
             Assign labels to this issue
@@ -282,7 +304,9 @@ function AssigneePage({
         </li>
         <li
           className={`${
-            targetText === "Assignees" && itemList ? "block" : "hidden"
+            targetText === targetLabelSpan.current?.outerText && itemList
+              ? "block"
+              : "hidden"
           } xl:bg-slate-100 xl:py-2 xl:px-[10px] text-xs border-t-[1px] border-solid xl:border-gray-300 flex justify-start items-center md:px-[10px] md:bg-slate-100 md:font-semibold`}
         >
           Suggeations

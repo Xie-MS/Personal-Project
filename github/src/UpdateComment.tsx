@@ -48,6 +48,8 @@ function CreateComment({
   renderLabelData,
   setTargetText,
   renderIssueData,
+  issueDetailData,
+  setIssueDetailData,
 }: {
   updateComment: String;
   setUpdateComment: any;
@@ -63,6 +65,8 @@ function CreateComment({
   renderLabelData: any;
   setTargetText: any;
   renderIssueData: any;
+  issueDetailData: any;
+  setIssueDetailData: any;
 }) {
   const Imgfile = useRef<HTMLInputElement | null | any>(null);
   const [imgURL, setImgURL]: any = useState("");
@@ -70,20 +74,33 @@ function CreateComment({
   const [issueClose, setIssueClose]: any = useState(true);
   const [tagsName, setTagsName]: any = useState("");
   const [issueNum, setIssueNum]: any = useState(-1);
-  const [closeIssue, setCloseIssue]: any = useState(false);
+  const [issueUpdateInputDefaultValue, setIssueUpdateInputDefaultValue]: any =
+    useState("");
+
+  if (
+    (issueUpdateInputDefaultValue === "" &&
+      issueDetailData.body !== undefined) ||
+    (issueUpdateInputDefaultValue === "Leave a comment" &&
+      issueDetailData.body !== undefined)
+  ) {
+    setIssueUpdateInputDefaultValue(issueDetailData.body);
+  }
 
   function PreviewText() {
-    if (issueContainer === "" || issueContainer === "Leave a comment") {
+    if (
+      issueUpdateInputDefaultValue === "" ||
+      issueUpdateInputDefaultValue === "Leave a comment"
+    ) {
       return <p className="text-sm">Nothing to preview</p>;
     } else if (
-      issueContainer !== "" &&
+      issueUpdateInputDefaultValue !== "" &&
       imgURL === "" &&
       tagsName === "" &&
       issueNum === -1
     ) {
       return (
         <ReactMarkdown
-          children={issueContainer}
+          children={issueUpdateInputDefaultValue}
           components={{
             em: ({ node, ...props }) => (
               <i style={{ fontStyle: "italic" }} {...props} />
@@ -148,7 +165,7 @@ function CreateComment({
         />
       );
     } else if (
-      issueContainer !== "" &&
+      issueUpdateInputDefaultValue !== "" &&
       imgURL !== "" &&
       tagsName === "" &&
       issueNum === -1
@@ -156,7 +173,7 @@ function CreateComment({
       console.log(imgURL);
       return <img src={imgURL} alt="" />;
     } else if (
-      issueContainer !== "" &&
+      issueUpdateInputDefaultValue !== "" &&
       imgURL === "" &&
       tagsName !== "" &&
       issueNum === -1
@@ -165,12 +182,12 @@ function CreateComment({
         <p className="font-semibold hover:decoration-1">
           {" "}
           <a href={`https://github.com/${tagsName}`} className="text-md">
-            {issueContainer}
+            {issueUpdateInputDefaultValue}
           </a>
         </p>
       );
     } else if (
-      issueContainer !== "" &&
+      issueUpdateInputDefaultValue !== "" &&
       issueNum !== -1 &&
       imgURL === "" &&
       tagsName === ""
@@ -182,7 +199,7 @@ function CreateComment({
             href={`https://github.com/Xie-Ms/Personal-Project/issues/${issueNum}`}
             className="text-md"
           >
-            {issueContainer}
+            {issueUpdateInputDefaultValue}
           </a>
         </p>
       );
@@ -190,14 +207,16 @@ function CreateComment({
   }
 
   function TagAssigneeName() {
-    if (issueContainer.includes("@") && tagsClose) {
+    if (issueUpdateInputDefaultValue.includes("@") && tagsClose) {
       setTargetText("Assignees");
       return renderAssigneeData.map((_item: any, TagIndex: number) => {
         return (
           <li
             className="text-md w-[200px] h-[25px] flex justify-start items-center text-black hover:bg-[#0969da] hover:text-white cursor-pointer"
             onClick={() => {
-              setIssueContainer("@" + renderAssigneeData[TagIndex].login + " ");
+              setIssueUpdateInputDefaultValue(
+                "@" + renderAssigneeData[TagIndex].login + " "
+              );
               setTagsName(renderAssigneeData[TagIndex].login);
               setTagsClose(false);
               setIssueNum(-1);
@@ -211,8 +230,8 @@ function CreateComment({
   }
 
   function TagIssue() {
-    if (issueContainer.includes("#") && issueClose) {
-      setTargetText("Issues");
+    if (issueUpdateInputDefaultValue.includes("#") && issueClose) {
+      // setTargetText("Issues");
       return renderIssueData
         .slice(0, 5)
         .map((_item: any, IssueIndex: number) => {
@@ -220,7 +239,9 @@ function CreateComment({
             <li
               className="text-md w-[200px] h-[25px] flex justify-start items-center text-black hover:bg-[#0969da] hover:text-white cursor-pointer"
               onClick={() => {
-                setIssueContainer("#" + renderIssueData[IssueIndex].number);
+                setIssueUpdateInputDefaultValue(
+                  "#" + renderIssueData[IssueIndex].number
+                );
                 setIssueClose(false);
                 setIssueNum(renderIssueData[IssueIndex].number);
               }}
@@ -235,7 +256,7 @@ function CreateComment({
   }
 
   return (
-    <div className="md:w-full lg:w-auto xl:w-[838px] justify-start lg:relative flex items-start xl:flex relative mt-4">
+    <div className="md:w-full lg:w-auto justify-start lg:relative flex items-start xl:flex relative mt-4">
       <div className="md:hidden lg:block w-[7.24%] xl:block">
         <img
           src={UserImg}
@@ -295,7 +316,9 @@ function CreateComment({
                     <button
                       className="ml-[5px] mr-1 py-2 px-1"
                       onClick={() => {
-                        setIssueContainer("### " + issueContainer);
+                        setIssueUpdateInputDefaultValue(
+                          "### " + issueUpdateInputDefaultValue
+                        );
                         setIssueNum(-1);
                         setImgURL("");
                         setTagsName("");
@@ -306,7 +329,9 @@ function CreateComment({
                     <button
                       className="ml-[5px] mr-1 py-2 px-1"
                       onClick={() => {
-                        setIssueContainer("**" + issueContainer + "**");
+                        setIssueUpdateInputDefaultValue(
+                          "**" + issueUpdateInputDefaultValue + "**"
+                        );
                         setIssueNum(-1);
                         setImgURL("");
                         setTagsName("");
@@ -317,7 +342,9 @@ function CreateComment({
                     <button
                       className="ml-[5px] mr-1 py-2 px-1"
                       onClick={() => {
-                        setIssueContainer("_" + issueContainer + "_");
+                        setIssueUpdateInputDefaultValue(
+                          "_" + issueUpdateInputDefaultValue + "_"
+                        );
                         setIssueNum(-1);
                         setImgURL("");
                         setTagsName("");
@@ -328,7 +355,9 @@ function CreateComment({
                     <button
                       className="ml-[5px] mr-1 py-2 px-1"
                       onClick={() => {
-                        setIssueContainer("- " + issueContainer);
+                        setIssueUpdateInputDefaultValue(
+                          "- " + issueUpdateInputDefaultValue
+                        );
                         setIssueNum(-1);
                         setImgURL("");
                         setTagsName("");
@@ -339,7 +368,9 @@ function CreateComment({
                     <button
                       className="ml-[5px] mr-1 py-2 px-1"
                       onClick={() => {
-                        setIssueContainer("1. " + issueContainer);
+                        setIssueUpdateInputDefaultValue(
+                          "1. " + issueUpdateInputDefaultValue
+                        );
                         setIssueNum(-1);
                         setImgURL("");
                         setTagsName("");
@@ -357,7 +388,9 @@ function CreateComment({
                     <button
                       className="ml-[5px] mr-1 py-2 px-1 lg:py-1 lg:px-1 lg:ml-[6px] lg:mx-1 xl:py-1 xl:px-1 xl:ml-[6px] xl:mx-1"
                       onClick={() => {
-                        setIssueContainer("### " + issueContainer);
+                        setIssueUpdateInputDefaultValue(
+                          "### " + issueUpdateInputDefaultValue
+                        );
                         setIssueNum(-1);
                         setImgURL("");
                         setTagsName("");
@@ -368,7 +401,9 @@ function CreateComment({
                     <button
                       className="ml-[5px] mr-1 py-2 px-1 lg:py-1 lg:px-1 lg:ml-[6px] lg:mx-1 xl:py-1 xl:px-1 xl:ml-[6px] xl:mx-1"
                       onClick={() => {
-                        setIssueContainer("**" + issueContainer + "**");
+                        setIssueUpdateInputDefaultValue(
+                          "**" + issueUpdateInputDefaultValue + "**"
+                        );
                         setIssueNum(-1);
                         setImgURL("");
                         setTagsName("");
@@ -379,7 +414,9 @@ function CreateComment({
                     <button
                       className="ml-[5px] mr-1 py-2 px-1 lg:py-1 lg:px-1 lg:ml-[6px] lg:mx-1 xl:py-1 xl:px-1 xl:ml-[6px] xl:mx-1"
                       onClick={() => {
-                        setIssueContainer("_" + issueContainer + "_");
+                        setIssueUpdateInputDefaultValue(
+                          "_" + issueUpdateInputDefaultValue + "_"
+                        );
                         setIssueNum(-1);
                         setImgURL("");
                         setTagsName("");
@@ -392,7 +429,9 @@ function CreateComment({
                     <button
                       className="ml-[5px] mr-1 py-2 px-1 lg:py-1 lg:px-1 lg:ml-[6px] lg:mx-1 xl:py-1 xl:px-1 xl:ml-[6px] xl:mx-1"
                       onClick={() => {
-                        setIssueContainer("- " + issueContainer);
+                        setIssueUpdateInputDefaultValue(
+                          "- " + issueUpdateInputDefaultValue
+                        );
                         setIssueNum(-1);
                         setImgURL("");
                         setTagsName("");
@@ -403,7 +442,9 @@ function CreateComment({
                     <button
                       className="ml-[5px] mr-1 py-2 px-1 lg:py-1 lg:px-1 lg:ml-[6px] lg:mx-1 xl:py-1 xl:px-1 xl:ml-[6px] xl:mx-1"
                       onClick={() => {
-                        setIssueContainer("1. " + issueContainer);
+                        setIssueUpdateInputDefaultValue(
+                          "1. " + issueUpdateInputDefaultValue
+                        );
                         setIssueNum(-1);
                         setImgURL("");
                         setTagsName("");
@@ -420,7 +461,9 @@ function CreateComment({
                       <button
                         className="ml-[5px] py-2 px-2 lg:py-1 lg:px-1 lg:ml-[6px] lg:mx-1 xl:py-1 xl:px-1 xl:ml-[6px] xl:mx-1"
                         onClick={() => {
-                          setIssueContainer("> " + issueContainer);
+                          setIssueUpdateInputDefaultValue(
+                            "> " + issueUpdateInputDefaultValue
+                          );
                           setIssueNum(-1);
                           setImgURL("");
                           setTagsName("");
@@ -431,7 +474,9 @@ function CreateComment({
                       <button
                         className="ml-[5px] py-2 px-2 lg:py-1 lg:px-1 lg:ml-[6px] lg:mx-1 xl:py-1 xl:px-1 xl:ml-[6px] xl:mx-1"
                         onClick={() => {
-                          setIssueContainer("`" + issueContainer + "`");
+                          setIssueUpdateInputDefaultValue(
+                            "`" + issueUpdateInputDefaultValue + "`"
+                          );
                           setIssueNum(-1);
                           setImgURL("");
                           setTagsName("");
@@ -442,7 +487,9 @@ function CreateComment({
                       <button
                         className="ml-[5px] py-2 px-2 lg:py-1 lg:px-1 lg:ml-[6px] lg:mx-1 xl:py-1 xl:px-1 xl:ml-[6px] xl:mx-1"
                         onClick={() => {
-                          setIssueContainer("[" + issueContainer + "](url)");
+                          setIssueUpdateInputDefaultValue(
+                            "[" + issueUpdateInputDefaultValue + "](url)"
+                          );
                           setIssueNum(-1);
                           setTagsName("");
                         }}
@@ -456,7 +503,7 @@ function CreateComment({
                     <button
                       className="ml-[5px] py-2 px-2 lg:py-1 lg:px-1 lg:ml-[6px] lg:mx-1 xl:py-1 xl:px-1 xl:ml-[6px] xl:mx-1"
                       onClick={() => {
-                        setIssueContainer("@");
+                        setIssueUpdateInputDefaultValue("@");
                         setIssueNum(-1);
                         setImgURL("");
                       }}
@@ -473,7 +520,7 @@ function CreateComment({
                         const file = Imgfile.current?.files;
                         if (file[0] !== undefined) {
                           setImgURL(URL.createObjectURL(file[0]));
-                          setIssueContainer(
+                          setIssueUpdateInputDefaultValue(
                             `![${file[0].name}](${URL.createObjectURL(
                               file[0]
                             )})`
@@ -493,7 +540,7 @@ function CreateComment({
                     <button
                       className="ml-[5px] py-2 px-2 lg:py-1 lg:px-1 lg:ml-[6px] lg:mx-1 xl:py-1 xl:px-1 xl:ml-[6px] xl:mx-1"
                       onClick={() => {
-                        setIssueContainer("#");
+                        setIssueUpdateInputDefaultValue("#");
                         setTagsName("");
                         setImgURL("");
                       }}
@@ -517,16 +564,16 @@ function CreateComment({
                   <textarea
                     cols="30"
                     rows="10"
-                    value={issueContainer}
+                    value={issueUpdateInputDefaultValue}
                     className="relative md:leading-snug md:h-[82px] px-2 py-2 border-[1px] md:border-b-[0px] border-solid border-gray-400 bg-slate-100 rounded-md w-full lg:focus:bg-white lg:border-b-[1px] border-t-[0px] border-r-[0px] border-l-[0px] lg:border-dashed lg:h-[96px] lg:leading-snug lg:rounded-b-[0px] xl:focus:bg-white xl:border-dashed xl:h-[96px] xl:leading-snug xl:rounded-b-[0px]"
                     onChange={(e) => {
-                      setIssueContainer(e.target.value);
+                      setIssueUpdateInputDefaultValue(e.target.value);
                     }}
                   />
                 </div>
                 <ul
                   className={`${
-                    issueContainer.includes("@") && tagsClose
+                    issueUpdateInputDefaultValue.includes("@") && tagsClose
                       ? "block"
                       : "hidden"
                   } absolute z-30 bg-slate-100 top-[30px] left-[30px] border-[1px] border-solid  border-gray-200 rounded-md `}
@@ -535,7 +582,7 @@ function CreateComment({
                 </ul>
                 <ul
                   className={`${
-                    issueContainer.includes("#") && issueClose
+                    issueUpdateInputDefaultValue.includes("#") && issueClose
                       ? "block"
                       : "hidden"
                   } absolute z-30 bg-slate-100 top-[30px] left-[30px] border-[1px] border-solid  border-gray-200 rounded-md `}
@@ -554,7 +601,7 @@ function CreateComment({
                         const file = Imgfile.current?.files;
                         if (file[0] !== undefined) {
                           setImgURL(URL.createObjectURL(file[0]));
-                          setIssueContainer(
+                          setIssueUpdateInputDefaultValue(
                             `![${file[0].name}](${URL.createObjectURL(
                               file[0]
                             )})`

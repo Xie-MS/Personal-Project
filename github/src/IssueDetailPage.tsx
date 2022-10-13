@@ -1,5 +1,6 @@
 import React from "react";
 import { useState, useEffect, useRef } from "react";
+import { useParams } from "react-router-dom";
 
 import {
   TriangleDownIcon,
@@ -20,11 +21,11 @@ import {
   IssueOpenedIcon,
 } from "@primer/octicons-react";
 
-import UserImg from "../src/img/userImg.png";
 import CreateComment from "./CreateComment";
 import UpdateComment from "./UpdateComment";
-import SharedListData from "./SharedListData";
+import IssueList from "./IssueList";
 import api from "./api";
+import { string } from "prop-types";
 
 const Emoji = ["👍", "👎", "😄", "🎉", "😕", "❤", "🚀", "👀"];
 
@@ -48,10 +49,22 @@ function IssueDetailPage() {
   const [kebabHorizontal, setKebabHorizontal] = useState(false);
   const [updateComment, setUpdateComment] = useState("");
   const [EditTitle, setEditTitle] = useState(false);
+  const { IssueNum } = useParams();
+  const [issueDetailData, setIssueDetailData]: any = useState<any>();
+
+  useEffect(() => {
+    async function getIssueDetailStat(IssueNum: string | undefined) {
+      const data = await api.getIssueData(IssueNum);
+      setIssueDetailData(data);
+      console.log(issueDetailData);
+    }
+    getIssueDetailStat(IssueNum);
+  }, []);
 
   useEffect(() => {
     async function getAssigneeList() {
       if (targetText === targetAssigneeSpan.current?.outerText) {
+        console.log("AAA");
         const data = await api.getIssuesAssignee();
         setRenderAssigneeData(data);
       } else if (targetText === targetLabelSpan.current?.outerText) {
@@ -133,6 +146,50 @@ function IssueDetailPage() {
     }
   }
 
+  function CreateTime() {
+    const NewTime = new Date();
+    const IssuesTime = new Date(issueDetailData.created_at);
+    const reduce = NewTime.getTime() - IssuesTime.getTime();
+    const days = Math.floor(reduce / (24 * 3600 * 1000));
+    const leave1 = reduce % (24 * 3600 * 1000);
+    const hours = Math.floor(leave1 / (3600 * 1000));
+    const leave2 = leave1 % (3600 * 1000);
+    const minutes = Math.floor(leave2 / (60 * 1000));
+    const leave3 = leave2 % (60 * 1000);
+    const seconds = Math.round(leave3 / 1000);
+    if (days > 0) {
+      return <p className="text-sm mx-1"> {`${days}`} days ago</p>;
+    } else if (days === 0 && hours > 0) {
+      return <p className="text-sm mx-1"> {`${hours}`} hours ago</p>;
+    } else if (days === 0 && hours === 0 && minutes > 0) {
+      return <p className="text-sm mx-1"> {`${minutes}`} minutes ago</p>;
+    } else if (days === 0 && hours === 0 && minutes === 0 && seconds > 0) {
+      return <p className="text-sm mx-1"> {`${seconds}`} seconds ago</p>;
+    }
+  }
+
+  function UpdateTime() {
+    const NewTime = new Date();
+    const IssuesTime = new Date(issueDetailData.updated_at);
+    const reduce = NewTime.getTime() - IssuesTime.getTime();
+    const days = Math.floor(reduce / (24 * 3600 * 1000));
+    const leave1 = reduce % (24 * 3600 * 1000);
+    const hours = Math.floor(leave1 / (3600 * 1000));
+    const leave2 = leave1 % (3600 * 1000);
+    const minutes = Math.floor(leave2 / (60 * 1000));
+    const leave3 = leave2 % (60 * 1000);
+    const seconds = Math.round(leave3 / 1000);
+    if (days > 0) {
+      return <p className="text-sm mx-1"> {`${days}`} days ago</p>;
+    } else if (days === 0 && hours > 0) {
+      return <p className="text-sm mx-1"> {`${hours}`} hours ago</p>;
+    } else if (days === 0 && hours === 0 && minutes > 0) {
+      return <p className="text-sm mx-1"> {`${minutes}`} minutes ago</p>;
+    } else if (days === 0 && hours === 0 && minutes === 0 && seconds > 0) {
+      return <p className="text-sm mx-1"> {`${seconds}`} seconds ago</p>;
+    }
+  }
+
   async function setIssue() {
     const data = await api.setIssue({
       owner: "Xie-MS",
@@ -145,6 +202,7 @@ function IssueDetailPage() {
     window.location.assign(`/IssuePage`);
   }
 
+  if (issueDetailData === undefined) return <></>;
   return (
     <div className="mt-6 px-4 xl:flex xl:justify-center xl:items-center">
       <div>
@@ -182,8 +240,8 @@ function IssueDetailPage() {
                   type="text"
                   className={`${
                     EditTitle ? "block" : "hidden"
-                  } px-3 py-[5px] md:w-full bg:[#f6f8fa} text-md border-[1px] border-solid border-[#d0d7de] rounded-[6px] lg:ml-4 xl:mr-4 lg:w-full xl:w-full`}
-                  defaultValue="Demo"
+                  } px-3 py-[5px] md:w-full bg:[#f6f8fa} text-md border-[1px] border-solid border-[#d0d7de] rounded-[6px] lg:mr-4 xl:mr-4 lg:w-full xl:w-full`}
+                  defaultValue={issueDetailData.title}
                 />
 
                 <div
@@ -209,9 +267,11 @@ function IssueDetailPage() {
                   EditTitle ? "hidden" : "flex"
                 } items-center justify-start mb-2`}
               >
-                <p className="text-[26px] font-normal">Demo</p>
+                <p className="text-[26px] font-normal">
+                  {issueDetailData.title}
+                </p>
                 <p className="text-[#57606a] font-light text-[26px] ml-2">
-                  #53
+                  #{issueDetailData.number}
                 </p>
               </div>
 
@@ -222,24 +282,44 @@ function IssueDetailPage() {
                 </button>
                 <div className="mb-2 flex items-center justify-start">
                   <a href="#" className="text-[#57606a] font-semibold">
-                    Xie-Ms
+                    {issueDetailData.user.login}
                   </a>
-                  <p className="text-[#57606a] text-sm ml-1">
-                    opened this issue 3 days ago · 0 comments
+                  <p className="text-[#57606a] text-sm ml-1 flex justify-start items-center">
+                    opened this issue {CreateTime()} ·{" "}
+                    {issueDetailData.comments} comments
                   </p>
                 </div>
               </div>
             </div>
           </div>
         </div>
-        <div className="mb-6 border-b-[1px] border-solid border-[rgba(27,31,36,0.15)] lg:hidden xl:hidden">
-          <div className="mb-4 flex items-center justify-start">
+        <div
+          className={`${
+            issueDetailData.assignee !== null &&
+            issueDetailData.labels.length !== 0
+              ? "md:block"
+              : "md:hidden"
+          } mb-6 border-b-[1px] border-solid border-[rgba(27,31,36,0.15)] lg:hidden xl:hidden`}
+        >
+          <div
+            className={`{${
+              issueDetailData.assignee !== null ? "flex" : "hidden"
+            } mb-4 items-center justify-start`}
+          >
             <p className="text-xs w-[122.53px] text-[#57606a] font-semibold">
               Assignee
             </p>
-            <img src={UserImg} alt="" className="rounded-full w-[3%]" />
+            <img
+              src={issueDetailData.user.avatar_url}
+              alt=""
+              className="rounded-full w-[5%]"
+            />
           </div>
-          <div className="mb-4 flex items-center justify-start">
+          <div
+            className={`{${
+              issueDetailData.labels.length !== 0 ? "flex" : "hidden"
+            } mb-4 items-center justify-start`}
+          >
             <p className="text-xs w-[122.53px] text-[#57606a] font-semibold">
               Labels
             </p>
@@ -258,7 +338,7 @@ function IssueDetailPage() {
               >
                 <div className="md:hidden lg:w-[7.5%] xl:w-[7.5%]">
                   <img
-                    src={UserImg}
+                    src={issueDetailData.user.avatar_url}
                     alt=""
                     className="rounded-full md:w-[3%] lg:w-[60%] xl:w-[60%]"
                   />
@@ -266,9 +346,11 @@ function IssueDetailPage() {
                 <div className="border-[1px] border-solid border-[rgba(84,174,255,0.4)] rounded-md mb-4 md:w-full lg:w-[90%] xl:w-[90%]">
                   <div className="h-[37px] flex justify-between items-center px-4 border-b-[1px] border-solid border-[rgba(27,31,36,0.15)] bg-[#ddf4ff]">
                     <div className="flex justify-between items-center">
-                      <p className="text-sm font-semibold mr-2">Xie-MS</p>
+                      <p className="text-sm font-semibold mr-2">
+                        {issueDetailData.user.login}
+                      </p>
                       <p className="flex justify-between items-center text-sm text-[#57606a]">
-                        commented 6 hours ago．
+                        commented {UpdateTime()}．
                         <button className="flex justify-between items-center">
                           <p>edited</p>
                           <TriangleDownIcon size={16} />
@@ -372,10 +454,12 @@ function IssueDetailPage() {
                   renderLabelData={renderLabelData}
                   setTargetText={setTargetText}
                   renderIssueData={renderIssueData}
+                  issueDetailData={issueDetailData}
+                  setIssueDetailData={setIssueDetailData}
                 />
               </div>
               <div className="relative lg:pl-4 lg:ml-10 md:ml-0 md:pl-0 xl:pl-4 xl:ml-10">
-                <div className="absolute w-[2px] h-full bg-[rgba(27,31,36,0.15)] left-4 -z-20 top-0 lg:left-[30px] lg:top-[-15px] xl:left-[30px] xl:top-[-15px]" />
+                <div className="absolute w-[2px] h-full bg-[rgba(27,31,36,0.15)] md:left-4 -z-20 md:top-0 lg:left-[30px] lg:top-[-15px] xl:left-[30px] xl:top-[-15px]" />
                 <div className="flex justify-start items-center py-4 ml-4">
                   <div className="flex justify-center items-center w-8 h-8 rounded-full border-[2px] border-solid border-white mr-2 bg-[#eaeef2] ml-[-15px]">
                     <button>
@@ -385,7 +469,7 @@ function IssueDetailPage() {
 
                   <button className="flex justify-start items-center">
                     <img
-                      src={UserImg}
+                      src={issueDetailData.user.avatar_url}
                       alt=""
                       className="rounded-full w-5 h-5"
                     />
@@ -407,7 +491,7 @@ function IssueDetailPage() {
                   </div>
                   <button className="flex justify-start items-center">
                     <img
-                      src={UserImg}
+                      src={issueDetailData.user.avatar_url}
                       alt=""
                       className="rounded-full w-5 h-5"
                     />
@@ -434,7 +518,7 @@ function IssueDetailPage() {
                   </div>
                   <button className="flex justify-start items-center">
                     <img
-                      src={UserImg}
+                      src={issueDetailData.user.avatar_url}
                       alt=""
                       className="rounded-full w-5 h-5"
                     />
@@ -455,7 +539,7 @@ function IssueDetailPage() {
 
                   <button className="flex justify-start items-center">
                     <img
-                      src={UserImg}
+                      src={issueDetailData.user.avatar_url}
                       alt=""
                       className="rounded-full w-5 h-5"
                     />
@@ -474,7 +558,7 @@ function IssueDetailPage() {
                   </div>
                   <button className="flex justify-start items-center">
                     <img
-                      src={UserImg}
+                      src={issueDetailData.user.avatar_url}
                       alt=""
                       className="rounded-full w-5 h-5"
                     />
@@ -501,6 +585,8 @@ function IssueDetailPage() {
                 renderLabelData={renderLabelData}
                 setTargetText={setTargetText}
                 renderIssueData={renderIssueData}
+                issueDetailData={issueDetailData}
+                setIssueDetailData={setIssueDetailData}
               />
             </div>
           </div>
@@ -530,7 +616,7 @@ function IssueDetailPage() {
                       <GearIcon size={16} />
                     </div>
                   </div>
-                  <SharedListData
+                  <IssueList
                     setListClose={setListClose}
                     itemList={itemList}
                     setItemList={setItemList}
@@ -544,6 +630,8 @@ function IssueDetailPage() {
                     setAssigneeSelectData={setAssigneeSelectData}
                     labelSelectData={labelSelectData}
                     setLabelSelectData={setLabelSelectData}
+                    issueDetailData={issueDetailData}
+                    setIssueDetailData={setIssueDetailData}
                   />
                 </div>
                 <div
@@ -630,7 +718,7 @@ function IssueDetailPage() {
                   <div>
                     <button>
                       <img
-                        src={UserImg}
+                        src={issueDetailData.user.avatar_url}
                         alt=""
                         className="rounded-full w-[6%]"
                       />

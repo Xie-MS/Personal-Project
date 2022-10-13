@@ -205,7 +205,7 @@ function CreateNewIssue({
 
   function TagIssue() {
     if (issueContainer.includes("#") && issueClose) {
-      setTargetText("Issues");
+      // setTargetText("Issues");
       return renderIssueData
         .slice(0, 5)
         .map((_item: any, IssueIndex: number) => {

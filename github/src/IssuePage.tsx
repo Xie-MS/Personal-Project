@@ -224,9 +224,7 @@ function IssuePage() {
                     <p
                       className="text-base font-semibold hover:text-[#0969da] hover:cursor-pointer"
                       onClick={() => {
-                        navigate(
-                          `/IssueDetailPage?${renderData[index].number}`
-                        );
+                        navigate(`/Issue/${renderData[index].number}`);
                       }}
                     >
                       {renderData[index].title}

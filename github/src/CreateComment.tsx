@@ -48,6 +48,8 @@ function CreateComment({
   renderLabelData,
   setTargetText,
   renderIssueData,
+  issueDetailData,
+  setIssueDetailData,
 }: {
   updateComment: String;
   setUpdateComment: any;
@@ -63,6 +65,8 @@ function CreateComment({
   renderLabelData: any;
   setTargetText: any;
   renderIssueData: any;
+  issueDetailData: any;
+  setIssueDetailData: any;
 }) {
   const Imgfile = useRef<HTMLInputElement | null | any>(null);
   const [imgURL, setImgURL]: any = useState("");
@@ -153,7 +157,6 @@ function CreateComment({
       tagsName === "" &&
       issueNum === -1
     ) {
-      console.log(imgURL);
       return <img src={imgURL} alt="" />;
     } else if (
       issueContainer !== "" &&
@@ -235,7 +238,7 @@ function CreateComment({
   }
 
   return (
-    <div className="w-full justify-evenly lg:relative flex items-start xl:flex relative mt-4">
+    <div className="w-full justify-start lg:relative flex items-start xl:flex relative mt-4">
       <div className="md:hidden lg:block w-[7.24%] xl:block">
         <img src={UserImg} alt="" className="w-[70%] rounded-full sm:hidden" />
       </div>
@@ -577,7 +580,7 @@ function CreateComment({
               <div
                 className={`${
                   preview ? "block" : "hidden"
-                } px-2 pb-2 w-full min-h-[191px] border-b-[2px] border-solid border-[#d0d7de] md:min-h-[270px]`}
+                } px-2 pb-2 w-full min-h-[191px] border-b-[2px] border-solid border-[#d0d7de]`}
               >
                 <p className="text-sm"></p>
                 {PreviewText()}
