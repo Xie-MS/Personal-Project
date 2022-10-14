@@ -133,7 +133,6 @@ function IssueDetailPage() {
               assigneeLogin[assigneeIndex].login.toString().toLowerCase()
             ) === false
         ) {
-          console.log("Aaa");
           setAssigneeSelectData([
             ...assigneeSelectData,
             assigneeLogin[assigneeIndex].login,
@@ -720,6 +719,8 @@ function IssueDetailPage() {
                     setIssueDetailData={setIssueDetailData}
                     assigneeLogin={assigneeLogin}
                     setAssigneeLogin={setAssigneeLogin}
+                    createCommentRender={createCommentRender}
+                    setCreateCommentRender={setCreateCommentRender}
                   />
                 </div>
                 <div

@@ -3,6 +3,7 @@ import React from "react";
 import { useState, useRef, useEffect } from "react";
 
 import { CheckIcon, XIcon } from "@primer/octicons-react";
+import { useParams } from "react-router-dom";
 
 import api from "./api";
 
@@ -24,6 +25,8 @@ function AssigneePage({
   setIssueDetailData,
   assigneeLogin,
   setAssigneeLogin,
+  createCommentRender,
+  setCreateCommentRender,
 }: {
   setListClose: any;
   targetText: string;
@@ -42,12 +45,28 @@ function AssigneePage({
   setIssueDetailData: any;
   assigneeLogin: any;
   setAssigneeLogin: any;
+  createCommentRender: any;
+  setCreateCommentRender: any;
 }) {
   const [assigneeInputName, setAssigneeInputName]: any = useState("");
   const [labelsInputSelect, setLabelsInputSelect]: any = useState("");
 
   const AssigneeName = useRef<HTMLParagraphElement | null>(null);
   const LabelName = useRef<HTMLParagraphElement | null>(null);
+  const { IssueNum } = useParams();
+
+  async function UpdateAssignees() {
+    const data = await api.UpdateIssue(
+      {
+        owner: "Xie-MS",
+        repo: "Personal-Project",
+        issue_number: IssueNum,
+        assignees: assigneeSelectData,
+      },
+      IssueNum
+    );
+    setCreateCommentRender((prev: boolean) => !prev);
+  }
 
   function AssigneeInput(e: any) {
     if (
@@ -66,8 +85,10 @@ function AssigneePage({
       if (assigneeSelectData.includes(e.target.value)) {
         const assigneeSelectNum = assigneeSelectData.indexOf(e.target.value);
         assigneeSelectData.splice(assigneeSelectNum, 1);
+        UpdateAssignees();
       } else {
         setAssigneeSelectData([...assigneeSelectData, e.target.value]);
+        UpdateAssignees();
       }
     }
   }
@@ -120,6 +141,7 @@ function AssigneePage({
                   renderAssigneeData[ItemIndex].login
                 );
                 assigneeLogin.splice(assigneeLoginNum, 1);
+                UpdateAssignees();
               } else if (
                 assigneeSelectData.includes(
                   renderAssigneeData[ItemIndex].login
@@ -133,6 +155,7 @@ function AssigneePage({
                   ...assigneeLogin,
                   renderAssigneeData[ItemIndex].login,
                 ]);
+                UpdateAssignees();
               }
             }}
           >
