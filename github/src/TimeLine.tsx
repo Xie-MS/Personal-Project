@@ -1,0 +1,480 @@
+import React from "react";
+import { useState, useEffect, useRef } from "react";
+import { useParams } from "react-router-dom";
+
+import {
+  TriangleDownIcon,
+  KebabHorizontalIcon,
+  SmileyIcon,
+  TagIcon,
+  PersonIcon,
+  CheckCircleIcon,
+  IssueReopenedIcon,
+  SkipIcon,
+} from "@primer/octicons-react";
+
+import UpdateComment from "./UpdateComment";
+import api from "./api";
+
+const Emoji = ["👍", "👎", "😄", "🎉", "😕", "❤", "🚀", "👀"];
+
+function TimeLine({
+  preview,
+  setPreview,
+  setTargetText,
+  issueTitle,
+  setIssueTitle,
+  issueContainer,
+  setIssueContainer,
+  markDownBtn,
+  setmarkDownBtn,
+  renderAssigneeData,
+  renderLabelData,
+  renderIssueData,
+  updateComment,
+  setUpdateComment,
+  issueDetailData,
+  setIssueDetailData,
+  updateCommentNum,
+  setUpdateCommentNum,
+  timeLineIndex,
+  settimeLineIndex,
+  commentNum,
+  setCommentNum,
+  createCommentRender,
+  setCreateCommentRender,
+  issueUpdateInputDefaultValue,
+  setIssueUpdateInputDefaultValue,
+}: {
+  preview: Boolean;
+  setPreview: any;
+  setTargetText: any;
+  issueTitle: String;
+  setIssueTitle: any;
+  issueContainer: any;
+  setIssueContainer: any;
+  markDownBtn: Boolean;
+  setmarkDownBtn: any;
+  renderAssigneeData: any;
+  renderLabelData: any;
+  renderIssueData: any;
+  updateComment: String;
+  setUpdateComment: any;
+  issueDetailData: any;
+  setIssueDetailData: any;
+  updateCommentNum: number;
+  setUpdateCommentNum: any;
+  timeLineIndex: number;
+  settimeLineIndex: any;
+  commentNum: number | string | undefined;
+  setCommentNum: any;
+  createCommentRender: boolean;
+  setCreateCommentRender: any;
+  issueUpdateInputDefaultValue: any;
+  setIssueUpdateInputDefaultValue: any;
+}) {
+  const [TimeLineCommentemojiListClose, setTimeLineCommentEmojiListClose] =
+    useState(false);
+  const [kebabHorizontal, setKebabHorizontal] = useState(false);
+  const { IssueNum } = useParams();
+  const [issueDetailTimeline, setIssueDetailTimeline]: any = useState<any>();
+
+  useEffect(() => {
+    async function getIssueTimeline(IssueNum: string | undefined) {
+      const data = await api.getIssueTimeline(IssueNum);
+      setIssueDetailTimeline(data);
+    }
+    getIssueTimeline(IssueNum);
+  }, [createCommentRender]);
+
+  function EmojiList() {
+    return Emoji.map((item: any, EmojiIndex: number) => {
+      return (
+        <li className="px-1 py-1 my-1 mx-[2px] h-10 flex justify-center items-center">
+          {Emoji[EmojiIndex]}
+        </li>
+      );
+    });
+  }
+
+  function Timeline() {
+    if (issueDetailTimeline === undefined) return <></>;
+    return issueDetailTimeline.map((timeLine: any, timeLineIndex: number) => {
+      function timelineCreateTime() {
+        const NewTime = new Date();
+        const IssuesTime = new Date(timeLine.created_at);
+        const reduce = NewTime.getTime() - IssuesTime.getTime();
+        const days = Math.floor(reduce / (24 * 3600 * 1000));
+        const leave1 = reduce % (24 * 3600 * 1000);
+        const hours = Math.floor(leave1 / (3600 * 1000));
+        const leave2 = leave1 % (3600 * 1000);
+        const minutes = Math.floor(leave2 / (60 * 1000));
+        const leave3 = leave2 % (60 * 1000);
+        const seconds = Math.round(leave3 / 1000);
+
+        if (days > 0) {
+          return <p className="text-sm mx-1"> {`${days}`} days ago</p>;
+        } else if (days === 0 && hours > 0) {
+          return <p className="text-sm mx-1"> {`${hours}`} hours ago</p>;
+        } else if (days === 0 && hours === 0 && minutes > 0) {
+          return <p className="text-sm mx-1"> {`${minutes}`} minutes ago</p>;
+        } else if (days === 0 && hours === 0 && minutes === 0 && seconds > 0) {
+          return <p className="text-sm mx-1"> {`${seconds}`} seconds ago</p>;
+        }
+      }
+
+      if (timeLine.event === "labeled") {
+        return (
+          <div className="flex justify-start items-center py-4 ml-4">
+            <div className="flex justify-center items-center w-8 h-8 rounded-full border-[2px] border-solid border-white mr-2 bg-[#eaeef2] ml-[-15px]">
+              <button>
+                <TagIcon size={16} />
+              </button>
+            </div>
+
+            <button className="flex justify-start items-center">
+              <img
+                src={timeLine.actor.avatar_url}
+                alt=""
+                className="rounded-full w-5 h-5"
+              />
+              <p className="mr-2">{timeLine.actor.login}</p>
+              <p className="flex justify-start items-center text-sm text-[#57606a]">
+                added the{" "}
+                <button
+                  style={{
+                    backgroundColor: `#${timeLine.label.color}`,
+                  }}
+                  className="text-[#24292f] flex justify-center items-center text-sm bg-yellow-400 px-[7px] border-[1px] border-solid border-[rgba(27,31,36,0.15)] rounded-3xl font-semibold h-[18px] mx-1"
+                >
+                  {timeLine.label.name}
+                </button>{" "}
+                labels {timelineCreateTime()}
+              </p>
+            </button>
+          </div>
+        );
+      } else if (timeLine.event === "unlabeled") {
+        return (
+          <div className="flex justify-start items-center py-4 ml-4">
+            <div className="flex justify-center items-center w-8 h-8 rounded-full border-[2px] border-solid border-white mr-2 bg-[#eaeef2] ml-[-15px]">
+              <button>
+                <TagIcon size={16} />
+              </button>
+            </div>
+
+            <button className="flex justify-start items-center">
+              <img
+                src={timeLine.actor.avatar_url}
+                alt=""
+                className="rounded-full w-5 h-5"
+              />
+              <p className="mr-2">{timeLine.actor.login}</p>
+              <p className="flex justify-start items-center text-sm text-[#57606a]">
+                removed the{" "}
+                <button
+                  style={{
+                    backgroundColor: `#${timeLine.label.color}`,
+                  }}
+                  className="text-[#24292f] flex justify-center items-center text-sm bg-yellow-400 px-[7px] border-[1px] border-solid border-[rgba(27,31,36,0.15)] rounded-3xl font-semibold h-[18px] mx-1"
+                >
+                  {timeLine.label.name}
+                </button>{" "}
+                labels {timelineCreateTime()}
+              </p>
+            </button>
+          </div>
+        );
+      } else if (timeLine.event === "assigned") {
+        return (
+          <div className="flex justify-start items-center py-4 ml-4">
+            <div className="flex justify-center items-center w-[40px] h-8 rounded-full border-[2px] border-solid border-white mr-2 bg-[#eaeef2] ml-[-15px] lg:w-8 xl:w-8">
+              <button>
+                <PersonIcon size={16} />
+              </button>
+            </div>
+            <button className="flex justify-start items-center">
+              <img
+                src={timeLine.actor.avatar_url}
+                alt=""
+                className="rounded-full w-5 h-5"
+              />
+              <p className="mr-2">{timeLine.actor.login}</p>
+              <p className="flex justify-start items-center text-sm text-[#57606a]">
+                assigned{" "}
+                <p className="text-[#24292f] mx-2 font-semibold">
+                  {timeLine.assignee.login}
+                </p>{" "}
+                {timelineCreateTime()}
+              </p>
+            </button>
+          </div>
+        );
+      } else if (timeLine.event === "unassigned") {
+        return (
+          <div className="flex justify-start items-center py-4 ml-4">
+            <div className="flex justify-center items-center w-[40px] h-8 rounded-full border-[2px] border-solid border-white mr-2 bg-[#eaeef2] ml-[-15px] lg:w-8 xl:w-8">
+              <button>
+                <PersonIcon size={16} />
+              </button>
+            </div>
+            <button className="flex justify-start items-center">
+              <img
+                src={timeLine.actor.avatar_url}
+                alt=""
+                className="rounded-full w-5 h-5"
+              />
+              <p className="mr-2">{timeLine.actor.login}</p>
+              <p className="flex justify-start items-center text-sm text-[#57606a]">
+                unassigned{" "}
+                <p className="text-[#24292f] mx-2 font-semibold">
+                  {timeLine.assignee.login}
+                </p>{" "}
+                {timelineCreateTime()}
+              </p>
+            </button>
+          </div>
+        );
+      } else if (
+        timeLine.event === "closed" &&
+        timeLine.state_reason === "reopened"
+      ) {
+        return (
+          <div className="relative flex justify-start items-center py-4 ml-4">
+            <div className="flex justify-center items-center w-8 h-8 rounded-full border-[2px] border-solid border-white mr-2 bg-[#8250df] ml-[-15px]">
+              <button>
+                <CheckCircleIcon size={16} fill={"white"} />
+              </button>
+            </div>
+            <button className="flex justify-start items-center">
+              <img
+                src={timeLine.actor.avatar_url}
+                alt=""
+                className="rounded-full w-5 h-5"
+              />
+              <p className="mr-2">{timeLine.actor.login}</p>
+              <p className="flex justify-start items-center text-sm text-[#57606a]">
+                closed this as comppleted {timelineCreateTime()}
+              </p>
+            </button>
+            <div className="absolute w-[107%] bg-[rgba(27,31,36,0.15)] h-[4px] bottom-0 left-[-33px] lg:left-[-70px] xl:left-[-70px]" />
+          </div>
+        );
+      } else if (
+        timeLine.event === "closed" &&
+        timeLine.state_reason === "not_planned"
+      ) {
+        return (
+          <div className="relative flex justify-start items-center py-4 ml-4">
+            <div className="flex justify-center items-center w-8 h-8 rounded-full border-[2px] border-solid border-white mr-2 bg-[#eaeef2] ml-[-15px]">
+              <button>
+                <SkipIcon size={16} />
+              </button>
+            </div>
+            <button className="flex justify-start items-center">
+              <img
+                src={timeLine.actor.avatar_url}
+                alt=""
+                className="rounded-full w-5 h-5"
+              />
+              <p className="mr-2">{timeLine.actor.login}</p>
+              <p className="flex justify-start items-center text-sm text-[#57606a]">
+                closed this an not planned {timelineCreateTime()}
+              </p>
+            </button>
+            <div className="absolute w-[107%] bg-[rgba(27,31,36,0.15)] h-[4px] bottom-0 left-[-33px] lg:left-[-70px] xl:left-[-70px]" />
+          </div>
+        );
+      } else if (timeLine.event === "reopened") {
+        return (
+          <div className="flex justify-start items-center py-4 ml-4">
+            <div className="flex justify-center items-center w-8 h-8 rounded-full border-[2px] border-solid border-white mr-2 bg-[#2da44e] ml-[-15px]">
+              <button>
+                <IssueReopenedIcon size={16} fill={"white"} />
+              </button>
+            </div>
+
+            <button className="flex justify-start items-center">
+              <img
+                src={timeLine.actor.avatar_url}
+                alt=""
+                className="rounded-full w-5 h-5"
+              />
+              <p className="mr-2">{timeLine.actor.login}</p>
+              <p className="flex justify-start items-center text-sm text-[#57606a]">
+                reopened this {timelineCreateTime()}
+              </p>
+            </button>
+          </div>
+        );
+      } else if (timeLine.event === "commented") {
+        return (
+          <>
+            <div
+              className={`${
+                updateComment === "UpdateComment" &&
+                updateCommentNum === timeLineIndex
+                  ? "hidden"
+                  : "flex"
+              } lg:justify-start lg:items-start xl:justify-start xl:items-start lg:relative lg:w-[106.5%] lg:left-[-50px] xl:relative xl:w-[106.5%] xl:left-[-55px]`}
+            >
+              <div className="md:hidden lg:w-[7.5%] xl:w-[7.5%]">
+                <img
+                  src={timeLine.actor.avatar_url}
+                  alt=""
+                  className="rounded-full md:w-[3%] lg:w-[60%] xl:w-[60%]"
+                />
+              </div>
+              <div className="border-[1px] border-solid border-[rgba(84,174,255,0.4)] rounded-md mb-4 md:w-full lg:w-[90%] xl:w-[90%]">
+                <div className="h-[37px] flex justify-between items-center px-4 border-b-[1px] border-solid border-[rgba(27,31,36,0.15)] bg-[#ddf4ff]">
+                  <div className="flex justify-between items-center">
+                    <p className="text-sm font-semibold mr-2">
+                      {timeLine.actor.login}
+                    </p>
+                    <p className="flex justify-between items-center text-sm text-[#57606a]">
+                      commented {timelineCreateTime()}．
+                      <button className="flex justify-between items-center">
+                        <p>edited</p>
+                        <TriangleDownIcon size={16} />
+                      </button>
+                    </p>
+                  </div>
+
+                  <div className="flex justify-between items-center">
+                    <button className="ml-1 px-[7px] border-[1px] border-solid border-[rgba(84,174,255,0.4)] text-xs rounded-[2rem] text-[#57606a] font-medium">
+                      owner
+                    </button>
+                    <div className="md:hidden lg:px-2 lg:py-1 lg:relative xl:px-2 xl:py-1 xl:relative">
+                      <button
+                        className="w-[26px] h-[26px] bg-transparent rounded-full"
+                        onClick={() => {
+                          if (TimeLineCommentemojiListClose === false) {
+                            setTimeLineCommentEmojiListClose(true);
+                          } else if (TimeLineCommentemojiListClose === true) {
+                            setTimeLineCommentEmojiListClose(false);
+                          }
+                        }}
+                      >
+                        <SmileyIcon size={16} />
+                      </button>
+                      <div className="absolute left-[-270px] top-[5px]">
+                        <ul
+                          className={`${
+                            TimeLineCommentemojiListClose ? "flex" : "hidden"
+                          } justify-start items-center my-2 mr-2 px-[2px] border-[1px] border-solid border-[#d0d7de] bg-white rounded-md hover:cursor-pointer`}
+                        >
+                          {EmojiList()}
+                        </ul>
+                      </div>
+                    </div>
+                    <div className="relative">
+                      <div
+                        className="hover:cursor-pointer"
+                        onClick={() => {
+                          setUpdateCommentNum(timeLineIndex);
+                          setIssueUpdateInputDefaultValue(
+                            issueDetailTimeline[timeLineIndex].body
+                          );
+                          if (kebabHorizontal === false) {
+                            setKebabHorizontal(true);
+                          } else if (kebabHorizontal === true) {
+                            setKebabHorizontal(false);
+                          }
+                        }}
+                      >
+                        <KebabHorizontalIcon size={16} />
+                      </div>
+
+                      <ul
+                        className={`${
+                          kebabHorizontal && timeLineIndex === updateCommentNum
+                            ? "block"
+                            : "hidden"
+                        } absolute right-0 top-[25px] w-[183px] bg-white border-[1px] border-solid border-[#d0d7de] justify-start items-center rounded-md z-20`}
+                      >
+                        <li>
+                          <p className="pl-4 pr-2 py-1 text-xs h-[29px]">
+                            Copy link
+                          </p>
+                          <p className="pl-4 pr-2 py-1 text-xs h-[29px]">
+                            Quote reply
+                          </p>
+                        </li>
+                        <div className="my-2 border-t-[1px] border-solid border-[#d0d7de]" />
+                        <li
+                          className="pl-4 pr-2 py-1 text-xs h-[29px]"
+                          onClick={() => {
+                            setUpdateComment("UpdateComment");
+                            setUpdateCommentNum(timeLineIndex);
+                            setCommentNum(timeLine.id);
+                          }}
+                        >
+                          Edit
+                        </li>
+                        <div className="my-2 border-t-[1px] border-solid border-[#d0d7de]" />
+                        <li className="pl-4 pr-2 py-1 text-xs h-[29px]">
+                          Report content
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+                <div className="text-sm px-4 py-4 text-[#24292f] bg-white">
+                  <p>{timeLine.body}</p>
+                </div>
+              </div>
+            </div>
+            <div
+              className={`${
+                updateComment === "UpdateComment" &&
+                updateCommentNum === timeLineIndex
+                  ? "block"
+                  : "hidden"
+              }`}
+            >
+              <UpdateComment
+                updateComment={updateComment}
+                setUpdateComment={setUpdateComment}
+                preview={preview}
+                setPreview={setPreview}
+                issueContainer={issueContainer}
+                setIssueContainer={setIssueContainer}
+                issueTitle={issueTitle}
+                setIssueTitle={setIssueTitle}
+                markDownBtn={markDownBtn}
+                setmarkDownBtn={setmarkDownBtn}
+                renderAssigneeData={renderAssigneeData}
+                renderLabelData={renderLabelData}
+                setTargetText={setTargetText}
+                renderIssueData={renderIssueData}
+                issueDetailData={issueDetailData}
+                setIssueDetailData={setIssueDetailData}
+                updateCommentNum={updateCommentNum}
+                setUpdateCommentNum={setUpdateCommentNum}
+                timeLineIndex={timeLineIndex}
+                settimeLineIndex={settimeLineIndex}
+                createCommentRender={createCommentRender}
+                setCreateCommentRender={setCreateCommentRender}
+                commentNum={commentNum}
+                issueUpdateInputDefaultValue={issueUpdateInputDefaultValue}
+                setIssueUpdateInputDefaultValue={
+                  setIssueUpdateInputDefaultValue
+                }
+              />
+            </div>
+          </>
+        );
+      }
+    });
+  }
+
+  if (issueDetailData === undefined) return <></>;
+  return (
+    <div className="relative lg:pl-4 lg:ml-10 md:ml-0 md:pl-0 xl:pl-4 xl:ml-10">
+      <div className="absolute w-[2px] h-full bg-[rgba(27,31,36,0.15)] md:left-4 -z-20 md:top-0 lg:left-[30px] lg:top-[-15px] xl:left-[30px] xl:top-[-15px]" />
+      {Timeline()}
+    </div>
+  );
+}
+
+export default TimeLine;

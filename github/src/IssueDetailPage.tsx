@@ -24,6 +24,7 @@ import {
 import CreateComment from "./CreateComment";
 import UpdateComment from "./UpdateComment";
 import IssueList from "./IssueList";
+import TimeLine from "./TimeLine";
 import api from "./api";
 import { string } from "prop-types";
 
@@ -48,18 +49,26 @@ function IssueDetailPage() {
   const [emojiListClose, setEmojiListClose] = useState(false);
   const [kebabHorizontal, setKebabHorizontal] = useState(false);
   const [updateComment, setUpdateComment] = useState("");
+  const [updateCommentNum, setUpdateCommentNum] = useState(-1);
   const [EditTitle, setEditTitle] = useState(false);
   const { IssueNum } = useParams();
   const [issueDetailData, setIssueDetailData]: any = useState<any>();
+  const [timeLineIndex, settimeLineIndex]: any = useState(-2);
+  const [commentNum, setCommentNum]: any = useState(0);
+
+  const [createCommentRender, setCreateCommentRender]: any = useState(true);
+  const [issueUpdateInputDefaultValue, setIssueUpdateInputDefaultValue]: any =
+    useState("");
+
+  console.log(createCommentRender);
 
   useEffect(() => {
-    async function getIssueDetailStat(IssueNum: string | undefined) {
+    async function getIssueDetailData(IssueNum: string | undefined) {
       const data = await api.getIssueData(IssueNum);
       setIssueDetailData(data);
-      console.log(issueDetailData);
     }
-    getIssueDetailStat(IssueNum);
-  }, []);
+    getIssueDetailData(IssueNum);
+  }, [createCommentRender]);
 
   useEffect(() => {
     async function getAssigneeList() {
@@ -333,7 +342,9 @@ function IssueDetailPage() {
             <div>
               <div
                 className={`${
-                  updateComment === "UpdateComment" ? "hidden" : "flex"
+                  updateComment === "UpdateComment" && updateCommentNum === -1
+                    ? "hidden"
+                    : "flex"
                 } lg:justify-start lg:items-start xl:justify-start xl:items-start`}
               >
                 <div className="md:hidden lg:w-[7.5%] xl:w-[7.5%]">
@@ -417,6 +428,7 @@ function IssueDetailPage() {
                             className="pl-4 pr-2 py-1 text-xs h-[29px]"
                             onClick={() => {
                               setUpdateComment("UpdateComment");
+                              setUpdateCommentNum(-1);
                             }}
                           >
                             Edit
@@ -430,13 +442,15 @@ function IssueDetailPage() {
                     </div>
                   </div>
                   <div className="text-sm px-4 py-4 text-[#24292f]">
-                    <p>Demo</p>
+                    <p>{issueDetailData.body}</p>
                   </div>
                 </div>
               </div>
               <div
                 className={`${
-                  updateComment === "UpdateComment" ? "block" : "hidden"
+                  updateComment === "UpdateComment" && updateCommentNum === -1
+                    ? "block"
+                    : "hidden"
                 }`}
               >
                 <UpdateComment
@@ -456,120 +470,49 @@ function IssueDetailPage() {
                   renderIssueData={renderIssueData}
                   issueDetailData={issueDetailData}
                   setIssueDetailData={setIssueDetailData}
+                  updateCommentNum={updateCommentNum}
+                  setUpdateCommentNum={setUpdateCommentNum}
+                  timeLineIndex={timeLineIndex}
+                  settimeLineIndex={settimeLineIndex}
+                  createCommentRender={createCommentRender}
+                  setCreateCommentRender={setCreateCommentRender}
+                  commentNum={commentNum}
+                  issueUpdateInputDefaultValue={issueUpdateInputDefaultValue}
+                  setIssueUpdateInputDefaultValue={
+                    setIssueUpdateInputDefaultValue
+                  }
                 />
               </div>
-              <div className="relative lg:pl-4 lg:ml-10 md:ml-0 md:pl-0 xl:pl-4 xl:ml-10">
-                <div className="absolute w-[2px] h-full bg-[rgba(27,31,36,0.15)] md:left-4 -z-20 md:top-0 lg:left-[30px] lg:top-[-15px] xl:left-[30px] xl:top-[-15px]" />
-                <div className="flex justify-start items-center py-4 ml-4">
-                  <div className="flex justify-center items-center w-8 h-8 rounded-full border-[2px] border-solid border-white mr-2 bg-[#eaeef2] ml-[-15px]">
-                    <button>
-                      <TagIcon size={16} />
-                    </button>
-                  </div>
-
-                  <button className="flex justify-start items-center">
-                    <img
-                      src={issueDetailData.user.avatar_url}
-                      alt=""
-                      className="rounded-full w-5 h-5"
-                    />
-                    <p className="mr-2">Xie-MS</p>
-                    <p className="flex justify-start items-center text-sm text-[#57606a]">
-                      added the{" "}
-                      <button className="text-[#24292f] flex justify-center items-center text-sm bg-yellow-400 px-[7px] border-[1px] border-solid border-[rgba(27,31,36,0.15)] rounded-3xl font-semibold h-[18px] mx-1">
-                        abc
-                      </button>{" "}
-                      labels 6 hours ago
-                    </p>
-                  </button>
-                </div>
-                <div className="flex justify-start items-center py-4 ml-4">
-                  <div className="flex justify-center items-center w-[40px] h-8 rounded-full border-[2px] border-solid border-white mr-2 bg-[#eaeef2] ml-[-15px] lg:w-8 xl:w-8">
-                    <button>
-                      <PersonIcon size={16} />
-                    </button>
-                  </div>
-                  <button className="flex justify-start items-center">
-                    <img
-                      src={issueDetailData.user.avatar_url}
-                      alt=""
-                      className="rounded-full w-5 h-5"
-                    />
-                    <p className="mr-2">Xie-MS</p>
-                    <p className="flex justify-start items-center text-sm text-[#57606a]">
-                      assigned{" "}
-                      <p className="text-[#24292f] mx-2 font-semibold">
-                        emil0519
-                      </p>{" "}
-                      and unassigned{" "}
-                      <p className="text-[#24292f] mx-2 font-semibold">
-                        Xie-MS
-                      </p>{" "}
-                      labels 6 hours ago
-                    </p>
-                  </button>
-                </div>
-
-                <div className="relative flex justify-start items-center py-4 ml-4">
-                  <div className="flex justify-center items-center w-8 h-8 rounded-full border-[2px] border-solid border-white mr-2 bg-[#8250df] ml-[-15px]">
-                    <button>
-                      <CheckCircleIcon size={16} fill={"white"} />
-                    </button>
-                  </div>
-                  <button className="flex justify-start items-center">
-                    <img
-                      src={issueDetailData.user.avatar_url}
-                      alt=""
-                      className="rounded-full w-5 h-5"
-                    />
-                    <p className="mr-2">Xie-MS</p>
-                    <p className="flex justify-start items-center text-sm text-[#57606a]">
-                      closed this as comppleted 6 hours ago
-                    </p>
-                  </button>
-                  <div className="absolute w-[107%] bg-[rgba(27,31,36,0.15)] h-[4px] bottom-0 left-[-33px] lg:left-[-70px] xl:left-[-70px]" />
-                </div>
-
-                <div className="flex justify-start items-center py-4 ml-4">
-                  <div className="flex justify-center items-center w-8 h-8 rounded-full border-[2px] border-solid border-white mr-2 bg-[#2da44e] ml-[-15px]">
-                    <button>
-                      <IssueReopenedIcon size={16} fill={"white"} />
-                    </button>
-                  </div>
-
-                  <button className="flex justify-start items-center">
-                    <img
-                      src={issueDetailData.user.avatar_url}
-                      alt=""
-                      className="rounded-full w-5 h-5"
-                    />
-                    <p className="mr-2">Xie-MS</p>
-                    <p className="flex justify-start items-center text-sm text-[#57606a]">
-                      reopened this 6 hours ago
-                    </p>
-                  </button>
-                </div>
-
-                <div className="relative flex justify-start items-center py-4 ml-4">
-                  <div className="flex justify-center items-center w-8 h-8 rounded-full border-[2px] border-solid border-white mr-2 bg-[#eaeef2] ml-[-15px]">
-                    <button>
-                      <SkipIcon size={16} />
-                    </button>
-                  </div>
-                  <button className="flex justify-start items-center">
-                    <img
-                      src={issueDetailData.user.avatar_url}
-                      alt=""
-                      className="rounded-full w-5 h-5"
-                    />
-                    <p className="mr-2">Xie-MS</p>
-                    <p className="flex justify-start items-center text-sm text-[#57606a]">
-                      closed this an not planned 6 hours ago
-                    </p>
-                  </button>
-                  <div className="absolute w-[107%] bg-[rgba(27,31,36,0.15)] h-[4px] bottom-0 left-[-33px] lg:left-[-70px] xl:left-[-70px]" />
-                </div>
-              </div>
+              <TimeLine
+                preview={preview}
+                setPreview={setPreview}
+                setTargetText={setTargetText}
+                issueTitle={issueTitle}
+                setIssueTitle={setIssueTitle}
+                issueContainer={issueContainer}
+                setIssueContainer={setIssueContainer}
+                markDownBtn={markDownBtn}
+                setmarkDownBtn={setmarkDownBtn}
+                renderAssigneeData={renderAssigneeData}
+                renderLabelData={renderLabelData}
+                renderIssueData={renderIssueData}
+                updateComment={updateComment}
+                setUpdateComment={setUpdateComment}
+                issueDetailData={issueDetailData}
+                setIssueDetailData={setIssueDetailData}
+                updateCommentNum={updateCommentNum}
+                setUpdateCommentNum={setUpdateCommentNum}
+                timeLineIndex={timeLineIndex}
+                settimeLineIndex={settimeLineIndex}
+                commentNum={commentNum}
+                setCommentNum={setCommentNum}
+                createCommentRender={createCommentRender}
+                setCreateCommentRender={setCreateCommentRender}
+                issueUpdateInputDefaultValue={issueUpdateInputDefaultValue}
+                setIssueUpdateInputDefaultValue={
+                  setIssueUpdateInputDefaultValue
+                }
+              />
               <CreateComment
                 updateComment={updateComment}
                 setUpdateComment={setUpdateComment}
@@ -587,6 +530,8 @@ function IssueDetailPage() {
                 renderIssueData={renderIssueData}
                 issueDetailData={issueDetailData}
                 setIssueDetailData={setIssueDetailData}
+                createCommentRender={createCommentRender}
+                setCreateCommentRender={setCreateCommentRender}
               />
             </div>
           </div>

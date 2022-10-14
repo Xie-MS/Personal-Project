@@ -213,21 +213,47 @@ const api = {
     return await response.json();
   },
 
-  async Pagination(per_page: number | string, paging: number | string) {
+  async getIssueTimeline(IssueNum: string | undefined) {
     const response = await fetch(
-      `${this.hostname}/issues?per_page=${per_page}&page=${paging}`
+      `${this.hostname}/issues/${IssueNum}/timeline`,
+      {
+        headers: new Headers({
+          "Content-type": "application/json",
+          Accept: "application/vnd.github+json",
+          Authorization: `token ${jwtToken}`,
+        }),
+      }
     );
     return await response.json();
   },
-  async filiter(userName: string) {
+  async CreateComment(data: any, IssueNum: string | number | undefined) {
     const response = await fetch(
-      `${this.hostname}/issues?assignee=${userName}`
+      `${this.hostname}/issues/${IssueNum}/comments`,
+      {
+        body: JSON.stringify(data),
+        headers: new Headers({
+          Accept: "application/vnd.github+json",
+          Authorization: `token ${jwtToken}`,
+        }),
+        method: "POST",
+      }
     );
+    console.log(response);
     return await response.json();
   },
 
-  async getTimeLine() {
-    const response = await fetch(`${this.hostname}/issues/1/timeline`);
+  async UpdateComment(data: any, commentNum: string | number | undefined) {
+    const response = await fetch(
+      `${this.hostname}/issues/comments/${commentNum}`,
+      {
+        body: JSON.stringify(data),
+        headers: new Headers({
+          Accept: "application/vnd.github+json",
+          Authorization: `token ${jwtToken}`,
+        }),
+        method: "PATCH",
+      }
+    );
     return await response.json();
   },
 };

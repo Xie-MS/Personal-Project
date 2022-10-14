@@ -1,4 +1,5 @@
 import React, { Dispatch, SetStateAction } from "react";
+import { useParams } from "react-router-dom";
 import { marked } from "marked";
 import ReactMarkdown from "react-markdown";
 import ReactDom from "react-dom";
@@ -32,6 +33,7 @@ import {
 } from "@primer/octicons-react";
 
 import UserImg from "../src/img/userImg.png";
+import api from "./api";
 
 function CreateComment({
   updateComment,
@@ -50,6 +52,8 @@ function CreateComment({
   renderIssueData,
   issueDetailData,
   setIssueDetailData,
+  createCommentRender,
+  setCreateCommentRender,
 }: {
   updateComment: String;
   setUpdateComment: any;
@@ -67,6 +71,8 @@ function CreateComment({
   renderIssueData: any;
   issueDetailData: any;
   setIssueDetailData: any;
+  createCommentRender: Boolean;
+  setCreateCommentRender: any;
 }) {
   const Imgfile = useRef<HTMLInputElement | null | any>(null);
   const [imgURL, setImgURL]: any = useState("");
@@ -75,6 +81,19 @@ function CreateComment({
   const [tagsName, setTagsName]: any = useState("");
   const [issueNum, setIssueNum]: any = useState(-1);
   const [closeIssue, setCloseIssue]: any = useState(false);
+  const { IssueNum } = useParams();
+
+  async function CreateIssueComment() {
+    const data = await api.CreateComment(
+      {
+        owner: "Xie-MS",
+        repo: "Personal-Project",
+        body: issueContainer,
+      },
+      IssueNum
+    );
+    setCreateCommentRender((prev: boolean) => !prev);
+  }
 
   function PreviewText() {
     if (issueContainer === "" || issueContainer === "Leave a comment") {
@@ -520,6 +539,7 @@ function CreateComment({
                     className="relative md:leading-snug md:h-[82px] px-2 py-2 border-[1px] md:border-b-[0px] border-solid border-gray-400 bg-slate-100 rounded-md w-full lg:focus:bg-white lg:border-b-[1px] border-t-[0px] border-r-[0px] border-l-[0px] lg:border-dashed lg:h-[96px] lg:leading-snug lg:rounded-b-[0px] xl:focus:bg-white xl:border-dashed xl:h-[96px] xl:leading-snug xl:rounded-b-[0px]"
                     onChange={(e) => {
                       setIssueContainer(e.target.value);
+                      console.log(issueContainer);
                     }}
                   />
                 </div>
@@ -649,7 +669,14 @@ function CreateComment({
                     </li>
                   </ul>
                 </div>
-                <button className="px-4 py-[5px] text-sm bg-[#94d3a2] border-[1px] border-solid border-gray-200 rounded-lg text-white">
+                <button
+                  className={`${
+                    issueContainer !== "" ? "bg-[#2da44e]" : "bg-[#94d3a2]"
+                  } px-4 py-[5px] text-sm  border-[1px] border-solid border-gray-200 rounded-lg text-white`}
+                  onClick={() => {
+                    CreateIssueComment();
+                  }}
+                >
                   Comment
                 </button>
               </div>

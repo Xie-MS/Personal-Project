@@ -32,6 +32,7 @@ import {
 } from "@primer/octicons-react";
 
 import UserImg from "../src/img/userImg.png";
+import api from "./api";
 
 function CreateComment({
   updateComment,
@@ -50,6 +51,15 @@ function CreateComment({
   renderIssueData,
   issueDetailData,
   setIssueDetailData,
+  updateCommentNum,
+  setUpdateCommentNum,
+  timeLineIndex,
+  settimeLineIndex,
+  createCommentRender,
+  setCreateCommentRender,
+  commentNum,
+  issueUpdateInputDefaultValue,
+  setIssueUpdateInputDefaultValue,
 }: {
   updateComment: String;
   setUpdateComment: any;
@@ -67,6 +77,15 @@ function CreateComment({
   renderIssueData: any;
   issueDetailData: any;
   setIssueDetailData: any;
+  updateCommentNum: number;
+  setUpdateCommentNum: any;
+  timeLineIndex: number;
+  settimeLineIndex: any;
+  createCommentRender: boolean;
+  setCreateCommentRender: any;
+  commentNum: string | number | undefined;
+  issueUpdateInputDefaultValue: any;
+  setIssueUpdateInputDefaultValue: any;
 }) {
   const Imgfile = useRef<HTMLInputElement | null | any>(null);
   const [imgURL, setImgURL]: any = useState("");
@@ -74,8 +93,6 @@ function CreateComment({
   const [issueClose, setIssueClose]: any = useState(true);
   const [tagsName, setTagsName]: any = useState("");
   const [issueNum, setIssueNum]: any = useState(-1);
-  const [issueUpdateInputDefaultValue, setIssueUpdateInputDefaultValue]: any =
-    useState("");
 
   if (
     (issueUpdateInputDefaultValue === "" &&
@@ -84,6 +101,18 @@ function CreateComment({
       issueDetailData.body !== undefined)
   ) {
     setIssueUpdateInputDefaultValue(issueDetailData.body);
+  }
+
+  async function UpdateComment() {
+    const data = await api.CreateComment(
+      {
+        owner: "Xie-MS",
+        repo: "Personal-Project",
+        body: issueUpdateInputDefaultValue,
+      },
+      commentNum
+    );
+    setCreateCommentRender((prev: boolean) => !prev);
   }
 
   function PreviewText() {
@@ -170,7 +199,6 @@ function CreateComment({
       tagsName === "" &&
       issueNum === -1
     ) {
-      console.log(imgURL);
       return <img src={imgURL} alt="" />;
     } else if (
       issueUpdateInputDefaultValue !== "" &&
@@ -564,10 +592,11 @@ function CreateComment({
                   <textarea
                     cols="30"
                     rows="10"
-                    value={issueUpdateInputDefaultValue}
+                    defaultValue={issueUpdateInputDefaultValue}
                     className="relative md:leading-snug md:h-[82px] px-2 py-2 border-[1px] md:border-b-[0px] border-solid border-gray-400 bg-slate-100 rounded-md w-full lg:focus:bg-white lg:border-b-[1px] border-t-[0px] border-r-[0px] border-l-[0px] lg:border-dashed lg:h-[96px] lg:leading-snug lg:rounded-b-[0px] xl:focus:bg-white xl:border-dashed xl:h-[96px] xl:leading-snug xl:rounded-b-[0px]"
                     onChange={(e) => {
                       setIssueUpdateInputDefaultValue(e.target.value);
+                      console.log(issueUpdateInputDefaultValue);
                     }}
                   />
                 </div>
@@ -648,17 +677,6 @@ function CreateComment({
               </div>
             </div>
           </div>
-        </div>
-        <div className="mt-4 mb-2 text-xs">
-          <p className="flex justify-start items-center">
-            <div className="mr-1">
-              <InfoIcon size={16} className="fill-[#57606a]" />
-            </div>
-            Remember, contributions to this repository should follow our{" "}
-            <a href="#" className="text-[#0969da]">
-              GitHub Community Guidelines.
-            </a>
-          </p>
         </div>
       </div>
     </div>
