@@ -482,6 +482,8 @@ function IssueDetailPage() {
                   setIssueUpdateInputDefaultValue={
                     setIssueUpdateInputDefaultValue
                   }
+                  kebabHorizontal={kebabHorizontal}
+                  setKebabHorizontal={setKebabHorizontal}
                 />
               </div>
               <TimeLine

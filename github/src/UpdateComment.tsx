@@ -60,6 +60,8 @@ function CreateComment({
   commentNum,
   issueUpdateInputDefaultValue,
   setIssueUpdateInputDefaultValue,
+  kebabHorizontal,
+  setKebabHorizontal,
 }: {
   updateComment: String;
   setUpdateComment: any;
@@ -86,6 +88,8 @@ function CreateComment({
   commentNum: string | number | undefined;
   issueUpdateInputDefaultValue: any;
   setIssueUpdateInputDefaultValue: any;
+  kebabHorizontal: any;
+  setKebabHorizontal: any;
 }) {
   const Imgfile = useRef<HTMLInputElement | null | any>(null);
   const [imgURL, setImgURL]: any = useState("");
@@ -106,6 +110,7 @@ function CreateComment({
     );
     setCreateCommentRender((prev: boolean) => !prev);
     setUpdateComment("");
+    setKebabHorizontal(false);
   }
 
   function PreviewText() {

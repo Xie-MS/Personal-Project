@@ -97,6 +97,19 @@ function TimeLine({
     });
   }
 
+  async function DeleteComment() {
+    const data = await api.DeleteComment(
+      {
+        owner: "Xie-MS",
+        repo: "Personal-Project",
+        comment_id: commentNum,
+      },
+      commentNum
+    );
+    setCreateCommentRender((prev: boolean) => !prev);
+    setKebabHorizontal(false);
+  }
+
   function Timeline() {
     if (issueDetailTimeline === undefined) return <></>;
     return issueDetailTimeline.map((timeLine: any, timeLineIndex: number) => {
@@ -372,6 +385,7 @@ function TimeLine({
                         className="hover:cursor-pointer"
                         onClick={() => {
                           setUpdateCommentNum(timeLineIndex);
+                          setCommentNum(timeLine.id);
                           setIssueUpdateInputDefaultValue(
                             issueDetailTimeline[timeLineIndex].body
                           );
@@ -390,7 +404,7 @@ function TimeLine({
                           kebabHorizontal && timeLineIndex === updateCommentNum
                             ? "block"
                             : "hidden"
-                        } absolute right-0 top-[25px] w-[183px] bg-white border-[1px] border-solid border-[#d0d7de] justify-start items-center rounded-md z-20`}
+                        } absolute right-0 top-[25px] w-[183px] py-1 bg-white border-[1px] border-solid border-[#d0d7de] justify-start items-center rounded-md z-20`}
                       >
                         <li>
                           <p className="pl-4 pr-2 py-1 text-xs h-[29px]">
@@ -399,6 +413,9 @@ function TimeLine({
                           <p className="pl-4 pr-2 py-1 text-xs h-[29px]">
                             Quote reply
                           </p>
+                          <p className="pl-4 pr-2 py-1 text-xs h-[29px]">
+                            Reference in new issue
+                          </p>
                         </li>
                         <div className="my-2 border-t-[1px] border-solid border-[#d0d7de]" />
                         <li
@@ -406,10 +423,20 @@ function TimeLine({
                           onClick={() => {
                             setUpdateComment("UpdateComment");
                             setUpdateCommentNum(timeLineIndex);
-                            setCommentNum(timeLine.id);
                           }}
                         >
                           Edit
+                        </li>
+                        <li className="pl-4 pr-2 py-1 text-xs h-[29px]">
+                          Hide
+                        </li>
+                        <li
+                          className="pl-4 pr-2 py-1 text-xs h-[29px] text-[#cf222e]"
+                          onClick={() => {
+                            DeleteComment();
+                          }}
+                        >
+                          Delete
                         </li>
                         <div className="my-2 border-t-[1px] border-solid border-[#d0d7de]" />
                         <li className="pl-4 pr-2 py-1 text-xs h-[29px]">
@@ -460,6 +487,8 @@ function TimeLine({
                 setIssueUpdateInputDefaultValue={
                   setIssueUpdateInputDefaultValue
                 }
+                kebabHorizontal={kebabHorizontal}
+                setKebabHorizontal={setKebabHorizontal}
               />
             </div>
           </>
