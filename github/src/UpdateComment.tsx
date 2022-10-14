@@ -94,25 +94,18 @@ function CreateComment({
   const [tagsName, setTagsName]: any = useState("");
   const [issueNum, setIssueNum]: any = useState(-1);
 
-  if (
-    (issueUpdateInputDefaultValue === "" &&
-      issueDetailData.body !== undefined) ||
-    (issueUpdateInputDefaultValue === "Leave a comment" &&
-      issueDetailData.body !== undefined)
-  ) {
-    setIssueUpdateInputDefaultValue(issueDetailData.body);
-  }
-
   async function UpdateComment() {
-    const data = await api.CreateComment(
+    const data = await api.UpdateComment(
       {
         owner: "Xie-MS",
         repo: "Personal-Project",
+        comment_id: commentNum,
         body: issueUpdateInputDefaultValue,
       },
       commentNum
     );
     setCreateCommentRender((prev: boolean) => !prev);
+    setUpdateComment("");
   }
 
   function PreviewText() {
@@ -592,7 +585,7 @@ function CreateComment({
                   <textarea
                     cols="30"
                     rows="10"
-                    defaultValue={issueUpdateInputDefaultValue}
+                    value={issueUpdateInputDefaultValue}
                     className="relative md:leading-snug md:h-[82px] px-2 py-2 border-[1px] md:border-b-[0px] border-solid border-gray-400 bg-slate-100 rounded-md w-full lg:focus:bg-white lg:border-b-[1px] border-t-[0px] border-r-[0px] border-l-[0px] lg:border-dashed lg:h-[96px] lg:leading-snug lg:rounded-b-[0px] xl:focus:bg-white xl:border-dashed xl:h-[96px] xl:leading-snug xl:rounded-b-[0px]"
                     onChange={(e) => {
                       setIssueUpdateInputDefaultValue(e.target.value);
@@ -671,7 +664,12 @@ function CreateComment({
                 >
                   Cancel
                 </button>
-                <button className="px-4 py-[5px] border-[1px] border-solid border-gray-200 text-white bg-[#2da44e] text-sm font-medium rounded-md">
+                <button
+                  className="px-4 py-[5px] border-[1px] border-solid border-gray-200 text-white bg-[#2da44e] text-sm font-medium rounded-md"
+                  onClick={() => {
+                    UpdateComment();
+                  }}
+                >
                   Update New Issue
                 </button>
               </div>

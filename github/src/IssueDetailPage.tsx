@@ -59,6 +59,7 @@ function IssueDetailPage() {
   const [createCommentRender, setCreateCommentRender]: any = useState(true);
   const [issueUpdateInputDefaultValue, setIssueUpdateInputDefaultValue]: any =
     useState("");
+  console.log("test", issueUpdateInputDefaultValue);
 
   console.log(createCommentRender);
 

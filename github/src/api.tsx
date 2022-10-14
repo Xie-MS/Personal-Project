@@ -254,6 +254,7 @@ const api = {
         method: "PATCH",
       }
     );
+    console.log(response);
     return await response.json();
   },
 };
