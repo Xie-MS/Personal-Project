@@ -10,6 +10,7 @@ import {
   PersonIcon,
   CheckCircleIcon,
   IssueReopenedIcon,
+  PencilIcon,
   SkipIcon,
 } from "@primer/octicons-react";
 
@@ -113,6 +114,8 @@ function TimeLine({
     setCreateCommentRender((prev: boolean) => !prev);
     setKebabHorizontal(false);
   }
+
+  console.log(issueDetailTimeline);
 
   function Timeline() {
     if (issueDetailTimeline === undefined) return <></>;
@@ -302,12 +305,37 @@ function TimeLine({
             <div className="absolute w-[107%] bg-[rgba(27,31,36,0.15)] h-[4px] bottom-0 left-[-33px] lg:left-[-70px] xl:left-[-70px]" />
           </div>
         );
-      } else if (timeLine.event === "reopened") {
+      } else if (
+        timeLine.event === "closed" &&
+        timeLine.state_reason === "not_planned"
+      ) {
+        return (
+          <div className="relative flex justify-start items-center py-4 ml-4">
+            <div className="flex justify-center items-center w-8 h-8 rounded-full border-[2px] border-solid border-white mr-2 bg-[#eaeef2] ml-[-15px]">
+              <button>
+                <SkipIcon size={16} />
+              </button>
+            </div>
+            <button className="flex justify-start items-center">
+              <img
+                src={timeLine.actor.avatar_url}
+                alt=""
+                className="rounded-full w-5 h-5"
+              />
+              <p className="mr-2">{timeLine.actor.login}</p>
+              <p className="flex justify-start items-center text-sm text-[#57606a]">
+                closed this an not planned {timelineCreateTime()}
+              </p>
+            </button>
+            <div className="absolute w-[107%] bg-[rgba(27,31,36,0.15)] h-[4px] bottom-0 left-[-33px] lg:left-[-70px] xl:left-[-70px]" />
+          </div>
+        );
+      } else if (timeLine.event === "renamed") {
         return (
           <div className="flex justify-start items-center py-4 ml-4">
-            <div className="flex justify-center items-center w-8 h-8 rounded-full border-[2px] border-solid border-white mr-2 bg-[#2da44e] ml-[-15px]">
+            <div className="flex justify-center items-center w-8 h-8 rounded-full border-[2px] border-solid border-white mr-2 bg-[#eaeef2] ml-[-15px]">
               <button>
-                <IssueReopenedIcon size={16} fill={"white"} />
+                <PencilIcon size={16} />
               </button>
             </div>
 
@@ -318,8 +346,13 @@ function TimeLine({
                 className="rounded-full w-5 h-5"
               />
               <p className="mr-2">{timeLine.actor.login}</p>
+              <p className="flex justify-start items-center text-sm text-[#57606a] mr-1">
+                changed the this{" "}
+                <p className="line-through mx-1">{timeLine.rename.from}</p>{" "}
+                {timeLine.rename.to}
+              </p>
               <p className="flex justify-start items-center text-sm text-[#57606a]">
-                reopened this {timelineCreateTime()}
+                {timelineCreateTime()}
               </p>
             </button>
           </div>

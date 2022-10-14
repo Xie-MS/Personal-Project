@@ -57,6 +57,8 @@ function IssueDetailPage() {
   const [timeLineIndex, settimeLineIndex]: any = useState(-2);
   const [commentNum, setCommentNum]: any = useState(0);
 
+  const [assigneeLogin, setAssigneeLogin]: any = useState([]);
+
   const [createCommentRender, setCreateCommentRender]: any = useState(true);
   const [issueUpdateInputDefaultValue, setIssueUpdateInputDefaultValue]: any =
     useState("");
@@ -69,6 +71,9 @@ function IssueDetailPage() {
     async function getIssueDetailData(IssueNum: string | undefined) {
       const data = await api.getIssueData(IssueNum);
       setIssueDetailData(data);
+      if (data.assignees !== null) {
+        setAssigneeLogin(data.assignees);
+      }
     }
     getIssueDetailData(IssueNum);
   }, [createCommentRender]);
@@ -111,9 +116,53 @@ function IssueDetailPage() {
       );
     });
   }
+  console.log(assigneeSelectData);
 
   function AssigneeSelect() {
-    if (assigneeSelectData.length !== 0) {
+    if (
+      assigneeSelectData.length <= issueDetailData.assignees.length &&
+      issueDetailData.assignees.length !== 0
+    ) {
+      return assigneeLogin.map((assigneeData: any, assigneeIndex: number) => {
+        if (
+          assigneeSelectData.length <= issueDetailData.assignees.length &&
+          assigneeSelectData
+            .toString()
+            .toLowerCase()
+            .includes(
+              assigneeLogin[assigneeIndex].login.toString().toLowerCase()
+            ) === false
+        ) {
+          console.log("Aaa");
+          setAssigneeSelectData([
+            ...assigneeSelectData,
+            assigneeLogin[assigneeIndex].login,
+          ]);
+        }
+
+        return (
+          <button
+            className={`${
+              assigneeSelectData.includes(assigneeLogin[assigneeIndex].login)
+                ? "flex"
+                : "hidden"
+            } justify-start items-center mt-2`}
+          >
+            <img
+              src={`${assigneeLogin[assigneeIndex].avatar_url}`}
+              alt=""
+              className="md:w-[5%] rounded-full mr-1 lg:w-[9%] xl:w-[9%]"
+            />
+            <p className="text-xs font-semibold">
+              {assigneeLogin[assigneeIndex].login}
+            </p>
+          </button>
+        );
+      });
+    } else if (
+      assigneeSelectData.length <= renderAssigneeData.length &&
+      assigneeSelectData.length > issueDetailData.assignees.length
+    ) {
       return renderAssigneeData.map(
         (_item: any, assigneeSelectIndex: number) => {
           return (
@@ -335,9 +384,10 @@ function IssueDetailPage() {
                   className={`${
                     EditTitle ? "block" : "hidden"
                   } px-3 py-[5px] md:w-full bg:[#f6f8fa} text-md border-[1px] border-solid border-[#d0d7de] rounded-[6px] lg:mr-4 xl:mr-4 lg:w-full xl:w-full`}
-                  value={issueDetailData.title}
+                  defaultValue={issueDetailData.title}
                   onChange={(e) => {
                     setIssueTitle(e.target.value);
+                    console.log(issueDetailData);
                   }}
                 />
 
@@ -646,6 +696,7 @@ function IssueDetailPage() {
                         setItemList(true);
                         setListClose(true);
                         setTargetText(targetAssigneeSpan.current?.outerText);
+                        // setAssigneeSelectData([]);
                       }}
                     >
                       <GearIcon size={16} />
@@ -667,6 +718,8 @@ function IssueDetailPage() {
                     setLabelSelectData={setLabelSelectData}
                     issueDetailData={issueDetailData}
                     setIssueDetailData={setIssueDetailData}
+                    assigneeLogin={assigneeLogin}
+                    setAssigneeLogin={setAssigneeLogin}
                   />
                 </div>
                 <div

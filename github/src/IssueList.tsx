@@ -22,6 +22,8 @@ function AssigneePage({
   targetLabelSpan,
   issueDetailData,
   setIssueDetailData,
+  assigneeLogin,
+  setAssigneeLogin,
 }: {
   setListClose: any;
   targetText: string;
@@ -38,24 +40,14 @@ function AssigneePage({
   targetLabelSpan: any;
   issueDetailData: any;
   setIssueDetailData: any;
+  assigneeLogin: any;
+  setAssigneeLogin: any;
 }) {
   const [assigneeInputName, setAssigneeInputName]: any = useState("");
   const [labelsInputSelect, setLabelsInputSelect]: any = useState("");
 
   const AssigneeName = useRef<HTMLParagraphElement | null>(null);
   const LabelName = useRef<HTMLParagraphElement | null>(null);
-
-  if (issueDetailData.length === 0) return <></>;
-
-  if (assigneeSelectData.length === 0 && issueDetailData.assignee !== null) {
-    setAssigneeSelectData(issueDetailData.assignee.login);
-  }
-
-  if (labelSelectData.length === 0 && issueDetailData.labels.length !== 0) {
-    return issueDetailData.labels.map((item: any) => {
-      setLabelSelectData([...item.name, item.name]);
-    });
-  }
 
   function AssigneeInput(e: any) {
     if (
@@ -124,6 +116,10 @@ function AssigneePage({
                   renderAssigneeData[ItemIndex].login
                 );
                 assigneeSelectData.splice(assigneeSelectNum, 1);
+                const assigneeLoginNum = assigneeLogin.indexOf(
+                  renderAssigneeData[ItemIndex].login
+                );
+                assigneeLogin.splice(assigneeLoginNum, 1);
               } else if (
                 assigneeSelectData.includes(
                   renderAssigneeData[ItemIndex].login
@@ -131,6 +127,10 @@ function AssigneePage({
               ) {
                 setAssigneeSelectData([
                   ...assigneeSelectData,
+                  renderAssigneeData[ItemIndex].login,
+                ]);
+                setAssigneeLogin([
+                  ...assigneeLogin,
                   renderAssigneeData[ItemIndex].login,
                 ]);
               }
