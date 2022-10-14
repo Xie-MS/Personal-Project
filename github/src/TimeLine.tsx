@@ -45,6 +45,8 @@ function TimeLine({
   setCreateCommentRender,
   issueUpdateInputDefaultValue,
   setIssueUpdateInputDefaultValue,
+  issueUpdateContainer,
+  setIssueUpdateContainer,
 }: {
   preview: Boolean;
   setPreview: any;
@@ -72,6 +74,8 @@ function TimeLine({
   setCreateCommentRender: any;
   issueUpdateInputDefaultValue: any;
   setIssueUpdateInputDefaultValue: any;
+  issueUpdateContainer: any;
+  setIssueUpdateContainer: any;
 }) {
   const [TimeLineCommentemojiListClose, setTimeLineCommentEmojiListClose] =
     useState(false);
@@ -112,8 +116,6 @@ function TimeLine({
 
   function Timeline() {
     if (issueDetailTimeline === undefined) return <></>;
-
-    console.log(issueDetailTimeline);
     return issueDetailTimeline.map((timeLine: any, timeLineIndex: number) => {
       function timelineCreateTime() {
         const NewTime = new Date();
@@ -491,6 +493,8 @@ function TimeLine({
                 }
                 kebabHorizontal={kebabHorizontal}
                 setKebabHorizontal={setKebabHorizontal}
+                issueUpdateContainer={issueUpdateContainer}
+                setIssueUpdateContainer={setIssueUpdateContainer}
               />
             </div>
           </>

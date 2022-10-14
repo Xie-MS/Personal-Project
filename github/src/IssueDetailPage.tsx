@@ -37,6 +37,7 @@ function IssueDetailPage() {
   const [targetText, setTargetText]: any = useState("");
   const [issueTitle, setIssueTitle]: any = useState("");
   const [issueContainer, setIssueContainer]: any = useState("Leave a comment");
+  const [issueUpdateContainer, setIssueUpdateContainer]: any = useState("");
   const [markDownBtn, setmarkDownBtn]: any = useState(true);
   const [renderAssigneeData, setRenderAssigneeData]: any = useState([]);
   const [renderLabelData, setRenderLabelData]: any = useState([]);
@@ -87,6 +88,19 @@ function IssueDetailPage() {
     }
     getAssigneeList();
   }, [targetText]);
+
+  async function UpdateTitle() {
+    const data = await api.UpdateIssue(
+      {
+        owner: "Xie-MS",
+        repo: "Personal-Project",
+        issue_number: IssueNum,
+        title: issueTitle,
+      },
+      IssueNum
+    );
+    setCreateCommentRender((prev: boolean) => !prev);
+  }
 
   function EmojiList() {
     return Emoji.map((item: any, EmojiIndex: number) => {
@@ -213,7 +227,6 @@ function IssueDetailPage() {
   }
 
   function issueState() {
-    console.log(issueDetailData);
     if (
       (issueDetailData.state === "open" &&
         issueDetailData.state_reason === "reopened") ||
@@ -322,7 +335,10 @@ function IssueDetailPage() {
                   className={`${
                     EditTitle ? "block" : "hidden"
                   } px-3 py-[5px] md:w-full bg:[#f6f8fa} text-md border-[1px] border-solid border-[#d0d7de] rounded-[6px] lg:mr-4 xl:mr-4 lg:w-full xl:w-full`}
-                  defaultValue={issueDetailData.title}
+                  value={issueDetailData.title}
+                  onChange={(e) => {
+                    setIssueTitle(e.target.value);
+                  }}
                 />
 
                 <div
@@ -330,7 +346,13 @@ function IssueDetailPage() {
                     EditTitle ? "flex" : "hidden"
                   } items-center justify-start lg:justify-end xl:justify-end my-2`}
                 >
-                  <button className="px-4 py-[5px] mr-2 border-[1px] border-solid border-[rgba(27,31,36,0.15)] flex justify-center items-center bg-[#f6f8fa] text-[#24292f] rounded-md">
+                  <button
+                    className="px-4 py-[5px] mr-2 border-[1px] border-solid border-[rgba(27,31,36,0.15)] flex justify-center items-center bg-[#f6f8fa] text-[#24292f] rounded-md"
+                    onClick={() => {
+                      UpdateTitle();
+                      setEditTitle(false);
+                    }}
+                  >
                     <p className="text-xs">Save</p>
                   </button>
                   <p
@@ -355,7 +377,6 @@ function IssueDetailPage() {
                   #{issueDetailData.number}
                 </p>
               </div>
-
               {issueState()}
             </div>
           </div>
@@ -458,6 +479,7 @@ function IssueDetailPage() {
                         <div
                           className="hover:cursor-pointer"
                           onClick={() => {
+                            setIssueUpdateContainer(issueDetailData.body);
                             if (kebabHorizontal === false) {
                               setKebabHorizontal(true);
                             } else if (kebabHorizontal === true) {
@@ -541,6 +563,8 @@ function IssueDetailPage() {
                   }
                   kebabHorizontal={kebabHorizontal}
                   setKebabHorizontal={setKebabHorizontal}
+                  issueUpdateContainer={issueUpdateContainer}
+                  setIssueUpdateContainer={setIssueUpdateContainer}
                 />
               </div>
               <TimeLine
@@ -572,6 +596,8 @@ function IssueDetailPage() {
                 setIssueUpdateInputDefaultValue={
                   setIssueUpdateInputDefaultValue
                 }
+                issueUpdateContainer={issueUpdateContainer}
+                setIssueUpdateContainer={setIssueUpdateContainer}
               />
               <CreateComment
                 updateComment={updateComment}

@@ -3,6 +3,7 @@ import { marked } from "marked";
 import ReactMarkdown from "react-markdown";
 import ReactDom from "react-dom";
 import remarkGfm from "remark-gfm";
+import { useParams } from "react-router-dom";
 
 import { useState, useRef } from "react";
 
@@ -62,6 +63,8 @@ function CreateComment({
   setIssueUpdateInputDefaultValue,
   kebabHorizontal,
   setKebabHorizontal,
+  issueUpdateContainer,
+  setIssueUpdateContainer,
 }: {
   updateComment: String;
   setUpdateComment: any;
@@ -90,6 +93,8 @@ function CreateComment({
   setIssueUpdateInputDefaultValue: any;
   kebabHorizontal: any;
   setKebabHorizontal: any;
+  issueUpdateContainer: any;
+  setIssueUpdateContainer: any;
 }) {
   const Imgfile = useRef<HTMLInputElement | null | any>(null);
   const [imgURL, setImgURL]: any = useState("");
@@ -97,6 +102,7 @@ function CreateComment({
   const [issueClose, setIssueClose]: any = useState(true);
   const [tagsName, setTagsName]: any = useState("");
   const [issueNum, setIssueNum]: any = useState(-1);
+  const { IssueNum } = useParams();
 
   async function UpdateComment() {
     const data = await api.UpdateComment(
@@ -107,6 +113,21 @@ function CreateComment({
         body: issueUpdateInputDefaultValue,
       },
       commentNum
+    );
+    setCreateCommentRender((prev: boolean) => !prev);
+    setUpdateComment("");
+    setKebabHorizontal(false);
+  }
+
+  async function UpdateContainer() {
+    const data = await api.UpdateIssue(
+      {
+        owner: "Xie-MS",
+        repo: "Personal-Project",
+        issue_number: IssueNum,
+        body: issueUpdateContainer,
+      },
+      IssueNum
     );
     setCreateCommentRender((prev: boolean) => !prev);
     setUpdateComment("");
@@ -590,11 +611,18 @@ function CreateComment({
                   <textarea
                     cols="30"
                     rows="10"
-                    value={issueUpdateInputDefaultValue}
+                    value={`${
+                      updateCommentNum !== -1
+                        ? `${issueUpdateInputDefaultValue}`
+                        : `${issueUpdateContainer}`
+                    }`}
                     className="relative md:leading-snug md:h-[82px] px-2 py-2 border-[1px] md:border-b-[0px] border-solid border-gray-400 bg-slate-100 rounded-md w-full lg:focus:bg-white lg:border-b-[1px] border-t-[0px] border-r-[0px] border-l-[0px] lg:border-dashed lg:h-[96px] lg:leading-snug lg:rounded-b-[0px] xl:focus:bg-white xl:border-dashed xl:h-[96px] xl:leading-snug xl:rounded-b-[0px]"
                     onChange={(e) => {
-                      setIssueUpdateInputDefaultValue(e.target.value);
-                      console.log(issueUpdateInputDefaultValue);
+                      if (updateCommentNum !== -1) {
+                        setIssueUpdateInputDefaultValue(e.target.value);
+                      } else if (updateCommentNum === -1) {
+                        setIssueUpdateContainer(e.target.value);
+                      }
                     }}
                   />
                 </div>
@@ -672,7 +700,11 @@ function CreateComment({
                 <button
                   className="px-4 py-[5px] border-[1px] border-solid border-gray-200 text-white bg-[#2da44e] text-sm font-medium rounded-md"
                   onClick={() => {
-                    UpdateComment();
+                    if (updateCommentNum !== -1) {
+                      UpdateComment();
+                    } else if (updateCommentNum === -1) {
+                      UpdateContainer();
+                    }
                   }}
                 >
                   Update New Issue
