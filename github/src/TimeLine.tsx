@@ -115,8 +115,6 @@ function TimeLine({
     setKebabHorizontal(false);
   }
 
-  console.log(issueDetailTimeline);
-
   function Timeline() {
     if (issueDetailTimeline === undefined) return <></>;
     return issueDetailTimeline.map((timeLine: any, timeLineIndex: number) => {

@@ -254,7 +254,7 @@ function AssigneePage({
       });
     }
   }
-  console.log(targetText, targetAssigneeSpan.current?.outerText);
+
   return (
     <div
       className={`${

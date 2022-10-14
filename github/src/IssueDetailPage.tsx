@@ -58,6 +58,7 @@ function IssueDetailPage() {
   const [commentNum, setCommentNum]: any = useState(0);
 
   const [assigneeLogin, setAssigneeLogin]: any = useState([]);
+  const [labelName, setLabelName]: any = useState([]);
 
   const [createCommentRender, setCreateCommentRender]: any = useState(true);
   const [issueUpdateInputDefaultValue, setIssueUpdateInputDefaultValue]: any =
@@ -73,6 +74,9 @@ function IssueDetailPage() {
       setIssueDetailData(data);
       if (data.assignees !== null) {
         setAssigneeLogin(data.assignees);
+      }
+      if (data.labels.length !== 0) {
+        setLabelName(data.labels);
       }
     }
     getIssueDetailData(IssueNum);
@@ -116,7 +120,6 @@ function IssueDetailPage() {
       );
     });
   }
-  console.log(assigneeSelectData);
 
   function AssigneeSelect() {
     if (
@@ -196,7 +199,33 @@ function IssueDetailPage() {
   }
 
   function LabelseSelect() {
-    if (labelSelectData.length !== 0) {
+    if (
+      labelSelectData.length <= issueDetailData.labels.length &&
+      issueDetailData.labels.length !== 0
+    ) {
+      return labelName.map((labelData: any, labelIndex: number) => {
+        if (
+          labelSelectData.length <= issueDetailData.labels.length &&
+          labelSelectData.includes(labelName[labelIndex].login) === false
+        ) {
+          setLabelSelectData([...labelSelectData, labelName[labelIndex].name]);
+        }
+
+        return (
+          <button
+            style={{
+              backgroundColor: `#${labelName[labelIndex].color}`,
+            }}
+            className={`flex text-xs font-semibold justify-center items-center rounded-xl border-[1px] border-solid border-gray-50 mr-1 mb-1 px-[7px] h-[20px]`}
+          >
+            {labelName[labelIndex].name}
+          </button>
+        );
+      });
+    } else if (
+      labelSelectData.length <= renderLabelData.length &&
+      labelSelectData.length > issueDetailData.labels.length
+    ) {
       return renderLabelData.map((_item: any, labelSelectIndex: number) => {
         return (
           <button
@@ -213,7 +242,27 @@ function IssueDetailPage() {
           </button>
         );
       });
-    } else if (labelSelectData.length === 0) {
+    }
+
+    // if (labelSelectData.length !== 0) {
+    //   return renderLabelData.map((_item: any, labelSelectIndex: number) => {
+    //     return (
+    //       <button
+    //         style={{
+    //           backgroundColor: `#${renderLabelData[labelSelectIndex].color}`,
+    //         }}
+    //         className={`${
+    //           labelSelectData.includes(renderLabelData[labelSelectIndex].name)
+    //             ? "flex"
+    //             : "hidden"
+    //         } text-xs font-semibold justify-center items-center rounded-xl border-[1px] border-solid border-gray-50 mr-1 mb-1 px-[7px] h-[20px]`}
+    //       >
+    //         {renderLabelData[labelSelectIndex].name}
+    //       </button>
+    //     );
+    //   });
+    // }
+    else if (labelSelectData.length === 0) {
       return <p className="text-xs justify-start items-center">Noneyet</p>;
     }
   }
