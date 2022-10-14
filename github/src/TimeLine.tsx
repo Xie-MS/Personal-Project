@@ -112,6 +112,8 @@ function TimeLine({
 
   function Timeline() {
     if (issueDetailTimeline === undefined) return <></>;
+
+    console.log(issueDetailTimeline);
     return issueDetailTimeline.map((timeLine: any, timeLineIndex: number) => {
       function timelineCreateTime() {
         const NewTime = new Date();
@@ -249,8 +251,8 @@ function TimeLine({
           </div>
         );
       } else if (
-        timeLine.event === "closed" &&
-        timeLine.state_reason === "reopened"
+        (timeLine.event === "closed" && timeLine.state_reason === "reopened") ||
+        (timeLine.event === "closed" && timeLine.state_reason === null)
       ) {
         return (
           <div className="relative flex justify-start items-center py-4 ml-4">

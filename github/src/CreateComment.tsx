@@ -30,6 +30,7 @@ import {
   SkipIcon,
   CheckIcon,
   IssueOpenedIcon,
+  IssueReopenedIcon,
 } from "@primer/octicons-react";
 
 import UserImg from "../src/img/userImg.png";
@@ -54,6 +55,10 @@ function CreateComment({
   setIssueDetailData,
   createCommentRender,
   setCreateCommentRender,
+  issueDetailState,
+  setIssueDetailState,
+  issueDetailStateReanson,
+  setIssueDetailStateReanson,
 }: {
   updateComment: String;
   setUpdateComment: any;
@@ -73,6 +78,10 @@ function CreateComment({
   setIssueDetailData: any;
   createCommentRender: Boolean;
   setCreateCommentRender: any;
+  issueDetailState: any;
+  setIssueDetailState: any;
+  issueDetailStateReanson: any;
+  setIssueDetailStateReanson: any;
 }) {
   const Imgfile = useRef<HTMLInputElement | null | any>(null);
   const [imgURL, setImgURL]: any = useState("");
@@ -89,6 +98,20 @@ function CreateComment({
         owner: "Xie-MS",
         repo: "Personal-Project",
         body: issueContainer,
+      },
+      IssueNum
+    );
+    setCreateCommentRender((prev: boolean) => !prev);
+  }
+
+  async function UpdateUssueState() {
+    const data = await api.UpdateIssue(
+      {
+        owner: "Xie-MS",
+        repo: "Personal-Project",
+        state: issueDetailState,
+        state_reason: issueDetailStateReanson,
+        issue_number: IssueNum,
       },
       IssueNum
     );
@@ -607,14 +630,44 @@ function CreateComment({
               </div>
               <div className="flex justify-end items-center mt-2">
                 <div className="relative flex justify-start items-center bg-[#f6f8fa] mr-2">
-                  <button className="flex justify-between items-center px-4 py-[5px] border-t-[1px] border-b-[1px] border-l-[1px] border-solid border-gray-200 rounded-l-lg">
+                  <button
+                    className={`${
+                      issueDetailData.state === "open" ? "flex" : "hidden"
+                    } justify-between items-center px-4 py-[5px] border-t-[1px] border-b-[1px] border-l-[1px] border-solid border-gray-200 rounded-l-lg`}
+                    onClick={() => {
+                      setIssueDetailState("closed");
+                      setIssueDetailStateReanson("completed");
+                      UpdateUssueState();
+                    }}
+                  >
                     <CheckCircleIcon
                       size={16}
                       fill={"purple"}
                       className="mr-1"
                     />
+
                     <p className="text-sm">Close issue</p>
                   </button>
+
+                  <button
+                    className={`${
+                      issueDetailData.state === "closed" ? "flex" : "hidden"
+                    } justify-between items-center px-4 py-[5px] border-t-[1px] border-b-[1px] border-l-[1px] border-solid border-gray-200 rounded-l-lg`}
+                    onClick={() => {
+                      setIssueDetailState("open");
+                      setIssueDetailStateReanson("reopened");
+                      UpdateUssueState();
+                    }}
+                  >
+                    <IssueReopenedIcon
+                      size={16}
+                      fill={"green"}
+                      className="mr-1"
+                    />
+
+                    <p className="text-sm">Reopen</p>
+                  </button>
+
                   <div
                     className="px-[10px] py-[5px] border-[1px] border-solid border-gray-200 rounded-lg h-[32px] w-[40px] hover:cursor-pointer"
                     onClick={() => {
@@ -632,12 +685,36 @@ function CreateComment({
                       closeIssue ? "block" : "hidden"
                     } absolute top-[38px] right-0 bg-white border-[1px] border-solid border-gray-200 rounded-r-lg`}
                   >
-                    <li className="relative flex justify-start items-start py-2 pr-2 pl-[30px] w-[298px] h-[55px] border-b-[1px] border-solid border-gray-200">
-                      <div className="absolute left-[8px]">
+                    <li
+                      className={`${
+                        issueDetailData.state !== "open"
+                          ? "items-center"
+                          : "items-start"
+                      } relative flex items-start py-2 pr-2 pl-[30px] w-[298px] h-[55px] border-b-[1px] border-solid border-gray-200`}
+                    >
+                      <div
+                        className={`${
+                          (issueDetailData.state === "open" &&
+                            issueDetailData.state_reason === "reopened") ||
+                          (issueDetailData.state === "closed" &&
+                            issueDetailData.state_reason === "completed")
+                            ? "block"
+                            : "hidden"
+                        } absolute left-[8px]`}
+                      >
                         <CheckIcon size={16} className="mr-1" />
                       </div>
 
-                      <div>
+                      <div
+                        className={`${
+                          issueDetailData.state === "open" ? "block" : "hidden"
+                        }`}
+                        onClick={() => {
+                          setIssueDetailState("closed");
+                          setIssueDetailStateReanson("completed");
+                          UpdateUssueState();
+                        }}
+                      >
                         <div className="flex justify-start items-center">
                           <CheckCircleIcon
                             size={16}
@@ -650,19 +727,64 @@ function CreateComment({
                         </div>
                         <p className="text-xs">Done, closed, fixed, resolved</p>
                       </div>
+
+                      <div
+                        className={`${
+                          issueDetailData.state !== "open" ? "block" : "hidden"
+                        }`}
+                        onClick={() => {
+                          setIssueDetailState("open");
+                          setIssueDetailStateReanson("reopened");
+                          UpdateUssueState();
+                        }}
+                      >
+                        <div className="flex justify-start items-center">
+                          <IssueReopenedIcon
+                            size={16}
+                            fill={"green"}
+                            className="mr-1"
+                          />
+                          <p className="text-sm font-semibold">Reopen issue</p>
+                        </div>
+                      </div>
                     </li>
-                    <li className="flex justify-start items-start py-2 pr-2 pl-[30px] w-[298px] h-[55px]">
-                      <div className="absolute left-[8px]">
+                    <li
+                      className={`${
+                        issueDetailData.state !== "open"
+                          ? "items-center"
+                          : "items-start"
+                      } flex justify-start  py-2 pr-2 pl-[30px] w-[298px] h-[55px]`}
+                    >
+                      <div
+                        className={`${
+                          issueDetailData.state === "closed" &&
+                          issueDetailData.state_reason === "not_planned"
+                            ? "block"
+                            : "hidden"
+                        } absolute left-[8px]`}
+                      >
                         <CheckIcon size={16} className="mr-1" />
                       </div>
-                      <div>
+                      <div
+                        onClick={() => {
+                          setIssueDetailState("closed");
+                          setIssueDetailStateReanson("not_planned");
+                          UpdateUssueState();
+                        }}
+                      >
                         <div className="flex justify-start items-center">
                           <SkipIcon size={16} fill={"gray"} className="mr-1" />
                           <p className="text-sm font-semibold">
                             Close as not planned
                           </p>
                         </div>
-                        <p className="text-xs">
+                        <p
+                          className={`${
+                            issueDetailData.state === "open"
+                              ? "block"
+                              : "hidden"
+                          } text-xs`}
+                        >
                           Won't fix, can't repo, duplocate, state
                         </p>
                       </div>

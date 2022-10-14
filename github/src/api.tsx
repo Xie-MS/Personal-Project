@@ -273,6 +273,19 @@ const api = {
     console.log(response);
     return await response;
   },
+
+  async UpdateIssue(data: any, IssueNum: string | number | undefined) {
+    const response = await fetch(`${this.hostname}/issues/${IssueNum}`, {
+      body: JSON.stringify(data),
+      headers: new Headers({
+        Accept: "application/vnd.github+json",
+        Authorization: `token ${jwtToken}`,
+      }),
+      method: "PATCH",
+    });
+    console.log(response);
+    return await response.json();
+  },
 };
 
 export default api;

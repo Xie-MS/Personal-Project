@@ -59,9 +59,10 @@ function IssueDetailPage() {
   const [createCommentRender, setCreateCommentRender]: any = useState(true);
   const [issueUpdateInputDefaultValue, setIssueUpdateInputDefaultValue]: any =
     useState("");
-  console.log("test", issueUpdateInputDefaultValue);
 
-  console.log(createCommentRender);
+  const [issueDetailState, setIssueDetailState]: any = useState("");
+  const [issueDetailStateReanson, setIssueDetailStateReanson]: any =
+    useState("");
 
   useEffect(() => {
     async function getIssueDetailData(IssueNum: string | undefined) {
@@ -74,7 +75,6 @@ function IssueDetailPage() {
   useEffect(() => {
     async function getAssigneeList() {
       if (targetText === targetAssigneeSpan.current?.outerText) {
-        console.log("AAA");
         const data = await api.getIssuesAssignee();
         setRenderAssigneeData(data);
       } else if (targetText === targetLabelSpan.current?.outerText) {
@@ -212,7 +212,78 @@ function IssueDetailPage() {
     window.location.assign(`/IssuePage`);
   }
 
+  function issueState() {
+    console.log(issueDetailData);
+    if (
+      (issueDetailData.state === "open" &&
+        issueDetailData.state_reason === "reopened") ||
+      (issueDetailData.state === "open" &&
+        issueDetailData.state_reason === null)
+    ) {
+      return (
+        <div className="flex items-center justify-start pb-2 mb-4">
+          <button className="mr-2 py-[5px] px-3 border-[1px] border-solid border-[rgba(27,31,36,0.15)] bg-[#2da44e] text-white font-medium rounded-3xl">
+            <IssueOpenedIcon size={16} className="mr-1" />
+            {issueDetailData.state}
+          </button>
+          <div className="mb-2 flex items-center justify-start">
+            <a href="#" className="text-[#57606a] font-semibold">
+              {issueDetailData.user.login}
+            </a>
+            <p className="text-[#57606a] text-sm ml-1 flex justify-start items-center">
+              opened this issue {CreateTime()} · {issueDetailData.comments}{" "}
+              comments
+            </p>
+          </div>
+        </div>
+      );
+    } else if (
+      issueDetailData.state === "closed" &&
+      issueDetailData.state_reason === "not_planned"
+    ) {
+      return (
+        <div className="flex items-center justify-start pb-2 mb-4">
+          <button className="mr-2 py-[5px] px-3 border-[1px] border-solid border-[rgba(27,31,36,0.15)] bg-[#6e7781] text-white font-medium rounded-3xl">
+            <SkipIcon size={16} className="mr-1" />
+            {issueDetailData.state}
+          </button>
+          <div className="mb-2 flex items-center justify-start">
+            <a href="#" className="text-[#57606a] font-semibold">
+              {issueDetailData.user.login}
+            </a>
+            <p className="text-[#57606a] text-sm ml-1 flex justify-start items-center">
+              opened this issue {CreateTime()} · {issueDetailData.comments}{" "}
+              comments
+            </p>
+          </div>
+        </div>
+      );
+    } else if (
+      issueDetailData.state === "closed" &&
+      issueDetailData.state_reason === "completed"
+    ) {
+      return (
+        <div className="flex items-center justify-start mb-4">
+          <button className="mr-2 py-[5px] px-3 border-[1px] border-solid border-[rgba(27,31,36,0.15)] bg-[#8250df] text-white font-medium rounded-3xl">
+            <CheckCircleIcon size={16} className="mr-1" />
+            {issueDetailData.state}
+          </button>
+          <div className="mb-2 flex items-center justify-start">
+            <a href="#" className="text-[#57606a] font-semibold">
+              {issueDetailData.user.login}
+            </a>
+            <p className="text-[#57606a] text-sm ml-1 flex justify-start items-center">
+              opened this issue {CreateTime()} · {issueDetailData.comments}{" "}
+              comments
+            </p>
+          </div>
+        </div>
+      );
+    }
+  }
+
   if (issueDetailData === undefined) return <></>;
+
   return (
     <div className="mt-6 px-4 xl:flex xl:justify-center xl:items-center">
       <div>
@@ -277,7 +348,7 @@ function IssueDetailPage() {
                   EditTitle ? "hidden" : "flex"
                 } items-center justify-start mb-2`}
               >
-                <p className="text-[26px] font-normal">
+                <p className="md:text-[26px] font-normal lg:text-[32px] xl:text-[32px]">
                   {issueDetailData.title}
                 </p>
                 <p className="text-[#57606a] font-light text-[26px] ml-2">
@@ -285,21 +356,7 @@ function IssueDetailPage() {
                 </p>
               </div>
 
-              <div className="flex items-center justify-start pb-2 mb-4">
-                <button className="mr-2 py-[5px] px-3 border-[1px] border-solid border-[rgba(27,31,36,0.15)] bg-[#2da44e] text-white font-medium rounded-3xl">
-                  <IssueOpenedIcon size={16} />
-                  open
-                </button>
-                <div className="mb-2 flex items-center justify-start">
-                  <a href="#" className="text-[#57606a] font-semibold">
-                    {issueDetailData.user.login}
-                  </a>
-                  <p className="text-[#57606a] text-sm ml-1 flex justify-start items-center">
-                    opened this issue {CreateTime()} ·{" "}
-                    {issueDetailData.comments} comments
-                  </p>
-                </div>
-              </div>
+              {issueState()}
             </div>
           </div>
         </div>
@@ -535,6 +592,10 @@ function IssueDetailPage() {
                 setIssueDetailData={setIssueDetailData}
                 createCommentRender={createCommentRender}
                 setCreateCommentRender={setCreateCommentRender}
+                issueDetailState={issueDetailState}
+                setIssueDetailState={setIssueDetailState}
+                issueDetailStateReanson={issueDetailStateReanson}
+                setIssueDetailStateReanson={setIssueDetailStateReanson}
               />
             </div>
           </div>
