@@ -27,6 +27,8 @@ function AssigneePage({
   setAssigneeLogin,
   createCommentRender,
   setCreateCommentRender,
+  labelName,
+  setLabelName,
 }: {
   setListClose: any;
   targetText: string;
@@ -47,13 +49,17 @@ function AssigneePage({
   setAssigneeLogin: any;
   createCommentRender: any;
   setCreateCommentRender: any;
+  labelName: any;
+  setLabelName: any;
 }) {
   const [assigneeInputName, setAssigneeInputName]: any = useState("");
   const [labelsInputSelect, setLabelsInputSelect]: any = useState("");
 
   const AssigneeName = useRef<HTMLParagraphElement | null>(null);
-  const LabelName = useRef<HTMLParagraphElement | null>(null);
+  const LabelSelectName = useRef<HTMLParagraphElement | null>(null);
   const { IssueNum } = useParams();
+
+  console.log(issueDetailData.reactions);
 
   async function UpdateAssignees() {
     const data = await api.UpdateIssue(
@@ -62,6 +68,19 @@ function AssigneePage({
         repo: "Personal-Project",
         issue_number: IssueNum,
         assignees: assigneeSelectData,
+      },
+      IssueNum
+    );
+    setCreateCommentRender((prev: boolean) => !prev);
+  }
+
+  async function UpdateLabels() {
+    const data = await api.UpdateIssue(
+      {
+        owner: "Xie-MS",
+        repo: "Personal-Project",
+        issue_number: IssueNum,
+        labels: labelSelectData,
       },
       IssueNum
     );
@@ -82,12 +101,20 @@ function AssigneePage({
 
   function AssigneeInputClick(e: any) {
     if (e.key === "Enter") {
-      if (assigneeSelectData.includes(e.target.value)) {
+      if (
+        assigneeSelectData.includes(e.target.value) ||
+        assigneeLogin.includes(e.target.value)
+      ) {
         const assigneeSelectNum = assigneeSelectData.indexOf(e.target.value);
         assigneeSelectData.splice(assigneeSelectNum, 1);
+
+        const assigneeLoginNum = assigneeLogin.indexOf(e.target.value);
+        assigneeLogin.splice(assigneeLoginNum, 1);
+
         UpdateAssignees();
       } else {
         setAssigneeSelectData([...assigneeSelectData, e.target.value]);
+        setAssigneeLogin([...assigneeLogin, e.target.value]);
         UpdateAssignees();
       }
     }
@@ -95,18 +122,32 @@ function AssigneePage({
 
   function LabelInputClick(e: any) {
     if (e.key === "Enter") {
-      if (labelSelectData.includes(e.target.value)) {
+      if (
+        labelSelectData.includes(e.target.value) ||
+        labelName.includes(e.target.value)
+      ) {
+        console.log("input filter");
         const labelSelectNum = labelSelectData.indexOf(e.target.value);
         labelSelectData.splice(labelSelectNum, 1);
+
+        const labelNameNum = labelName.indexOf(e.target.value);
+        labelName.splice(labelNameNum, 1);
+
+        UpdateLabels();
       } else {
+        console.log("input send");
         setLabelSelectData([...labelSelectData, e.target.value]);
+
+        setLabelName([...labelName, e.target.value]);
+
+        UpdateLabels();
       }
     }
   }
 
   function LabelInput(e: any) {
     if (
-      LabelName.current?.outerText
+      LabelSelectName.current?.outerText
         .toLowerCase()
         .includes(e.target.value.toLowerCase())
     ) {
@@ -137,6 +178,7 @@ function AssigneePage({
                   renderAssigneeData[ItemIndex].login
                 );
                 assigneeSelectData.splice(assigneeSelectNum, 1);
+
                 const assigneeLoginNum = assigneeLogin.indexOf(
                   renderAssigneeData[ItemIndex].login
                 );
@@ -199,19 +241,35 @@ function AssigneePage({
                 : "hidden"
             } xl:py-2 px-2 border-t-[1px] border-solid border-gray-300 text-xs justify-start items-center md:pl-5 md:pr-2 md:py-4 xl:pl-6 lg:pl-6 lg:relative xl:relative`}
             onClick={() => {
-              if (labelSelectData.includes(renderLabelData[ItemIndex].name)) {
+              if (
+                labelSelectData.includes(renderLabelData[ItemIndex].name) ||
+                labelName.includes(renderLabelData[ItemIndex].name)
+              ) {
+                console.log("click filter");
                 const labelSelectNum = labelSelectData.indexOf(
                   renderLabelData[ItemIndex].name
                 );
                 labelSelectData.splice(labelSelectNum, 1);
+
+                const labelNameNum = labelName.indexOf(
+                  renderLabelData[ItemIndex].name
+                );
+                labelName.splice(labelNameNum, 1);
+
+                UpdateLabels();
               } else if (
                 labelSelectData.includes(renderLabelData[ItemIndex].name) ===
-                false
+                  false ||
+                labelName.includes(renderLabelData[ItemIndex].name) === false
               ) {
+                console.log("click send");
+
                 setLabelSelectData([
                   ...labelSelectData,
                   renderLabelData[ItemIndex].name,
                 ]);
+                setLabelName([...labelName, renderLabelData[ItemIndex].name]);
+                UpdateLabels();
               }
             }}
           >
@@ -232,7 +290,10 @@ function AssigneePage({
                   }}
                   className="xl:w-[14px] h-[14px] rounded-full mr-2 mt-[2px]"
                 />
-                <p className="xl:mr-2 font-semibold xl:text-sm" ref={LabelName}>
+                <p
+                  className="xl:mr-2 font-semibold xl:text-sm"
+                  ref={LabelSelectName}
+                >
                   {renderLabelData[ItemIndex].name}
                 </p>
               </div>

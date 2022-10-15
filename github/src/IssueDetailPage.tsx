@@ -27,6 +27,7 @@ import IssueList from "./IssueList";
 import TimeLine from "./TimeLine";
 import api from "./api";
 import { string } from "prop-types";
+import e from "express";
 
 const Emoji = ["👍", "👎", "😄", "🎉", "😕", "❤", "🚀", "👀"];
 
@@ -68,10 +69,15 @@ function IssueDetailPage() {
   const [issueDetailStateReanson, setIssueDetailStateReanson]: any =
     useState("");
 
+  const [emojiDate, setEmojiData]: any = useState([]);
+  const [emojiTotal, setEmojiTotal]: any = useState(0);
+
   useEffect(() => {
     async function getIssueDetailData(IssueNum: string | undefined) {
       const data = await api.getIssueData(IssueNum);
       setIssueDetailData(data);
+      setEmojiData(data.reactions);
+      setEmojiTotal(data.reactions.total_count);
       if (data.assignees !== null) {
         setAssigneeLogin(data.assignees);
       }
@@ -120,6 +126,78 @@ function IssueDetailPage() {
       );
     });
   }
+
+  function EmojiIcon() {
+    return (
+      <div className="mb-4 ml-4 flex justify-start items-center">
+        <button
+          className={`${
+            emojiDate["+1"] !== 0 ? "flex" : "hidden"
+          } h-[24px] w-[40.476px] px-1 mr-2 border-[1px] border-solid border-[#d0d7de] rounded-[100px] bg-white text-xs justify-start items-center`}
+        >
+          👍<p className="mx-1 ml-[2px]">{emojiDate["+1"]}</p>
+        </button>
+
+        <button
+          className={`${
+            emojiDate["-1"] !== 0 ? "flex" : "hidden"
+          } h-[24px] w-[40.476px] px-1 mr-2 border-[1px] border-solid border-[#d0d7de] rounded-[100px] bg-white text-xs justify-start items-center`}
+        >
+          👎<p className="mx-1 ml-[2px]">{emojiDate["-1"]}</p>
+        </button>
+
+        <button
+          className={`${
+            emojiDate["confused"] !== 0 ? "flex" : "hidden"
+          } h-[24px] w-[40.476px] px-1 mr-2 border-[1px] border-solid border-[#d0d7de] rounded-[100px] bg-white text-xs justify-start items-center`}
+        >
+          🎉<p className="mx-1 ml-[2px]">{emojiDate["confused"]}</p>
+        </button>
+
+        <button
+          className={`${
+            emojiDate["eyes"] !== 0 ? "flex" : "hidden"
+          } h-[24px] w-[40.476px] px-1 mr-2 border-[1px] border-solid border-[#d0d7de] rounded-[100px] bg-white text-xs justify-start items-center`}
+        >
+          👀<p className="mx-1 ml-[2px]">{emojiDate["eyes"]}</p>
+        </button>
+
+        <button
+          className={`${
+            emojiDate["heart"] !== 0 ? "flex" : "hidden"
+          } h-[24px] w-[40.476px] px-1 mr-2 border-[1px] border-solid border-[#d0d7de] rounded-[100px] bg-white text-xs justify-start items-center`}
+        >
+          ❤<p className="mx-1 ml-[2px]">{emojiDate["heart"]}</p>
+        </button>
+
+        <button
+          className={`${
+            emojiDate["hooray"] !== 0 ? "flex" : "hidden"
+          } h-[24px] w-[40.476px] px-1 mr-2 border-[1px] border-solid border-[#d0d7de] rounded-[100px] bg-white text-xs justify-start items-center`}
+        >
+          😕<p className="mx-1 ml-[2px]">{emojiDate["hooray"]}</p>
+        </button>
+
+        <button
+          className={`${
+            emojiDate["laugh"] !== 0 ? "flex" : "hidden"
+          } h-[24px] w-[40.476px] px-1 mr-2 border-[1px] border-solid border-[#d0d7de] rounded-[100px] bg-white text-xs justify-start items-center`}
+        >
+          😄<p className="mx-1 ml-[2px]">{emojiDate["laugh"]}</p>
+        </button>
+
+        <button
+          className={`${
+            emojiDate["rocket"] !== 0 ? "flex" : "hidden"
+          } h-[24px] w-[40.476px] px-1 mr-2 border-[1px] border-solid border-[#d0d7de] rounded-[100px] bg-white text-xs justify-start items-center`}
+        >
+          🚀<p className="mx-1 ml-[2px]">{emojiDate["rocket"]}</p>
+        </button>
+      </div>
+    );
+  }
+
+  console.log(emojiDate["+1"]);
 
   function AssigneeSelect() {
     if (
@@ -206,7 +284,7 @@ function IssueDetailPage() {
       return labelName.map((labelData: any, labelIndex: number) => {
         if (
           labelSelectData.length <= issueDetailData.labels.length &&
-          labelSelectData.includes(labelName[labelIndex].login) === false
+          labelSelectData.includes(labelName[labelIndex].name) === false
         ) {
           setLabelSelectData([...labelSelectData, labelName[labelIndex].name]);
         }
@@ -216,7 +294,11 @@ function IssueDetailPage() {
             style={{
               backgroundColor: `#${labelName[labelIndex].color}`,
             }}
-            className={`flex text-xs font-semibold justify-center items-center rounded-xl border-[1px] border-solid border-gray-50 mr-1 mb-1 px-[7px] h-[20px]`}
+            className={`${
+              labelSelectData.includes(labelName[labelIndex].name)
+                ? "flex"
+                : "hidden"
+            } text-xs font-semibold justify-center items-center rounded-xl border-[1px] border-solid border-gray-50 mr-1 mb-1 px-[7px] h-[20px]`}
           >
             {labelName[labelIndex].name}
           </button>
@@ -242,27 +324,7 @@ function IssueDetailPage() {
           </button>
         );
       });
-    }
-
-    // if (labelSelectData.length !== 0) {
-    //   return renderLabelData.map((_item: any, labelSelectIndex: number) => {
-    //     return (
-    //       <button
-    //         style={{
-    //           backgroundColor: `#${renderLabelData[labelSelectIndex].color}`,
-    //         }}
-    //         className={`${
-    //           labelSelectData.includes(renderLabelData[labelSelectIndex].name)
-    //             ? "flex"
-    //             : "hidden"
-    //         } text-xs font-semibold justify-center items-center rounded-xl border-[1px] border-solid border-gray-50 mr-1 mb-1 px-[7px] h-[20px]`}
-    //       >
-    //         {renderLabelData[labelSelectIndex].name}
-    //       </button>
-    //     );
-    //   });
-    // }
-    else if (labelSelectData.length === 0) {
+    } else if (labelSelectData.length === 0) {
       return <p className="text-xs justify-start items-center">Noneyet</p>;
     }
   }
@@ -622,6 +684,7 @@ function IssueDetailPage() {
                   <div className="text-sm px-4 py-4 text-[#24292f]">
                     <p>{issueDetailData.body}</p>
                   </div>
+                  {EmojiIcon()}
                 </div>
               </div>
               <div
@@ -770,6 +833,8 @@ function IssueDetailPage() {
                     setAssigneeLogin={setAssigneeLogin}
                     createCommentRender={createCommentRender}
                     setCreateCommentRender={setCreateCommentRender}
+                    labelName={labelName}
+                    setLabelName={setLabelName}
                   />
                 </div>
                 <div
