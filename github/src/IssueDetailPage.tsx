@@ -70,14 +70,12 @@ function IssueDetailPage() {
     useState("");
 
   const [emojiDate, setEmojiData]: any = useState([]);
-  const [emojiTotal, setEmojiTotal]: any = useState(0);
 
   useEffect(() => {
     async function getIssueDetailData(IssueNum: string | undefined) {
       const data = await api.getIssueData(IssueNum);
       setIssueDetailData(data);
       setEmojiData(data.reactions);
-      setEmojiTotal(data.reactions.total_count);
       if (data.assignees !== null) {
         setAssigneeLogin(data.assignees);
       }
@@ -196,8 +194,6 @@ function IssueDetailPage() {
       </div>
     );
   }
-
-  console.log(emojiDate["+1"]);
 
   function AssigneeSelect() {
     if (
@@ -458,7 +454,7 @@ function IssueDetailPage() {
 
   return (
     <div className="mt-6 px-4 xl:flex xl:justify-center xl:items-center">
-      <div>
+      <div className="md:w-full ">
         <div className="md:mb-4 lg:block lg:justify-between lg:items-baseline lg:border-b-[1px] lg:border-solid lg:border-[#d0d7de] lg:mb-4 xl:justify-between xl:items-baseline xl:border-b-[1px] xl:border-solid lxl:border-[#d0d7de] xl:mb-4">
           <div className="md:block lg:flex lg:items-center lg:justify-between xl:flex xl:items-center xl:justify-between">
             <div className="lg:flex xl:flex items-center justify-between mb-4 lg:order-2 xl:order-2">
@@ -759,6 +755,7 @@ function IssueDetailPage() {
                 }
                 issueUpdateContainer={issueUpdateContainer}
                 setIssueUpdateContainer={setIssueUpdateContainer}
+                emojiDate={emojiDate}
               />
               <CreateComment
                 updateComment={updateComment}

@@ -48,6 +48,7 @@ function TimeLine({
   setIssueUpdateInputDefaultValue,
   issueUpdateContainer,
   setIssueUpdateContainer,
+  emojiDate,
 }: {
   preview: Boolean;
   setPreview: any;
@@ -77,6 +78,7 @@ function TimeLine({
   setIssueUpdateInputDefaultValue: any;
   issueUpdateContainer: any;
   setIssueUpdateContainer: any;
+  emojiDate: any;
 }) {
   const [TimeLineCommentemojiListClose, setTimeLineCommentEmojiListClose] =
     useState(false);
@@ -101,6 +103,8 @@ function TimeLine({
       );
     });
   }
+
+  console.log(issueDetailTimeline);
 
   async function DeleteComment() {
     const data = await api.DeleteComment(
@@ -356,6 +360,85 @@ function TimeLine({
           </div>
         );
       } else if (timeLine.event === "commented") {
+        function EmojiIcon() {
+          return (
+            <div className="mb-4 ml-4 flex justify-start items-center">
+              <button
+                className={`${
+                  timeLine.reactions["+1"] !== 0 ? "flex" : "hidden"
+                } h-[24px] w-[40.476px] px-1 mr-2 border-[1px] border-solid border-[#d0d7de] rounded-[100px] bg-white text-xs justify-start items-center`}
+              >
+                👍
+                <p className="mx-1 ml-[2px]">{timeLine.reactions["+1"]}</p>
+              </button>
+
+              <button
+                className={`${
+                  timeLine.reactions["-1"] !== 0 ? "flex" : "hidden"
+                } h-[24px] w-[40.476px] px-1 mr-2 border-[1px] border-solid border-[#d0d7de] rounded-[100px] bg-white text-xs justify-start items-center`}
+              >
+                👎
+                <p className="mx-1 ml-[2px]">{timeLine.reactions["-1"]}</p>
+              </button>
+
+              <button
+                className={`${
+                  timeLine.reactions["confused"] !== 0 ? "flex" : "hidden"
+                } h-[24px] w-[40.476px] px-1 mr-2 border-[1px] border-solid border-[#d0d7de] rounded-[100px] bg-white text-xs justify-start items-center`}
+              >
+                🎉
+                <p className="mx-1 ml-[2px]">
+                  {timeLine.reactions["confused"]}
+                </p>
+              </button>
+
+              <button
+                className={`${
+                  timeLine.reactions["eyes"] !== 0 ? "flex" : "hidden"
+                } h-[24px] w-[40.476px] px-1 mr-2 border-[1px] border-solid border-[#d0d7de] rounded-[100px] bg-white text-xs justify-start items-center`}
+              >
+                👀
+                <p className="mx-1 ml-[2px]">{timeLine.reactions["eyes"]}</p>
+              </button>
+
+              <button
+                className={`${
+                  timeLine.reactions["heart"] !== 0 ? "flex" : "hidden"
+                } h-[24px] w-[40.476px] px-1 mr-2 border-[1px] border-solid border-[#d0d7de] rounded-[100px] bg-white text-xs justify-start items-center`}
+              >
+                ❤<p className="mx-1 ml-[2px]">{timeLine.reactions["heart"]}</p>
+              </button>
+
+              <button
+                className={`${
+                  timeLine.reactions["hooray"] !== 0 ? "flex" : "hidden"
+                } h-[24px] w-[40.476px] px-1 mr-2 border-[1px] border-solid border-[#d0d7de] rounded-[100px] bg-white text-xs justify-start items-center`}
+              >
+                😕
+                <p className="mx-1 ml-[2px]">{timeLine.reactions["hooray"]}</p>
+              </button>
+
+              <button
+                className={`${
+                  timeLine.reactions["laugh"] !== 0 ? "flex" : "hidden"
+                } h-[24px] w-[40.476px] px-1 mr-2 border-[1px] border-solid border-[#d0d7de] rounded-[100px] bg-white text-xs justify-start items-center`}
+              >
+                😄
+                <p className="mx-1 ml-[2px]">{timeLine.reactions["laugh"]}</p>
+              </button>
+
+              <button
+                className={`${
+                  timeLine.reactions["rocket"] !== 0 ? "flex" : "hidden"
+                } h-[24px] w-[40.476px] px-1 mr-2 border-[1px] border-solid border-[#d0d7de] rounded-[100px] bg-white text-xs justify-start items-center`}
+              >
+                🚀
+                <p className="mx-1 ml-[2px]">{timeLine.reactions["rocket"]}</p>
+              </button>
+            </div>
+          );
+        }
+
         return (
           <>
             <div
@@ -364,7 +447,7 @@ function TimeLine({
                 updateCommentNum === timeLineIndex
                   ? "hidden"
                   : "flex"
-              } lg:justify-start lg:items-start xl:justify-start xl:items-start lg:relative lg:w-[106.5%] lg:left-[-50px] xl:relative xl:w-[106.5%] xl:left-[-55px]`}
+              } lg:justify-start lg:items-start xl:justify-start xl:items-start lg:relative md:w-full md:left-0 lg:w-[106.5%] lg:left-[-50px] xl:relative xl:w-[106.5%] xl:left-[-55px] pt-4 `}
             >
               <div className="md:hidden lg:w-[7.5%] xl:w-[7.5%]">
                 <img
@@ -373,7 +456,7 @@ function TimeLine({
                   className="rounded-full md:w-[3%] lg:w-[60%] xl:w-[60%]"
                 />
               </div>
-              <div className="border-[1px] border-solid border-[rgba(84,174,255,0.4)] rounded-md mb-4 md:w-full lg:w-[90%] xl:w-[90%]">
+              <div className="bg-white border-[1px] border-solid border-[rgba(84,174,255,0.4)] rounded-md mb-4 md:w-full lg:w-[90%] xl:w-[90%]">
                 <div className="h-[37px] flex justify-between items-center px-4 border-b-[1px] border-solid border-[rgba(27,31,36,0.15)] bg-[#ddf4ff]">
                   <div className="flex justify-between items-center">
                     <p className="text-sm font-semibold mr-2">
@@ -484,6 +567,7 @@ function TimeLine({
                 <div className="text-sm px-4 py-4 text-[#24292f] bg-white">
                   <p>{timeLine.body}</p>
                 </div>
+                {EmojiIcon()}
               </div>
             </div>
             <div
