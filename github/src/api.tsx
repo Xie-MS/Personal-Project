@@ -1,13 +1,25 @@
-//import username
-
-let jwtToken: string;
-function getProfile() {
-  jwtToken = JSON.parse(window.localStorage.getItem("userToken") as string);
-}
-getProfile();
+let jwtToken = JSON.parse(window.localStorage.getItem("userToken") as string);
+let jwtName = JSON.parse(window.localStorage.getItem("userName") as string);
+let jwtRepo = JSON.parse(
+  window.localStorage.getItem("userChooseRepo") as string
+);
 
 const api = {
-  hostname: `https://api.github.com/repos/Xie-Ms/Personal-Project`,
+  hostname: `https://api.github.com/repos/${jwtName}/${jwtRepo}`,
+  async getRepo() {
+    const response = await fetch(
+      `https://api.github.com/users/${jwtName}/repos`,
+      {
+        headers: new Headers({
+          "Content-type": "application/json",
+          Accept: "application/vnd.github+json",
+          Authorization: `token ${jwtToken}`,
+        }),
+      }
+    );
+    return await response.json();
+  },
+
   async getLabels() {
     const response = await fetch(`${this.hostname}/labels`, {
       headers: new Headers({

@@ -789,14 +789,11 @@ function LabelManagement() {
       const data = await api.getLabels();
       setLablels(data);
       setLabelsDataTotal(data.length);
-      console.log(data, LabelsData);
       if (LabelsData.length !== 1) {
         setLablels(LabelsData);
         setLabelsDataTotal(LabelsData.length);
-        console.log(data, labels, LabelsData);
       } else if (LabelsData.length === 1 && LabelsData[0].name === undefined) {
         setLablels(data);
-        console.log(data);
         setLabelsDataTotal(data.length);
       } else if (LabelsData.length === 1 && LabelsData[0].name !== undefined) {
         setLablels(data);
@@ -827,7 +824,6 @@ function LabelManagement() {
         setLabelBtnColor([labels][0][index].color);
         setUpdateChangeColor([labels][0][index].color);
       }
-      console.log(UpdateChangeColor, LabelBtnColorNum, index, LabelBtnColor);
 
       return (
         <>
@@ -1004,7 +1000,6 @@ function LabelManagement() {
             setNewLabelsSelectColor({ item }.item);
             setUpdateChangeColor({ item }.item.substring(1));
             setLabelBtnColorNum(index);
-            console.log(newLabelsSelectColor, UpdateChangeColor);
             if (selectColorMenuActive === true) {
               setSelectColorMenuActive(false);
             } else {
@@ -1024,11 +1019,6 @@ function LabelManagement() {
     setColorMathFloorNum(MathFloorColorNum);
     setUpdateLabelsSelectColor(colorListArray[colorMathFloorNum]);
     setNewLabelsSelectColor(colorListArray[colorMathFloorNum]);
-    console.log(
-      newLabelsSelectColor,
-      colorMathFloorNum,
-      colorListArray[colorMathFloorNum]
-    );
     setUpdateChangeColor(colorListArray[colorMathFloorNum].substring(1));
   }
 
@@ -1039,7 +1029,6 @@ function LabelManagement() {
     setColorMathFloorNum(MathFloorColorNum);
     setLabelBtnColorNum(colorMathFloorNum);
     setUpdateChangeColor(colorListArray[colorMathFloorNum].substring(1));
-    console.log(UpdateChangeColor);
   }
 
   function PostLabelName(e: any) {
@@ -1090,7 +1079,6 @@ function LabelManagement() {
   }
 
   async function deleteLabel(index: number) {
-    console.log(labels[index].name, index);
     const data = await api
       .deleteLabel({
         owner: "Xie-MS",
@@ -1103,7 +1091,6 @@ function LabelManagement() {
           payload: { Labeldata },
         });
       });
-    console.log(data);
   }
 
   async function updataLabels(index: number) {

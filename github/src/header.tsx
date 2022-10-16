@@ -245,11 +245,14 @@ function Headers() {
     setUserToken(token.provider_token);
   }
 
-  console.log(userToken);
-
   useEffect(() => {
     if (userToken === "") return;
     window.localStorage.setItem(`userToken`, JSON.stringify(`${userToken}`));
+    window.localStorage.setItem(`userName`, JSON.stringify(`${userName}`));
+    window.localStorage.setItem(
+      `userImg`,
+      JSON.stringify(`${user.user_metadata.avatar_url}`)
+    );
   }, [userName]);
 
   async function signInWithgithub() {
@@ -261,11 +264,13 @@ function Headers() {
         scopes: "repo gist notifications",
       }
     );
+    window.location.assign(`/signin`);
   }
 
   async function signOut() {
     await supabase.auth.signOut();
     setUser(null);
+    window.location.assign(`/`);
   }
 
   if (user) {

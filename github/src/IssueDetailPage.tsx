@@ -126,8 +126,6 @@ function IssueDetailPage() {
     setCreateCommentRender((prev: boolean) => !prev);
   }
 
-  console.log(emojiSelect);
-
   function EmojiList() {
     return Emoji.map((item: any, EmojiIndex: number) => {
       return (
@@ -525,7 +523,6 @@ function IssueDetailPage() {
                   defaultValue={issueDetailData.title}
                   onChange={(e) => {
                     setIssueTitle(e.target.value);
-                    console.log(issueDetailData);
                   }}
                 />
 

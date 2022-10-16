@@ -124,7 +124,6 @@ function AssigneePage({
         labelSelectData.includes(e.target.value) ||
         labelName.includes(e.target.value)
       ) {
-        console.log("input filter");
         const labelSelectNum = labelSelectData.indexOf(e.target.value);
         labelSelectData.splice(labelSelectNum, 1);
 
@@ -133,7 +132,6 @@ function AssigneePage({
 
         UpdateLabels();
       } else {
-        console.log("input send");
         setLabelSelectData([...labelSelectData, e.target.value]);
 
         setLabelName([...labelName, e.target.value]);
@@ -243,7 +241,6 @@ function AssigneePage({
                 labelSelectData.includes(renderLabelData[ItemIndex].name) ||
                 labelName.includes(renderLabelData[ItemIndex].name)
               ) {
-                console.log("click filter");
                 const labelSelectNum = labelSelectData.indexOf(
                   renderLabelData[ItemIndex].name
                 );
@@ -260,8 +257,6 @@ function AssigneePage({
                   false ||
                 labelName.includes(renderLabelData[ItemIndex].name) === false
               ) {
-                console.log("click send");
-
                 setLabelSelectData([
                   ...labelSelectData,
                   renderLabelData[ItemIndex].name,

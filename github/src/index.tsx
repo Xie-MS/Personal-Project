@@ -9,6 +9,8 @@ import LabelManagement from "./LabelManagement/LabelManagement";
 import IssuePage from "./IssuePage";
 import NewIssuePage from "./NewIssuePage";
 import IssueDetailPage from "./IssueDetailPage";
+import SignIn from "./SignIn";
+
 import "./index.css";
 
 const root = ReactDOM.createRoot(document.getElementById("root")!);
@@ -18,6 +20,7 @@ root.render(
       <Routes>
         <Route path="/" element={<App />}>
           <Route path="/OAuth" element={<OAuth />} />
+          <Route path="/signIn" element={<SignIn />} />
           <Route path="/LabelManagement" element={<LabelManagement />} />
           <Route path="/Issue" element={<IssuePage />} />
           <Route path="/Issue/:IssueNum" element={<IssueDetailPage />} />

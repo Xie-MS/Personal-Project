@@ -136,7 +136,6 @@ function TimeLine({
   }
 
   async function AddEmoji() {
-    console.log(emojiSelect);
     const data = await api.AddEmojiComment(
       {
         owner: "Xie-MS",
