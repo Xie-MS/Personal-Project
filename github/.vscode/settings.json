@@ -1,3 +1,9 @@
 {
-  "editor.formatOnSave": true
+  "editor.formatOnSave": true,
+  "window.commandCenter": true,
+  "editor.quickSuggestions": {
+    "strings": true
+  }
 }
+
+

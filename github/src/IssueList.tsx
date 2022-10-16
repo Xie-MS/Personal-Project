@@ -59,8 +59,6 @@ function AssigneePage({
   const LabelSelectName = useRef<HTMLParagraphElement | null>(null);
   const { IssueNum } = useParams();
 
-  console.log(issueDetailData.reactions);
-
   async function UpdateAssignees() {
     const data = await api.UpdateIssue(
       {

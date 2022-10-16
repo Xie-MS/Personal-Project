@@ -286,6 +286,38 @@ const api = {
     console.log(response);
     return await response.json();
   },
+
+  async AddEmoji(data: any, IssueNum: string | number | undefined) {
+    const response = await fetch(
+      `${this.hostname}/issues/${IssueNum}/reactions`,
+      {
+        body: JSON.stringify(data),
+        headers: new Headers({
+          Accept: "application/vnd.github+json",
+          Authorization: `token ${jwtToken}`,
+        }),
+        method: "POST",
+      }
+    );
+    console.log(response);
+    return await response.json();
+  },
+
+  async AddEmojiComment(data: any, commentNum: string | number | undefined) {
+    const response = await fetch(
+      `${this.hostname}/issues/comments/${commentNum}/reactions`,
+      {
+        body: JSON.stringify(data),
+        headers: new Headers({
+          Accept: "application/vnd.github+json",
+          Authorization: `token ${jwtToken}`,
+        }),
+        method: "POST",
+      }
+    );
+    console.log(response);
+    return await response.json();
+  },
 };
 
 export default api;

@@ -30,6 +30,16 @@ import { string } from "prop-types";
 import e from "express";
 
 const Emoji = ["👍", "👎", "😄", "🎉", "😕", "❤", "🚀", "👀"];
+const EmojiText = [
+  "+1",
+  "-1",
+  "laugh",
+  "confused",
+  "hooray",
+  "heart",
+  "rocket",
+  "eyes",
+];
 
 function IssueDetailPage() {
   const [preview, setPreview] = useState(false);
@@ -70,6 +80,7 @@ function IssueDetailPage() {
     useState("");
 
   const [emojiDate, setEmojiData]: any = useState([]);
+  const [emojiSelect, setEmojiSelect]: any = useState("");
 
   useEffect(() => {
     async function getIssueDetailData(IssueNum: string | undefined) {
@@ -115,14 +126,35 @@ function IssueDetailPage() {
     setCreateCommentRender((prev: boolean) => !prev);
   }
 
+  console.log(emojiSelect);
+
   function EmojiList() {
     return Emoji.map((item: any, EmojiIndex: number) => {
       return (
-        <li className="px-1 py-1 my-1 mx-[2px] h-10 flex justify-center items-center">
+        <li
+          className="px-1 py-1 my-1 mx-[2px] h-10 flex justify-center items-center"
+          onClick={() => {
+            setEmojiSelect(EmojiText[EmojiIndex]);
+            AddEmoji();
+          }}
+        >
           {Emoji[EmojiIndex]}
         </li>
       );
     });
+  }
+
+  async function AddEmoji() {
+    const data = await api.AddEmoji(
+      {
+        owner: "Xie-MS",
+        repo: "Personal-Project",
+        issue_number: IssueNum,
+        content: emojiSelect,
+      },
+      IssueNum
+    );
+    setCreateCommentRender((prev: boolean) => !prev);
   }
 
   function EmojiIcon() {

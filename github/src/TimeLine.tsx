@@ -18,6 +18,16 @@ import UpdateComment from "./UpdateComment";
 import api from "./api";
 
 const Emoji = ["👍", "👎", "😄", "🎉", "😕", "❤", "🚀", "👀"];
+const EmojiText = [
+  "+1",
+  "-1",
+  "laugh",
+  "confused",
+  "hooray",
+  "heart",
+  "rocket",
+  "eyes",
+];
 
 function TimeLine({
   preview,
@@ -86,6 +96,8 @@ function TimeLine({
   const { IssueNum } = useParams();
   const [issueDetailTimeline, setIssueDetailTimeline]: any = useState<any>();
 
+  const [emojiSelect, setEmojiSelect]: any = useState("");
+
   useEffect(() => {
     async function getIssueTimeline(IssueNum: string | undefined) {
       const data = await api.getIssueTimeline(IssueNum);
@@ -97,14 +109,18 @@ function TimeLine({
   function EmojiList() {
     return Emoji.map((item: any, EmojiIndex: number) => {
       return (
-        <li className="px-1 py-1 my-1 mx-[2px] h-10 flex justify-center items-center">
+        <li
+          className="px-1 py-1 my-1 mx-[2px] h-10 flex justify-center items-center"
+          onClick={() => {
+            setEmojiSelect(EmojiText[EmojiIndex]);
+            AddEmoji();
+          }}
+        >
           {Emoji[EmojiIndex]}
         </li>
       );
     });
   }
-
-  console.log(issueDetailTimeline);
 
   async function DeleteComment() {
     const data = await api.DeleteComment(
@@ -117,6 +133,21 @@ function TimeLine({
     );
     setCreateCommentRender((prev: boolean) => !prev);
     setKebabHorizontal(false);
+  }
+
+  async function AddEmoji() {
+    console.log(emojiSelect);
+    const data = await api.AddEmojiComment(
+      {
+        owner: "Xie-MS",
+        repo: "Personal-Project",
+        comment_id: commentNum,
+        content: emojiSelect,
+      },
+      commentNum
+    );
+    setCreateCommentRender((prev: boolean) => !prev);
+    setTimeLineCommentEmojiListClose(false);
   }
 
   function Timeline() {
@@ -479,6 +510,8 @@ function TimeLine({
                       <button
                         className="w-[26px] h-[26px] bg-transparent rounded-full"
                         onClick={() => {
+                          setUpdateCommentNum(timeLineIndex);
+                          setCommentNum(timeLine.id);
                           if (TimeLineCommentemojiListClose === false) {
                             setTimeLineCommentEmojiListClose(true);
                           } else if (TimeLineCommentemojiListClose === true) {
@@ -491,7 +524,10 @@ function TimeLine({
                       <div className="absolute left-[-270px] top-[5px]">
                         <ul
                           className={`${
-                            TimeLineCommentemojiListClose ? "flex" : "hidden"
+                            TimeLineCommentemojiListClose &&
+                            timeLineIndex === updateCommentNum
+                              ? "flex"
+                              : "hidden"
                           } justify-start items-center my-2 mr-2 px-[2px] border-[1px] border-solid border-[#d0d7de] bg-white rounded-md hover:cursor-pointer`}
                         >
                           {EmojiList()}
@@ -519,9 +555,7 @@ function TimeLine({
 
                       <ul
                         className={`${
-                          kebabHorizontal && timeLineIndex === updateCommentNum
-                            ? "block"
-                            : "hidden"
+                          kebabHorizontal ? "block" : "hidden"
                         } absolute right-0 top-[25px] w-[183px] py-1 bg-white border-[1px] border-solid border-[#d0d7de] justify-start items-center rounded-md z-20`}
                       >
                         <li>
