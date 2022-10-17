@@ -229,6 +229,7 @@ function Headers() {
 
   const [user, setUser]: any = useState(null);
   const [userName, setUserName] = useState("");
+  const [signIn, setSignIn] = useState(false);
 
   useEffect(() => {
     checkUser();
@@ -262,9 +263,9 @@ function Headers() {
       },
       {
         scopes: "repo gist notifications",
+        redirectTo: "https://github-ae242.web.app/signIn",
       }
     );
-    window.location.assign(`/signin`);
   }
 
   async function signOut() {
@@ -389,7 +390,6 @@ function Headers() {
           <Pofile
             onClick={() => {
               signInWithgithub();
-              navigate(`/LabelManagement`);
             }}
           >
             Sign In

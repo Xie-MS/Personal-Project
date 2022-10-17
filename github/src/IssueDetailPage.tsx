@@ -231,6 +231,7 @@ function IssueDetailPage() {
       issueDetailData.assignees.length !== 0
     ) {
       return assigneeLogin.map((assigneeData: any, assigneeIndex: number) => {
+        console.log("aaa");
         if (
           assigneeSelectData.length <= issueDetailData.assignees.length &&
           assigneeSelectData
@@ -269,6 +270,7 @@ function IssueDetailPage() {
       assigneeSelectData.length <= renderAssigneeData.length &&
       assigneeSelectData.length > issueDetailData.assignees.length
     ) {
+      console.log("bbb");
       return renderAssigneeData.map(
         (_item: any, assigneeSelectIndex: number) => {
           return (
@@ -294,6 +296,7 @@ function IssueDetailPage() {
         }
       );
     } else if (assigneeSelectData.length === 0) {
+      console.log("ccc");
       return (
         <p className="text-xs flex justify-start items-center">
           No one—<p className="hover:text-[#0969da]">assign yourself</p>
@@ -864,7 +867,9 @@ function IssueDetailPage() {
                   />
                 </div>
                 <div
-                  className={`block md:bg-black md:opacity-60 top-0 bottom-0 left-0 right-0 fixed md:z-10 xl:z-0 lg:z-0`}
+                  className={`${
+                    listClose ? "block" : "hidden"
+                  }  md:bg-black md:opacity-60 top-0 bottom-0 left-0 right-0 fixed md:z-10 xl:z-0 lg:z-0`}
                   onClick={() => {
                     setListClose(false);
                     setItemList(false);

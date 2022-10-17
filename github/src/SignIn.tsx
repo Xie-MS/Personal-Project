@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import api from "./api";
 
 function IssueDetailPage() {
-  const [repoData, setRepoData] = useState([]);
+  const [repoData, setRepoData] = useState<any>(undefined);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -19,10 +19,12 @@ function IssueDetailPage() {
   let jwtImg = JSON.parse(window.localStorage.getItem("userImg") as string);
   let jwtName = JSON.parse(window.localStorage.getItem("userName") as string);
 
-  if (repoData === undefined) return <></>;
+  if (repoData === undefined || repoData?.message === "Bad credentials")
+    return <></>;
+  console.log(repoData);
 
   function getRepoData() {
-    return repoData.map((repo: any) => {
+    return repoData?.map((repo: any) => {
       return (
         <li
           className="py-4 px-2 hover:cursor-pointer"

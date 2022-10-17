@@ -70,6 +70,7 @@ function AssigneePage({
       IssueNum
     );
     setCreateCommentRender((prev: boolean) => !prev);
+    console.log(createCommentRender, assigneeSelectData);
   }
 
   async function UpdateLabels() {
@@ -83,6 +84,7 @@ function AssigneePage({
       IssueNum
     );
     setCreateCommentRender((prev: boolean) => !prev);
+    console.log(createCommentRender);
   }
 
   function AssigneeInput(e: any) {
