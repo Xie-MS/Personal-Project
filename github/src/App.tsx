@@ -18,14 +18,13 @@ const GlobalStyle = createGlobalStyle`
 
 function App() {
   const LabelsData = useSelector((state) => state);
-  const [sortSelect, setsortSelect]: any = useState("");
   return (
     <>
       <Reset />
       <GlobalStyle />
       <Headers />
       <ContainerTitle />
-      <Outlet context={[sortSelect, setsortSelect]} />
+      <Outlet />
       <Footer />
     </>
   );

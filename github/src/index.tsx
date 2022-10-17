@@ -8,6 +8,9 @@ import OAuth from "./OAuth";
 import LabelManagement from "./LabelManagement/LabelManagement";
 import IssuePage from "./IssuePage";
 import NewIssuePage from "./NewIssuePage";
+import IssueDetailPage from "./IssueDetailPage";
+import SignIn from "./SignIn";
+
 import "./index.css";
 
 const root = ReactDOM.createRoot(document.getElementById("root")!);
@@ -16,11 +19,14 @@ root.render(
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<App />}>
-          <Route path="/OAuth" element={<OAuth />} />
+          {/* <Route path="/OAuth" element={<OAuth />} /> */}
+          {/* <Route index element={<SignIn />} /> */}
+          <Route path="/signIn" element={<SignIn />} />
           <Route path="/LabelManagement" element={<LabelManagement />} />
-          <Route path="/IssuePage" element={<IssuePage />} />
-          <Route path="/NewIssuePage" element={<NewIssuePage />} />
-          <Route path="#" element={<Navigate to="'/" replace />} />
+          <Route path="/Issue" element={<IssuePage />} />
+          <Route path="/Issue/:IssueNum" element={<IssueDetailPage />} />
+          <Route path="/NewIssue" element={<NewIssuePage />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
         </Route>
       </Routes>
     </BrowserRouter>

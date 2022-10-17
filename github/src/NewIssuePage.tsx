@@ -113,8 +113,7 @@ function NewIssuePage() {
       labels: labelSelectData,
       assignees: assigneeSelectData,
     });
-
-    window.location.assign(`/IssuePage`);
+    window.location.assign(`/Issue`);
   }
 
   return (

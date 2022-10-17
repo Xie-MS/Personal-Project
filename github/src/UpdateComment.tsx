@@ -3,8 +3,9 @@ import { marked } from "marked";
 import ReactMarkdown from "react-markdown";
 import ReactDom from "react-dom";
 import remarkGfm from "remark-gfm";
+import { useParams } from "react-router-dom";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useRef } from "react";
 
 import {
   TypographyIcon,
@@ -24,39 +25,76 @@ import {
   ChevronDownIcon,
   InfoIcon,
   MarkdownIcon,
+  CheckCircleIcon,
+  TriangleDownIcon,
+  SkipIcon,
+  CheckIcon,
   IssueOpenedIcon,
 } from "@primer/octicons-react";
 
 import UserImg from "../src/img/userImg.png";
+import api from "./api";
 
-function CreateNewIssue({
+function CreateComment({
+  updateComment,
+  setUpdateComment,
   preview,
   setPreview,
   issueContainer,
   setIssueContainer,
   issueTitle,
   setIssueTitle,
-  setIssue,
   markDownBtn,
   setmarkDownBtn,
   renderAssigneeData,
   renderLabelData,
   setTargetText,
   renderIssueData,
+  issueDetailData,
+  setIssueDetailData,
+  updateCommentNum,
+  setUpdateCommentNum,
+  timeLineIndex,
+  settimeLineIndex,
+  createCommentRender,
+  setCreateCommentRender,
+  commentNum,
+  issueUpdateInputDefaultValue,
+  setIssueUpdateInputDefaultValue,
+  kebabHorizontal,
+  setKebabHorizontal,
+  issueUpdateContainer,
+  setIssueUpdateContainer,
 }: {
-  preview: boolean;
+  updateComment: String;
+  setUpdateComment: any;
+  preview: Boolean;
   setPreview: any;
-  issueContainer: string;
+  issueContainer: any;
   setIssueContainer: any;
-  issueTitle: string;
+  issueTitle: String;
   setIssueTitle: any;
-  setIssue: any;
-  markDownBtn: boolean;
+  markDownBtn: Boolean;
   setmarkDownBtn: any;
   renderAssigneeData: any;
   renderLabelData: any;
   setTargetText: any;
   renderIssueData: any;
+  issueDetailData: any;
+  setIssueDetailData: any;
+  updateCommentNum: number;
+  setUpdateCommentNum: any;
+  timeLineIndex: number;
+  settimeLineIndex: any;
+  createCommentRender: boolean;
+  setCreateCommentRender: any;
+  commentNum: string | number | undefined;
+  issueUpdateInputDefaultValue: any;
+  setIssueUpdateInputDefaultValue: any;
+  kebabHorizontal: any;
+  setKebabHorizontal: any;
+  issueUpdateContainer: any;
+  setIssueUpdateContainer: any;
 }) {
   const Imgfile = useRef<HTMLInputElement | null | any>(null);
   const [imgURL, setImgURL]: any = useState("");
@@ -64,19 +102,53 @@ function CreateNewIssue({
   const [issueClose, setIssueClose]: any = useState(true);
   const [tagsName, setTagsName]: any = useState("");
   const [issueNum, setIssueNum]: any = useState(-1);
+  const { IssueNum } = useParams();
+
+  async function UpdateComment() {
+    const data = await api.UpdateComment(
+      {
+        owner: "Xie-MS",
+        repo: "Personal-Project",
+        comment_id: commentNum,
+        body: issueUpdateInputDefaultValue,
+      },
+      commentNum
+    );
+    setCreateCommentRender((prev: boolean) => !prev);
+    setUpdateComment("");
+    setKebabHorizontal(false);
+  }
+
+  async function UpdateContainer() {
+    const data = await api.UpdateIssue(
+      {
+        owner: "Xie-MS",
+        repo: "Personal-Project",
+        issue_number: IssueNum,
+        body: issueUpdateContainer,
+      },
+      IssueNum
+    );
+    setCreateCommentRender((prev: boolean) => !prev);
+    setUpdateComment("");
+    setKebabHorizontal(false);
+  }
 
   function PreviewText() {
-    if (issueContainer === "" || issueContainer === "Leave a comment") {
+    if (
+      issueUpdateInputDefaultValue === "" ||
+      issueUpdateInputDefaultValue === "Leave a comment"
+    ) {
       return <p className="text-sm">Nothing to preview</p>;
     } else if (
-      issueContainer !== "" &&
+      issueUpdateInputDefaultValue !== "" &&
       imgURL === "" &&
       tagsName === "" &&
       issueNum === -1
     ) {
       return (
         <ReactMarkdown
-          children={issueContainer}
+          children={issueUpdateInputDefaultValue}
           components={{
             em: ({ node, ...props }) => (
               <i style={{ fontStyle: "italic" }} {...props} />
@@ -141,15 +213,14 @@ function CreateNewIssue({
         />
       );
     } else if (
-      issueContainer !== "" &&
+      issueUpdateInputDefaultValue !== "" &&
       imgURL !== "" &&
       tagsName === "" &&
       issueNum === -1
     ) {
-      console.log(imgURL);
       return <img src={imgURL} alt="" />;
     } else if (
-      issueContainer !== "" &&
+      issueUpdateInputDefaultValue !== "" &&
       imgURL === "" &&
       tagsName !== "" &&
       issueNum === -1
@@ -158,12 +229,12 @@ function CreateNewIssue({
         <p className="font-semibold hover:decoration-1">
           {" "}
           <a href={`https://github.com/${tagsName}`} className="text-md">
-            {issueContainer}
+            {issueUpdateInputDefaultValue}
           </a>
         </p>
       );
     } else if (
-      issueContainer !== "" &&
+      issueUpdateInputDefaultValue !== "" &&
       issueNum !== -1 &&
       imgURL === "" &&
       tagsName === ""
@@ -175,7 +246,7 @@ function CreateNewIssue({
             href={`https://github.com/Xie-Ms/Personal-Project/issues/${issueNum}`}
             className="text-md"
           >
-            {issueContainer}
+            {issueUpdateInputDefaultValue}
           </a>
         </p>
       );
@@ -183,14 +254,16 @@ function CreateNewIssue({
   }
 
   function TagAssigneeName() {
-    if (issueContainer.includes("@") && tagsClose) {
+    if (issueUpdateInputDefaultValue.includes("@") && tagsClose) {
       setTargetText("Assignees");
       return renderAssigneeData.map((_item: any, TagIndex: number) => {
         return (
           <li
             className="text-md w-[200px] h-[25px] flex justify-start items-center text-black hover:bg-[#0969da] hover:text-white cursor-pointer"
             onClick={() => {
-              setIssueContainer("@" + renderAssigneeData[TagIndex].login + " ");
+              setIssueUpdateInputDefaultValue(
+                "@" + renderAssigneeData[TagIndex].login + " "
+              );
               setTagsName(renderAssigneeData[TagIndex].login);
               setTagsClose(false);
               setIssueNum(-1);
@@ -204,7 +277,7 @@ function CreateNewIssue({
   }
 
   function TagIssue() {
-    if (issueContainer.includes("#") && issueClose) {
+    if (issueUpdateInputDefaultValue.includes("#") && issueClose) {
       // setTargetText("Issues");
       return renderIssueData
         .slice(0, 5)
@@ -213,7 +286,9 @@ function CreateNewIssue({
             <li
               className="text-md w-[200px] h-[25px] flex justify-start items-center text-black hover:bg-[#0969da] hover:text-white cursor-pointer"
               onClick={() => {
-                setIssueContainer("#" + renderIssueData[IssueIndex].number);
+                setIssueUpdateInputDefaultValue(
+                  "#" + renderIssueData[IssueIndex].number
+                );
                 setIssueClose(false);
                 setIssueNum(renderIssueData[IssueIndex].number);
               }}
@@ -228,24 +303,18 @@ function CreateNewIssue({
   }
 
   return (
-    <div className="lg:relative flex justify-evenly items-start xl:flex relative">
+    <div className="md:w-full lg:w-auto justify-start lg:relative flex items-start xl:flex relative mt-4">
       <div className="md:hidden lg:block w-[7.24%] xl:block">
-        <img src={UserImg} alt="" className="w-[70%] rounded-full sm:hidden" />
+        <img
+          src={UserImg}
+          alt=""
+          className="w-10 h-10 rounded-full sm:hidden"
+        />
       </div>
       <div className="md:w-full lg:w-[88.7%] xl:w-[88.7%]">
         <div>
           <div className="md:h-auto md:border-[0px] lg:border-[1px] lg:border-solid lg:border-gray-200 lg:rounded-md lg:h-auto lg:mb-2 xl:border-[1px] xl:border-solid xl:border-gray-200 xl:rounded-md xl:h-auto xl:mb-2">
-            <div className="md:mb-4 md:px-0 md:py-0 lg:mb-0 lg:px-2 lg:py-2 xl:mb-0 xl:px-2 xl:py-2">
-              <input
-                type="text"
-                defaultValue="Title"
-                className="px-3 py-[5px] border-[1px] border-solid border-gray-400 bg-slate-50 rounded-md w-full lg:focus:bg-white lg:focus:border-[#218bff] xl:focus:bg-white xl:focus:border-blue-400"
-                onChange={(e) => {
-                  setIssueTitle(e.target.value);
-                }}
-              />
-            </div>
-            <div className="w-full">
+            <div className="flex justify-between items-baseline w-full">
               <div className="md:w-full md:mt-0 md:mx-0 lg:mt-2 lg:mx-2 lg:flex lg:justify-between lg:items-end  xl:mt-2 xl:mx-2 xl:flex xl:justify-between xl:items-end">
                 <div className="lg:flex lg:justify-between lg:items-end md:w-full xl:flex xl:justify-between xl:items-end ">
                   <button
@@ -294,7 +363,9 @@ function CreateNewIssue({
                     <button
                       className="ml-[5px] mr-1 py-2 px-1"
                       onClick={() => {
-                        setIssueContainer("### " + issueContainer);
+                        setIssueUpdateInputDefaultValue(
+                          "### " + issueUpdateInputDefaultValue
+                        );
                         setIssueNum(-1);
                         setImgURL("");
                         setTagsName("");
@@ -305,7 +376,9 @@ function CreateNewIssue({
                     <button
                       className="ml-[5px] mr-1 py-2 px-1"
                       onClick={() => {
-                        setIssueContainer("**" + issueContainer + "**");
+                        setIssueUpdateInputDefaultValue(
+                          "**" + issueUpdateInputDefaultValue + "**"
+                        );
                         setIssueNum(-1);
                         setImgURL("");
                         setTagsName("");
@@ -316,7 +389,9 @@ function CreateNewIssue({
                     <button
                       className="ml-[5px] mr-1 py-2 px-1"
                       onClick={() => {
-                        setIssueContainer("_" + issueContainer + "_");
+                        setIssueUpdateInputDefaultValue(
+                          "_" + issueUpdateInputDefaultValue + "_"
+                        );
                         setIssueNum(-1);
                         setImgURL("");
                         setTagsName("");
@@ -327,7 +402,9 @@ function CreateNewIssue({
                     <button
                       className="ml-[5px] mr-1 py-2 px-1"
                       onClick={() => {
-                        setIssueContainer("- " + issueContainer);
+                        setIssueUpdateInputDefaultValue(
+                          "- " + issueUpdateInputDefaultValue
+                        );
                         setIssueNum(-1);
                         setImgURL("");
                         setTagsName("");
@@ -338,7 +415,9 @@ function CreateNewIssue({
                     <button
                       className="ml-[5px] mr-1 py-2 px-1"
                       onClick={() => {
-                        setIssueContainer("1. " + issueContainer);
+                        setIssueUpdateInputDefaultValue(
+                          "1. " + issueUpdateInputDefaultValue
+                        );
                         setIssueNum(-1);
                         setImgURL("");
                         setTagsName("");
@@ -356,7 +435,9 @@ function CreateNewIssue({
                     <button
                       className="ml-[5px] mr-1 py-2 px-1 lg:py-1 lg:px-1 lg:ml-[6px] lg:mx-1 xl:py-1 xl:px-1 xl:ml-[6px] xl:mx-1"
                       onClick={() => {
-                        setIssueContainer("### " + issueContainer);
+                        setIssueUpdateInputDefaultValue(
+                          "### " + issueUpdateInputDefaultValue
+                        );
                         setIssueNum(-1);
                         setImgURL("");
                         setTagsName("");
@@ -367,7 +448,9 @@ function CreateNewIssue({
                     <button
                       className="ml-[5px] mr-1 py-2 px-1 lg:py-1 lg:px-1 lg:ml-[6px] lg:mx-1 xl:py-1 xl:px-1 xl:ml-[6px] xl:mx-1"
                       onClick={() => {
-                        setIssueContainer("**" + issueContainer + "**");
+                        setIssueUpdateInputDefaultValue(
+                          "**" + issueUpdateInputDefaultValue + "**"
+                        );
                         setIssueNum(-1);
                         setImgURL("");
                         setTagsName("");
@@ -378,7 +461,9 @@ function CreateNewIssue({
                     <button
                       className="ml-[5px] mr-1 py-2 px-1 lg:py-1 lg:px-1 lg:ml-[6px] lg:mx-1 xl:py-1 xl:px-1 xl:ml-[6px] xl:mx-1"
                       onClick={() => {
-                        setIssueContainer("_" + issueContainer + "_");
+                        setIssueUpdateInputDefaultValue(
+                          "_" + issueUpdateInputDefaultValue + "_"
+                        );
                         setIssueNum(-1);
                         setImgURL("");
                         setTagsName("");
@@ -391,7 +476,9 @@ function CreateNewIssue({
                     <button
                       className="ml-[5px] mr-1 py-2 px-1 lg:py-1 lg:px-1 lg:ml-[6px] lg:mx-1 xl:py-1 xl:px-1 xl:ml-[6px] xl:mx-1"
                       onClick={() => {
-                        setIssueContainer("- " + issueContainer);
+                        setIssueUpdateInputDefaultValue(
+                          "- " + issueUpdateInputDefaultValue
+                        );
                         setIssueNum(-1);
                         setImgURL("");
                         setTagsName("");
@@ -402,7 +489,9 @@ function CreateNewIssue({
                     <button
                       className="ml-[5px] mr-1 py-2 px-1 lg:py-1 lg:px-1 lg:ml-[6px] lg:mx-1 xl:py-1 xl:px-1 xl:ml-[6px] xl:mx-1"
                       onClick={() => {
-                        setIssueContainer("1. " + issueContainer);
+                        setIssueUpdateInputDefaultValue(
+                          "1. " + issueUpdateInputDefaultValue
+                        );
                         setIssueNum(-1);
                         setImgURL("");
                         setTagsName("");
@@ -419,7 +508,9 @@ function CreateNewIssue({
                       <button
                         className="ml-[5px] py-2 px-2 lg:py-1 lg:px-1 lg:ml-[6px] lg:mx-1 xl:py-1 xl:px-1 xl:ml-[6px] xl:mx-1"
                         onClick={() => {
-                          setIssueContainer("> " + issueContainer);
+                          setIssueUpdateInputDefaultValue(
+                            "> " + issueUpdateInputDefaultValue
+                          );
                           setIssueNum(-1);
                           setImgURL("");
                           setTagsName("");
@@ -430,7 +521,9 @@ function CreateNewIssue({
                       <button
                         className="ml-[5px] py-2 px-2 lg:py-1 lg:px-1 lg:ml-[6px] lg:mx-1 xl:py-1 xl:px-1 xl:ml-[6px] xl:mx-1"
                         onClick={() => {
-                          setIssueContainer("`" + issueContainer + "`");
+                          setIssueUpdateInputDefaultValue(
+                            "`" + issueUpdateInputDefaultValue + "`"
+                          );
                           setIssueNum(-1);
                           setImgURL("");
                           setTagsName("");
@@ -441,7 +534,9 @@ function CreateNewIssue({
                       <button
                         className="ml-[5px] py-2 px-2 lg:py-1 lg:px-1 lg:ml-[6px] lg:mx-1 xl:py-1 xl:px-1 xl:ml-[6px] xl:mx-1"
                         onClick={() => {
-                          setIssueContainer("[" + issueContainer + "](url)");
+                          setIssueUpdateInputDefaultValue(
+                            "[" + issueUpdateInputDefaultValue + "](url)"
+                          );
                           setIssueNum(-1);
                           setTagsName("");
                         }}
@@ -455,7 +550,7 @@ function CreateNewIssue({
                     <button
                       className="ml-[5px] py-2 px-2 lg:py-1 lg:px-1 lg:ml-[6px] lg:mx-1 xl:py-1 xl:px-1 xl:ml-[6px] xl:mx-1"
                       onClick={() => {
-                        setIssueContainer("@");
+                        setIssueUpdateInputDefaultValue("@");
                         setIssueNum(-1);
                         setImgURL("");
                       }}
@@ -472,7 +567,7 @@ function CreateNewIssue({
                         const file = Imgfile.current?.files;
                         if (file[0] !== undefined) {
                           setImgURL(URL.createObjectURL(file[0]));
-                          setIssueContainer(
+                          setIssueUpdateInputDefaultValue(
                             `![${file[0].name}](${URL.createObjectURL(
                               file[0]
                             )})`
@@ -492,7 +587,7 @@ function CreateNewIssue({
                     <button
                       className="ml-[5px] py-2 px-2 lg:py-1 lg:px-1 lg:ml-[6px] lg:mx-1 xl:py-1 xl:px-1 xl:ml-[6px] xl:mx-1"
                       onClick={() => {
-                        setIssueContainer("#");
+                        setIssueUpdateInputDefaultValue("#");
                         setTagsName("");
                         setImgURL("");
                       }}
@@ -510,22 +605,30 @@ function CreateNewIssue({
               <div
                 className={`${
                   preview ? "hidden" : "block"
-                } lg:h-[230px] lg:px-0 lg:py-0 border-[1px] border-solid border-gray-400 bg-slate-100 rounded-md w-full relative md:border-0 px-2 py-2 md:h-[200px] xl:h-[230px] xl:px-0 xl:py-0`}
+                } lg:h-[126px] lg:px-0 lg:py-0 border-[1px] border-solid border-gray-400 bg-slate-100 rounded-md w-full relative md:border-0 px-2 py-2 md:h-[126px] xl:h-[126px] xl:px-0 xl:py-0`}
               >
                 <div>
                   <textarea
                     cols="30"
                     rows="10"
-                    value={issueContainer}
-                    className="relative md:leading-snug md:h-[200px] px-2 py-2 border-[1px] md:border-b-[0px] border-solid border-gray-400 bg-slate-100 rounded-md w-full lg:focus:bg-white lg:border-b-[1px] border-t-[0px] border-r-[0px] border-l-[0px] lg:border-dashed lg:h-[200px] lg:leading-snug lg:rounded-b-[0px] xl:focus:bg-white xl:border-dashed xl:h-[200px] xl:leading-snug xl:rounded-b-[0px]"
+                    value={`${
+                      updateCommentNum !== -1
+                        ? `${issueUpdateInputDefaultValue}`
+                        : `${issueUpdateContainer}`
+                    }`}
+                    className="relative md:leading-snug md:h-[82px] px-2 py-2 border-[1px] md:border-b-[0px] border-solid border-gray-400 bg-slate-100 rounded-md w-full lg:focus:bg-white lg:border-b-[1px] border-t-[0px] border-r-[0px] border-l-[0px] lg:border-dashed lg:h-[96px] lg:leading-snug lg:rounded-b-[0px] xl:focus:bg-white xl:border-dashed xl:h-[96px] xl:leading-snug xl:rounded-b-[0px]"
                     onChange={(e) => {
-                      setIssueContainer(e.target.value);
+                      if (updateCommentNum !== -1) {
+                        setIssueUpdateInputDefaultValue(e.target.value);
+                      } else if (updateCommentNum === -1) {
+                        setIssueUpdateContainer(e.target.value);
+                      }
                     }}
                   />
                 </div>
                 <ul
                   className={`${
-                    issueContainer.includes("@") && tagsClose
+                    issueUpdateInputDefaultValue.includes("@") && tagsClose
                       ? "block"
                       : "hidden"
                   } absolute z-30 bg-slate-100 top-[30px] left-[30px] border-[1px] border-solid  border-gray-200 rounded-md `}
@@ -534,15 +637,15 @@ function CreateNewIssue({
                 </ul>
                 <ul
                   className={`${
-                    issueContainer.includes("#") && issueClose
+                    issueUpdateInputDefaultValue.includes("#") && issueClose
                       ? "block"
                       : "hidden"
                   } absolute z-30 bg-slate-100 top-[30px] left-[30px] border-[1px] border-solid  border-gray-200 rounded-md `}
                 >
                   {TagIssue()}
                 </ul>
-                <div className="md:hidden lg:absolute bottom-0 flex justify-between items-center w-full px-[6px] py-[6px] lg:h-[30px]  xl:absolute xl:h-[30px]">
-                  <div className="xl:h-auto lg:h-auto">
+                <div className="md:block absolute bottom-0 md:bg-slate-100 flex justify-between items-center w-full px-[6px] py-[6px] lg:h-[30px] xl:absolute xl:h-[30px]">
+                  <div className="xl:h-auto lg:h-auto lg:w-full lg:flex lg:justify-between lg:items-center xl:flex xl:justify-between xl:items-center xl:w-full">
                     <input
                       type="file"
                       className="hidden"
@@ -553,7 +656,7 @@ function CreateNewIssue({
                         const file = Imgfile.current?.files;
                         if (file[0] !== undefined) {
                           setImgURL(URL.createObjectURL(file[0]));
-                          setIssueContainer(
+                          setIssueUpdateInputDefaultValue(
                             `![${file[0].name}](${URL.createObjectURL(
                               file[0]
                             )})`
@@ -568,8 +671,7 @@ function CreateNewIssue({
                       }}
                     >
                       <p className="lg:text-sm xl:text-sm">
-                        Attach files by dragging & dropping, selectimg or
-                        pasting them.
+                        Attach files by selectimg or pasting them.
                       </p>
 
                       <MarkdownIcon size={16} />
@@ -586,51 +688,36 @@ function CreateNewIssue({
                 <p className="text-sm"></p>
                 {PreviewText()}
               </div>
-              <div className="md:hidden">
-                <div className="flex justify-between items-center mt-2">
-                  <div className="md:hidden lg:flex justify-between items-center xl:flex">
-                    <MarkdownIcon
-                      size={16}
-                      className="lg:mr-[2px] xl:mr-[2px]"
-                    />
-                    <p className="lg:text-xs xl:text-xs">
-                      Styling with Markdown is supported
-                    </p>
-                  </div>
-                  <div className="mt-4 pt-4 border-t-[1px] border-solid border-gray-200 lg:mt-0 lg:pt-0 xl:mt-0 xl:pt-0">
-                    <button
-                      className={`${
-                        issueTitle !== "" ? "bg-[#2DA44E]" : "bg-[#94d3a2]"
-                      } mt-6 px-4 py-[5px] border-[1px] border-solid border-[rgba(27,31,36,0.15)] w-full rounded-md lg:mt-0 xl:mt-0`}
-                      onClick={() => {
-                        setIssue();
-                      }}
-                    >
-                      <p className="text-sm text-white">Submit new issue</p>
-                    </button>
-                  </div>
-                </div>
+              <div className="flex justify-end items-center mt-2">
+                <button
+                  className="px-4 py-[5px] border-[1px] border-solid border-gray-200 text-[#cf222e] bg-[#f6f8fa] text-sm font-medium rounded-md mr-[5px]"
+                  onClick={() => {
+                    setUpdateComment("");
+                  }}
+                >
+                  Cancel
+                </button>
+                <button
+                  className="px-4 py-[5px] border-[1px] border-solid border-gray-200 text-white bg-[#2da44e] text-sm font-medium rounded-md"
+                  onClick={() => {
+                    if (updateCommentNum !== -1) {
+                      UpdateComment();
+                    } else if (updateCommentNum === -1) {
+                      UpdateContainer();
+                    }
+                  }}
+                >
+                  Update New Issue
+                </button>
               </div>
             </div>
           </div>
-        </div>
-        <div className="mt-4 mb-2 text-xs">
-          <p className="flex justify-start items-center">
-            <div className="mr-1">
-              <InfoIcon size={16} className="fill-[#57606a]" />
-            </div>
-            Remember, contributions to this repository should follow our{" "}
-            <a href="#" className="text-[#0969da]">
-              GitHub Community Guidelines.
-            </a>
-          </p>
         </div>
       </div>
     </div>
   );
 }
-
-export default CreateNewIssue;
+export default CreateComment;
 function readAsDataURL(arg0: any) {
   throw new Error("Function not implemented.");
 }

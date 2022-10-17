@@ -1,10 +1,11 @@
 import React, { Dispatch, SetStateAction } from "react";
+import { useParams } from "react-router-dom";
 import { marked } from "marked";
 import ReactMarkdown from "react-markdown";
 import ReactDom from "react-dom";
 import remarkGfm from "remark-gfm";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useRef } from "react";
 
 import {
   TypographyIcon,
@@ -24,39 +25,63 @@ import {
   ChevronDownIcon,
   InfoIcon,
   MarkdownIcon,
+  CheckCircleIcon,
+  TriangleDownIcon,
+  SkipIcon,
+  CheckIcon,
   IssueOpenedIcon,
+  IssueReopenedIcon,
 } from "@primer/octicons-react";
 
 import UserImg from "../src/img/userImg.png";
+import api from "./api";
 
-function CreateNewIssue({
+function CreateComment({
+  updateComment,
+  setUpdateComment,
   preview,
   setPreview,
   issueContainer,
   setIssueContainer,
   issueTitle,
   setIssueTitle,
-  setIssue,
   markDownBtn,
   setmarkDownBtn,
   renderAssigneeData,
   renderLabelData,
   setTargetText,
   renderIssueData,
+  issueDetailData,
+  setIssueDetailData,
+  createCommentRender,
+  setCreateCommentRender,
+  issueDetailState,
+  setIssueDetailState,
+  issueDetailStateReanson,
+  setIssueDetailStateReanson,
 }: {
-  preview: boolean;
+  updateComment: String;
+  setUpdateComment: any;
+  preview: Boolean;
   setPreview: any;
-  issueContainer: string;
+  issueContainer: any;
   setIssueContainer: any;
-  issueTitle: string;
+  issueTitle: String;
   setIssueTitle: any;
-  setIssue: any;
-  markDownBtn: boolean;
+  markDownBtn: Boolean;
   setmarkDownBtn: any;
   renderAssigneeData: any;
   renderLabelData: any;
   setTargetText: any;
   renderIssueData: any;
+  issueDetailData: any;
+  setIssueDetailData: any;
+  createCommentRender: Boolean;
+  setCreateCommentRender: any;
+  issueDetailState: any;
+  setIssueDetailState: any;
+  issueDetailStateReanson: any;
+  setIssueDetailStateReanson: any;
 }) {
   const Imgfile = useRef<HTMLInputElement | null | any>(null);
   const [imgURL, setImgURL]: any = useState("");
@@ -64,6 +89,34 @@ function CreateNewIssue({
   const [issueClose, setIssueClose]: any = useState(true);
   const [tagsName, setTagsName]: any = useState("");
   const [issueNum, setIssueNum]: any = useState(-1);
+  const [closeIssue, setCloseIssue]: any = useState(false);
+  const { IssueNum } = useParams();
+
+  async function CreateIssueComment() {
+    const data = await api.CreateComment(
+      {
+        owner: "Xie-MS",
+        repo: "Personal-Project",
+        body: issueContainer,
+      },
+      IssueNum
+    );
+    setCreateCommentRender((prev: boolean) => !prev);
+  }
+
+  async function UpdateUssueState() {
+    const data = await api.UpdateIssue(
+      {
+        owner: "Xie-MS",
+        repo: "Personal-Project",
+        state: issueDetailState,
+        state_reason: issueDetailStateReanson,
+        issue_number: IssueNum,
+      },
+      IssueNum
+    );
+    setCreateCommentRender((prev: boolean) => !prev);
+  }
 
   function PreviewText() {
     if (issueContainer === "" || issueContainer === "Leave a comment") {
@@ -146,7 +199,6 @@ function CreateNewIssue({
       tagsName === "" &&
       issueNum === -1
     ) {
-      console.log(imgURL);
       return <img src={imgURL} alt="" />;
     } else if (
       issueContainer !== "" &&
@@ -205,7 +257,7 @@ function CreateNewIssue({
 
   function TagIssue() {
     if (issueContainer.includes("#") && issueClose) {
-      // setTargetText("Issues");
+      setTargetText("Issues");
       return renderIssueData
         .slice(0, 5)
         .map((_item: any, IssueIndex: number) => {
@@ -228,24 +280,14 @@ function CreateNewIssue({
   }
 
   return (
-    <div className="lg:relative flex justify-evenly items-start xl:flex relative">
+    <div className="w-full justify-start lg:relative flex items-start xl:flex relative mt-4">
       <div className="md:hidden lg:block w-[7.24%] xl:block">
         <img src={UserImg} alt="" className="w-[70%] rounded-full sm:hidden" />
       </div>
       <div className="md:w-full lg:w-[88.7%] xl:w-[88.7%]">
         <div>
           <div className="md:h-auto md:border-[0px] lg:border-[1px] lg:border-solid lg:border-gray-200 lg:rounded-md lg:h-auto lg:mb-2 xl:border-[1px] xl:border-solid xl:border-gray-200 xl:rounded-md xl:h-auto xl:mb-2">
-            <div className="md:mb-4 md:px-0 md:py-0 lg:mb-0 lg:px-2 lg:py-2 xl:mb-0 xl:px-2 xl:py-2">
-              <input
-                type="text"
-                defaultValue="Title"
-                className="px-3 py-[5px] border-[1px] border-solid border-gray-400 bg-slate-50 rounded-md w-full lg:focus:bg-white lg:focus:border-[#218bff] xl:focus:bg-white xl:focus:border-blue-400"
-                onChange={(e) => {
-                  setIssueTitle(e.target.value);
-                }}
-              />
-            </div>
-            <div className="w-full">
+            <div className="block justify-start items-center w-full">
               <div className="md:w-full md:mt-0 md:mx-0 lg:mt-2 lg:mx-2 lg:flex lg:justify-between lg:items-end  xl:mt-2 xl:mx-2 xl:flex xl:justify-between xl:items-end">
                 <div className="lg:flex lg:justify-between lg:items-end md:w-full xl:flex xl:justify-between xl:items-end ">
                   <button
@@ -510,16 +552,17 @@ function CreateNewIssue({
               <div
                 className={`${
                   preview ? "hidden" : "block"
-                } lg:h-[230px] lg:px-0 lg:py-0 border-[1px] border-solid border-gray-400 bg-slate-100 rounded-md w-full relative md:border-0 px-2 py-2 md:h-[200px] xl:h-[230px] xl:px-0 xl:py-0`}
+                } lg:h-[126px] lg:px-0 lg:py-0 border-[1px] border-solid border-gray-400 bg-slate-100 rounded-md w-full relative md:border-0 px-2 py-2 md:h-[126px] xl:h-[126px] xl:px-0 xl:py-0`}
               >
                 <div>
                   <textarea
                     cols="30"
                     rows="10"
                     value={issueContainer}
-                    className="relative md:leading-snug md:h-[200px] px-2 py-2 border-[1px] md:border-b-[0px] border-solid border-gray-400 bg-slate-100 rounded-md w-full lg:focus:bg-white lg:border-b-[1px] border-t-[0px] border-r-[0px] border-l-[0px] lg:border-dashed lg:h-[200px] lg:leading-snug lg:rounded-b-[0px] xl:focus:bg-white xl:border-dashed xl:h-[200px] xl:leading-snug xl:rounded-b-[0px]"
+                    className="relative md:leading-snug md:h-[82px] px-2 py-2 border-[1px] md:border-b-[0px] border-solid border-gray-400 bg-slate-100 rounded-md w-full lg:focus:bg-white lg:border-b-[1px] border-t-[0px] border-r-[0px] border-l-[0px] lg:border-dashed lg:h-[96px] lg:leading-snug lg:rounded-b-[0px] xl:focus:bg-white xl:border-dashed xl:h-[96px] xl:leading-snug xl:rounded-b-[0px]"
                     onChange={(e) => {
                       setIssueContainer(e.target.value);
+                      console.log(issueDetailData);
                     }}
                   />
                 </div>
@@ -541,8 +584,8 @@ function CreateNewIssue({
                 >
                   {TagIssue()}
                 </ul>
-                <div className="md:hidden lg:absolute bottom-0 flex justify-between items-center w-full px-[6px] py-[6px] lg:h-[30px]  xl:absolute xl:h-[30px]">
-                  <div className="xl:h-auto lg:h-auto">
+                <div className="md:block absolute bottom-0 md:bg-slate-100 flex justify-between items-center w-full px-[6px] py-[6px] lg:h-[30px] xl:absolute xl:h-[30px]">
+                  <div className="xl:h-auto lg:h-auto lg:w-full lg:flex lg:justify-between lg:items-center xl:flex xl:justify-between xl:items-center xl:w-full">
                     <input
                       type="file"
                       className="hidden"
@@ -568,8 +611,7 @@ function CreateNewIssue({
                       }}
                     >
                       <p className="lg:text-sm xl:text-sm">
-                        Attach files by dragging & dropping, selectimg or
-                        pasting them.
+                        Attach files by selectimg or pasting them.
                       </p>
 
                       <MarkdownIcon size={16} />
@@ -581,35 +623,184 @@ function CreateNewIssue({
               <div
                 className={`${
                   preview ? "block" : "hidden"
-                } px-2 pb-2 w-full min-h-[191px] border-b-[2px] border-solid border-[#d0d7de] md:min-h-[270px]`}
+                } px-2 pb-2 w-full min-h-[191px] border-b-[2px] border-solid border-[#d0d7de]`}
               >
                 <p className="text-sm"></p>
                 {PreviewText()}
               </div>
-              <div className="md:hidden">
-                <div className="flex justify-between items-center mt-2">
-                  <div className="md:hidden lg:flex justify-between items-center xl:flex">
-                    <MarkdownIcon
+              <div className="flex justify-end items-center mt-2">
+                <div className="relative flex justify-start items-center bg-[#f6f8fa] mr-2">
+                  <button
+                    className={`${
+                      issueDetailData.state === "open" ? "flex" : "hidden"
+                    } justify-between items-center px-4 py-[5px] border-t-[1px] border-b-[1px] border-l-[1px] border-solid border-gray-200 rounded-l-lg`}
+                    onClick={() => {
+                      setIssueDetailState("closed");
+                      setIssueDetailStateReanson("completed");
+                      UpdateUssueState();
+                    }}
+                  >
+                    <CheckCircleIcon
                       size={16}
-                      className="lg:mr-[2px] xl:mr-[2px]"
+                      fill={"purple"}
+                      className="mr-1"
                     />
-                    <p className="lg:text-xs xl:text-xs">
-                      Styling with Markdown is supported
-                    </p>
+
+                    <p className="text-sm">Close issue</p>
+                  </button>
+
+                  <button
+                    className={`${
+                      issueDetailData.state === "closed" ? "flex" : "hidden"
+                    } justify-between items-center px-4 py-[5px] border-t-[1px] border-b-[1px] border-l-[1px] border-solid border-gray-200 rounded-l-lg`}
+                    onClick={() => {
+                      setIssueDetailState("open");
+                      setIssueDetailStateReanson("reopened");
+                      UpdateUssueState();
+                    }}
+                  >
+                    <IssueReopenedIcon
+                      size={16}
+                      fill={"green"}
+                      className="mr-1"
+                    />
+
+                    <p className="text-sm">Reopen</p>
+                  </button>
+
+                  <div
+                    className="px-[10px] py-[5px] border-[1px] border-solid border-gray-200 rounded-lg h-[32px] w-[40px] hover:cursor-pointer"
+                    onClick={() => {
+                      if (closeIssue === false) {
+                        setCloseIssue(true);
+                      } else if (closeIssue === true) {
+                        setCloseIssue(false);
+                      }
+                    }}
+                  >
+                    <TriangleDownIcon size={16} />
                   </div>
-                  <div className="mt-4 pt-4 border-t-[1px] border-solid border-gray-200 lg:mt-0 lg:pt-0 xl:mt-0 xl:pt-0">
-                    <button
+                  <ul
+                    className={`${
+                      closeIssue ? "block" : "hidden"
+                    } absolute top-[38px] right-0 bg-white border-[1px] border-solid border-gray-200 rounded-r-lg`}
+                  >
+                    <li
                       className={`${
-                        issueTitle !== "" ? "bg-[#2DA44E]" : "bg-[#94d3a2]"
-                      } mt-6 px-4 py-[5px] border-[1px] border-solid border-[rgba(27,31,36,0.15)] w-full rounded-md lg:mt-0 xl:mt-0`}
-                      onClick={() => {
-                        setIssue();
-                      }}
+                        issueDetailData.state !== "open"
+                          ? "items-center"
+                          : "items-start"
+                      } relative flex items-start py-2 pr-2 pl-[30px] w-[298px] h-[55px] border-b-[1px] border-solid border-gray-200`}
                     >
-                      <p className="text-sm text-white">Submit new issue</p>
-                    </button>
-                  </div>
+                      <div
+                        className={`${
+                          (issueDetailData.state === "open" &&
+                            issueDetailData.state_reason === "reopened") ||
+                          (issueDetailData.state === "closed" &&
+                            issueDetailData.state_reason === "completed")
+                            ? "block"
+                            : "hidden"
+                        } absolute left-[8px]`}
+                      >
+                        <CheckIcon size={16} className="mr-1" />
+                      </div>
+
+                      <div
+                        className={`${
+                          issueDetailData.state === "open" ? "block" : "hidden"
+                        }`}
+                        onClick={() => {
+                          setIssueDetailState("closed");
+                          setIssueDetailStateReanson("completed");
+                          UpdateUssueState();
+                        }}
+                      >
+                        <div className="flex justify-start items-center">
+                          <CheckCircleIcon
+                            size={16}
+                            fill={"purple"}
+                            className="mr-1"
+                          />
+                          <p className="text-sm font-semibold">
+                            Close as complteted
+                          </p>
+                        </div>
+                        <p className="text-xs">Done, closed, fixed, resolved</p>
+                      </div>
+
+                      <div
+                        className={`${
+                          issueDetailData.state !== "open" ? "block" : "hidden"
+                        }`}
+                        onClick={() => {
+                          setIssueDetailState("open");
+                          setIssueDetailStateReanson("reopened");
+                          UpdateUssueState();
+                        }}
+                      >
+                        <div className="flex justify-start items-center">
+                          <IssueReopenedIcon
+                            size={16}
+                            fill={"green"}
+                            className="mr-1"
+                          />
+                          <p className="text-sm font-semibold">Reopen issue</p>
+                        </div>
+                      </div>
+                    </li>
+                    <li
+                      className={`${
+                        issueDetailData.state !== "open"
+                          ? "items-center"
+                          : "items-start"
+                      } flex justify-start  py-2 pr-2 pl-[30px] w-[298px] h-[55px]`}
+                    >
+                      <div
+                        className={`${
+                          issueDetailData.state === "closed" &&
+                          issueDetailData.state_reason === "not_planned"
+                            ? "block"
+                            : "hidden"
+                        } absolute left-[8px]`}
+                      >
+                        <CheckIcon size={16} className="mr-1" />
+                      </div>
+                      <div
+                        onClick={() => {
+                          setIssueDetailState("closed");
+                          setIssueDetailStateReanson("not_planned");
+                          UpdateUssueState();
+                        }}
+                      >
+                        <div className="flex justify-start items-center">
+                          <SkipIcon size={16} fill={"gray"} className="mr-1" />
+                          <p className="text-sm font-semibold">
+                            Close as not planned
+                          </p>
+                        </div>
+                        <p
+                          className={`${
+                            issueDetailData.state === "open"
+                              ? "block"
+                              : "hidden"
+                          } text-xs`}
+                        >
+                          Won't fix, can't repo, duplocate, state
+                        </p>
+                      </div>
+                    </li>
+                  </ul>
                 </div>
+                <button
+                  className={`${
+                    issueContainer !== "" ? "bg-[#2da44e]" : "bg-[#94d3a2]"
+                  } px-4 py-[5px] text-sm  border-[1px] border-solid border-gray-200 rounded-lg text-white`}
+                  onClick={() => {
+                    CreateIssueComment();
+                  }}
+                >
+                  Comment
+                </button>
               </div>
             </div>
           </div>
@@ -629,8 +820,7 @@ function CreateNewIssue({
     </div>
   );
 }
-
-export default CreateNewIssue;
+export default CreateComment;
 function readAsDataURL(arg0: any) {
   throw new Error("Function not implemented.");
 }

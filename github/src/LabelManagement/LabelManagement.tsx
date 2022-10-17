@@ -224,8 +224,6 @@ const Label = styled.tr<CloseLabelTr>`
   border-top: 0.5px solid #cccccc;
 `;
 
-<<<<<<< HEAD:github/src/LabelManagement.tsx
-=======
 type UpdateCloseLabelTr = {
   UpdateCloseLabelTr: number;
   index: number;
@@ -248,7 +246,6 @@ const UpdateLabel = styled.tr`
   border-top: 0.5px solid #cccccc;
 `;
 
->>>>>>> Sprint2:github/src/LabelManagement/LabelManagement.tsx
 const LabelStyle = styled.td`
   width: 18%;
   @media screen and (max-width: 767px) {
@@ -708,9 +705,7 @@ function LabelManagement() {
   const [lightOrDarkCreateText, setLightOrCreateDark]: any = useState("black");
   const [lightOrDarkText, setLightOrDark]: any = useState("black");
   const dispatch = useDispatch();
-<<<<<<< HEAD:github/src/LabelManagement.tsx
-  const LabelsData:any = useSelector((state) => state);
-=======
+
   const LabelsData: any = useSelector((state) => state);
 
   // function lightOrDarkCreate() {
@@ -728,7 +723,6 @@ function LabelManagement() {
   //     setLightOrCreateDark("white")
   //   }
   // }
->>>>>>> Sprint2:github/src/LabelManagement/LabelManagement.tsx
 
   function lightOrDark() {
     let BGColor: string;
@@ -737,15 +731,7 @@ function LabelManagement() {
     } else {
       BGColor = LabelBtnColor;
     }
-<<<<<<< HEAD:github/src/LabelManagement.tsx
-    const r1 = parseInt(UpdateChangeColor.slice(0, 1), 16)
-    const r2 = parseInt(UpdateChangeColor.slice(1, 2), 16)
-    const g1 = parseInt(UpdateChangeColor.slice(2, 3), 16)
-    const g2 = parseInt(UpdateChangeColor.slice(3, 4), 16)
-    const b1 = parseInt(UpdateChangeColor.slice(4, 5), 16)
-    const b2 = parseInt(UpdateChangeColor.slice(5, 6), 16)
-    const hsp = r1  + r2  + g1 + g2 + b1 + b2 
-=======
+
     const r1 = parseInt(UpdateChangeColor.slice(0, 1), 16);
     const r2 = parseInt(UpdateChangeColor.slice(1, 2), 16);
     const g1 = parseInt(UpdateChangeColor.slice(2, 3), 16);
@@ -753,8 +739,7 @@ function LabelManagement() {
     const b1 = parseInt(UpdateChangeColor.slice(4, 5), 16);
     const b2 = parseInt(UpdateChangeColor.slice(5, 6), 16);
     const hsp = r1 + r2 + g1 + g2 + b1 + b2;
-    // console.log(BGColor,LabelBtnColor,UpdateChangeColor)
->>>>>>> Sprint2:github/src/LabelManagement/LabelManagement.tsx
+
     if (hsp < 45) {
       setLightOrDark("black");
     } else {
@@ -767,19 +752,10 @@ function LabelManagement() {
       const data = await api.getLabels();
       setLablels(data);
       setLabelsDataTotal(data.length);
-<<<<<<< HEAD:github/src/LabelManagement.tsx
-      if(LabelsData.length !== 1){
-        setLablels(LabelsData);
-        setLabelsDataTotal(LabelsData.length);
-      }else if(LabelsData.length === 1 && LabelsData[0].name === undefined){
-=======
-      console.log(data, LabelsData);
       if (LabelsData.length !== 1) {
         setLablels(LabelsData);
         setLabelsDataTotal(LabelsData.length);
-        console.log(data, labels, LabelsData);
       } else if (LabelsData.length === 1 && LabelsData[0].name === undefined) {
->>>>>>> Sprint2:github/src/LabelManagement/LabelManagement.tsx
         setLablels(data);
         setLabelsDataTotal(data.length);
       } else if (LabelsData.length === 1 && LabelsData[0].name !== undefined) {
@@ -811,10 +787,6 @@ function LabelManagement() {
         setLabelBtnColor([labels][0][index].color);
         setUpdateChangeColor([labels][0][index].color);
       }
-<<<<<<< HEAD:github/src/LabelManagement.tsx
-=======
-      console.log(UpdateChangeColor, LabelBtnColorNum, index, LabelBtnColor);
->>>>>>> Sprint2:github/src/LabelManagement/LabelManagement.tsx
 
       return (
         <>
@@ -991,7 +963,6 @@ function LabelManagement() {
             setNewLabelsSelectColor({ item }.item);
             setUpdateChangeColor({ item }.item.substring(1));
             setLabelBtnColorNum(index);
-            console.log(newLabelsSelectColor, UpdateChangeColor);
             if (selectColorMenuActive === true) {
               setSelectColorMenuActive(false);
             } else {
@@ -1011,14 +982,6 @@ function LabelManagement() {
     setColorMathFloorNum(MathFloorColorNum);
     setUpdateLabelsSelectColor(colorListArray[colorMathFloorNum]);
     setNewLabelsSelectColor(colorListArray[colorMathFloorNum]);
-<<<<<<< HEAD:github/src/LabelManagement.tsx
-=======
-    console.log(
-      newLabelsSelectColor,
-      colorMathFloorNum,
-      colorListArray[colorMathFloorNum]
-    );
->>>>>>> Sprint2:github/src/LabelManagement/LabelManagement.tsx
     setUpdateChangeColor(colorListArray[colorMathFloorNum].substring(1));
   }
 
@@ -1027,14 +990,8 @@ function LabelManagement() {
     let MathFloorColorNum;
     MathFloorColorNum = Math.floor(Math.random() * colorListArray.length);
     setColorMathFloorNum(MathFloorColorNum);
-<<<<<<< HEAD:github/src/LabelManagement.tsx
-    setLabelBtnColorNum(colorMathFloorNum)
-    setUpdateChangeColor(colorListArray[colorMathFloorNum].substring(1))
-=======
     setLabelBtnColorNum(colorMathFloorNum);
     setUpdateChangeColor(colorListArray[colorMathFloorNum].substring(1));
-    console.log(UpdateChangeColor);
->>>>>>> Sprint2:github/src/LabelManagement/LabelManagement.tsx
   }
 
   function PostLabelName(e: any) {
@@ -1084,22 +1041,12 @@ function LabelManagement() {
       });
   }
 
-<<<<<<< HEAD:github/src/LabelManagement.tsx
-
-  async function deleteLabel(index:number) {
-    const data = await api.deleteLabel({
-      owner: "Xie-MS",
-      repo: "Personal-Project",
-      name:labels[index].name
-=======
   async function deleteLabel(index: number) {
-    console.log(labels[index].name, index);
     const data = await api
       .deleteLabel({
         owner: "Xie-MS",
         repo: "Personal-Project",
         name: labels[index].name,
->>>>>>> Sprint2:github/src/LabelManagement/LabelManagement.tsx
       })
       .then((Labeldata) => {
         dispatch({
@@ -1107,10 +1054,6 @@ function LabelManagement() {
           payload: { Labeldata },
         });
       });
-<<<<<<< HEAD:github/src/LabelManagement.tsx
-=======
-    console.log(data);
->>>>>>> Sprint2:github/src/LabelManagement/LabelManagement.tsx
   }
 
   async function updataLabels(index: number) {

@@ -1,13 +1,25 @@
-//import username
-
-let jwtToken: string;
-function getProfile() {
-  jwtToken = JSON.parse(window.localStorage.getItem("userToken") as string);
-}
-getProfile();
+let jwtToken = JSON.parse(window.localStorage.getItem("userToken") as string);
+let jwtName = JSON.parse(window.localStorage.getItem("userName") as string);
+let jwtRepo = JSON.parse(
+  window.localStorage.getItem("userChooseRepo") as string
+);
 
 const api = {
-  hostname: `https://api.github.com/repos/Xie-Ms/Personal-Project`,
+  hostname: `https://api.github.com/repos/${jwtName}/${jwtRepo}`,
+  async getRepo() {
+    const response = await fetch(
+      `https://api.github.com/users/${jwtName}/repos`,
+      {
+        headers: new Headers({
+          "Content-type": "application/json",
+          Accept: "application/vnd.github+json",
+          Authorization: `token ${jwtToken}`,
+        }),
+      }
+    );
+    return await response.json();
+  },
+
   async getLabels() {
     const response = await fetch(`${this.hostname}/labels`, {
       headers: new Headers({
@@ -202,21 +214,120 @@ const api = {
     return await response.json();
   },
 
-  async Pagination(per_page: number | string, paging: number | string) {
-    const response = await fetch(
-      `${this.hostname}/issues?per_page=${per_page}&page=${paging}`
-    );
-    return await response.json();
-  },
-  async filiter(userName: string) {
-    const response = await fetch(
-      `${this.hostname}/issues?assignee=${userName}`
-    );
+  async getIssueData(IssueNum: string | undefined) {
+    const response = await fetch(`${this.hostname}/issues/${IssueNum}`, {
+      headers: new Headers({
+        "Content-type": "application/json",
+        Accept: "application/vnd.github+json",
+        Authorization: `token ${jwtToken}`,
+      }),
+    });
     return await response.json();
   },
 
-  async getTimeLine() {
-    const response = await fetch(`${this.hostname}/issues/1/timeline`);
+  async getIssueTimeline(IssueNum: string | undefined) {
+    const response = await fetch(
+      `${this.hostname}/issues/${IssueNum}/timeline`,
+      {
+        headers: new Headers({
+          "Content-type": "application/json",
+          Accept: "application/vnd.github+json",
+          Authorization: `token ${jwtToken}`,
+        }),
+      }
+    );
+    return await response.json();
+  },
+  async CreateComment(data: any, IssueNum: string | number | undefined) {
+    const response = await fetch(
+      `${this.hostname}/issues/${IssueNum}/comments`,
+      {
+        body: JSON.stringify(data),
+        headers: new Headers({
+          Accept: "application/vnd.github+json",
+          Authorization: `token ${jwtToken}`,
+        }),
+        method: "POST",
+      }
+    );
+    console.log(response);
+    return await response.json();
+  },
+
+  async UpdateComment(data: any, commentNum: string | number | undefined) {
+    const response = await fetch(
+      `${this.hostname}/issues/comments/${commentNum}`,
+      {
+        body: JSON.stringify(data),
+        headers: new Headers({
+          Accept: "application/vnd.github+json",
+          Authorization: `token ${jwtToken}`,
+        }),
+        method: "PATCH",
+      }
+    );
+    console.log(response);
+    return await response.json();
+  },
+
+  async DeleteComment(data: any, commentNum: string | number | undefined) {
+    const response = await fetch(
+      `${this.hostname}/issues/comments/${commentNum}`,
+      {
+        body: JSON.stringify(data),
+        headers: new Headers({
+          Accept: "application/vnd.github+json",
+          Authorization: `token ${jwtToken}`,
+        }),
+        method: "DELETE",
+      }
+    );
+    console.log(response);
+    return await response;
+  },
+
+  async UpdateIssue(data: any, IssueNum: string | number | undefined) {
+    const response = await fetch(`${this.hostname}/issues/${IssueNum}`, {
+      body: JSON.stringify(data),
+      headers: new Headers({
+        Accept: "application/vnd.github+json",
+        Authorization: `token ${jwtToken}`,
+      }),
+      method: "PATCH",
+    });
+    console.log(response);
+    return await response.json();
+  },
+
+  async AddEmoji(data: any, IssueNum: string | number | undefined) {
+    const response = await fetch(
+      `${this.hostname}/issues/${IssueNum}/reactions`,
+      {
+        body: JSON.stringify(data),
+        headers: new Headers({
+          Accept: "application/vnd.github+json",
+          Authorization: `token ${jwtToken}`,
+        }),
+        method: "POST",
+      }
+    );
+    console.log(response);
+    return await response.json();
+  },
+
+  async AddEmojiComment(data: any, commentNum: string | number | undefined) {
+    const response = await fetch(
+      `${this.hostname}/issues/comments/${commentNum}/reactions`,
+      {
+        body: JSON.stringify(data),
+        headers: new Headers({
+          Accept: "application/vnd.github+json",
+          Authorization: `token ${jwtToken}`,
+        }),
+        method: "POST",
+      }
+    );
+    console.log(response);
     return await response.json();
   },
 };
