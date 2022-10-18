@@ -104,10 +104,15 @@ function NewIssuePage() {
     }
   }
 
+  let jwtName = JSON.parse(window.localStorage.getItem("userName") as string);
+  let jwtRepo = JSON.parse(
+    window.localStorage.getItem("userChooseRepo") as string
+  );
+
   async function setIssue() {
     const data = await api.setIssue({
-      owner: "Xie-MS",
-      repo: "Personal-Project",
+      owner: { jwtName },
+      repo: { jwtRepo },
       title: issueTitle,
       body: issueContainer,
       labels: labelSelectData,

@@ -9,6 +9,7 @@ import SortWhite from "./img/SortWhite.png";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "./client";
+import { useDispatch } from "react-redux";
 
 const Header = styled.div`
   display: flex;
@@ -226,6 +227,7 @@ function Headers() {
   const [mobileMenuActive, setMobileMenuActive] = useState(false);
   const [userToken, setUserToken] = useState("");
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   function mobileMenu() {
     if (mobileMenuActive === false) {
@@ -250,6 +252,13 @@ function Headers() {
     const token: any = supabase.auth.session();
     setUser(user);
     setUserName(token.user.identities[0].identity_data.user_name);
+    dispatch({
+      type: "setUser",
+      payload: {
+        token: token.provider_token,
+        name: token.user.identities[0].identity_data.user_name,
+      },
+    });
     setUserToken(token.provider_token);
   }
 
@@ -278,6 +287,7 @@ function Headers() {
   async function signOut() {
     await supabase.auth.signOut();
     setUser(null);
+    localStorage.clear();
     window.location.assign(`/`);
   }
 

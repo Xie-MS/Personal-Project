@@ -5,6 +5,7 @@ import { Provider } from "react-redux";
 import { store } from "./store";
 import App from "./App";
 import OAuth from "./OAuth";
+import Error from "./404";
 import LabelManagement from "./LabelManagement/LabelManagement";
 import IssuePage from "./IssuePage";
 import NewIssuePage from "./NewIssuePage";
@@ -24,7 +25,8 @@ root.render(
           <Route path="/Issue" element={<IssuePage />} />
           <Route path="/Issue/:IssueNum" element={<IssueDetailPage />} />
           <Route path="/NewIssue" element={<NewIssuePage />} />
-          <Route path="*" element={<Navigate to="/" replace />} />
+          <Route path="/404" element={<Error />} />
+          <Route path="*" element={<Navigate to="/404" replace />} />
         </Route>
       </Routes>
     </BrowserRouter>

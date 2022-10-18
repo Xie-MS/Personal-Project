@@ -60,11 +60,16 @@ function AssigneePage({
   const LabelSelectName = useRef<HTMLParagraphElement | null>(null);
   const { IssueNum } = useParams();
 
+  let jwtName = JSON.parse(window.localStorage.getItem("userName") as string);
+  let jwtRepo = JSON.parse(
+    window.localStorage.getItem("userChooseRepo") as string
+  );
+
   async function UpdateAssignees() {
     const data = await api.UpdateIssue(
       {
-        owner: "Xie-MS",
-        repo: "Personal-Project",
+        owner: { jwtName },
+        repo: { jwtRepo },
         issue_number: IssueNum,
         assignees: assigneeSelectData,
       },
@@ -77,8 +82,8 @@ function AssigneePage({
   async function UpdateLabels() {
     const data = await api.UpdateIssue(
       {
-        owner: "Xie-MS",
-        repo: "Personal-Project",
+        owner: { jwtName },
+        repo: { jwtRepo },
         issue_number: IssueNum,
         labels: labelSelectData,
       },

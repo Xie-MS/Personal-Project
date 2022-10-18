@@ -1,3 +1,5 @@
+import { useSelector } from "react-redux";
+
 let jwtToken = JSON.parse(window.localStorage.getItem("userToken") as string);
 let jwtName = JSON.parse(window.localStorage.getItem("userName") as string);
 let jwtRepo = JSON.parse(
@@ -6,14 +8,16 @@ let jwtRepo = JSON.parse(
 
 const api = {
   hostname: `https://api.github.com/repos/${jwtName}/${jwtRepo}`,
-  async getRepo() {
+  async getRepo(userName: string, userToken: string) {
+    console.log(userName, userToken);
+
     const response = await fetch(
-      `https://api.github.com/users/${jwtName}/repos`,
+      `https://api.github.com/users/${userName}/repos`,
       {
         headers: new Headers({
           "Content-type": "application/json",
           Accept: "application/vnd.github+json",
-          Authorization: `token ${jwtToken}`,
+          Authorization: `token ${userToken}`,
         }),
       }
     );

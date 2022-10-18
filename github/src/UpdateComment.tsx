@@ -104,11 +104,16 @@ function CreateComment({
   const [issueNum, setIssueNum]: any = useState(-1);
   const { IssueNum } = useParams();
 
+  let jwtName = JSON.parse(window.localStorage.getItem("userName") as string);
+  let jwtRepo = JSON.parse(
+    window.localStorage.getItem("userChooseRepo") as string
+  );
+
   async function UpdateComment() {
     const data = await api.UpdateComment(
       {
-        owner: "Xie-MS",
-        repo: "Personal-Project",
+        owner: { jwtName },
+        repo: { jwtRepo },
         comment_id: commentNum,
         body: issueUpdateInputDefaultValue,
       },
@@ -122,8 +127,8 @@ function CreateComment({
   async function UpdateContainer() {
     const data = await api.UpdateIssue(
       {
-        owner: "Xie-MS",
-        repo: "Personal-Project",
+        owner: { jwtName },
+        repo: { jwtRepo },
         issue_number: IssueNum,
         body: issueUpdateContainer,
       },

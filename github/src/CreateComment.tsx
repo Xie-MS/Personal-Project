@@ -92,11 +92,16 @@ function CreateComment({
   const [closeIssue, setCloseIssue]: any = useState(false);
   const { IssueNum } = useParams();
 
+  let jwtName = JSON.parse(window.localStorage.getItem("userName") as string);
+  let jwtRepo = JSON.parse(
+    window.localStorage.getItem("userChooseRepo") as string
+  );
+
   async function CreateIssueComment() {
     const data = await api.CreateComment(
       {
-        owner: "Xie-MS",
-        repo: "Personal-Project",
+        owner: { jwtName },
+        repo: { jwtRepo },
         body: issueContainer,
       },
       IssueNum
@@ -107,8 +112,8 @@ function CreateComment({
   async function UpdateUssueState() {
     const data = await api.UpdateIssue(
       {
-        owner: "Xie-MS",
-        repo: "Personal-Project",
+        owner: { jwtName },
+        repo: { jwtRepo },
         state: issueDetailState,
         state_reason: issueDetailStateReanson,
         issue_number: IssueNum,

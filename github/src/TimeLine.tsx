@@ -122,11 +122,16 @@ function TimeLine({
     });
   }
 
+  let jwtName = JSON.parse(window.localStorage.getItem("userName") as string);
+  let jwtRepo = JSON.parse(
+    window.localStorage.getItem("userChooseRepo") as string
+  );
+
   async function DeleteComment() {
     const data = await api.DeleteComment(
       {
-        owner: "Xie-MS",
-        repo: "Personal-Project",
+        owner: { jwtName },
+        repo: { jwtRepo },
         comment_id: commentNum,
       },
       commentNum
@@ -138,8 +143,8 @@ function TimeLine({
   async function AddEmoji() {
     const data = await api.AddEmojiComment(
       {
-        owner: "Xie-MS",
-        repo: "Personal-Project",
+        owner: { jwtName },
+        repo: { jwtRepo },
         comment_id: commentNum,
         content: emojiSelect,
       },

@@ -761,6 +761,14 @@ function LabelManagement() {
   const [lightOrDarkText, setLightOrDark]: any = useState("black");
   const dispatch = useDispatch();
   const LabelsData: any = useSelector((state) => state);
+  console.log(LabelsData);
+  async function getLabels() {
+    const data = await api.getLabels();
+    dispatch({ type: "SetLabelData", payload: data });
+  }
+  useEffect(() => {
+    getLabels();
+  }, []);
 
   // function lightOrDarkCreate() {
   //   const r1 = parseInt(newLabelsSelectColor.substring(1).slice(0, 1), 16)
@@ -805,19 +813,25 @@ function LabelManagement() {
       const data = await api.getLabels();
       setLablels(data);
       setLabelsDataTotal(data.length);
-      if (LabelsData.length !== 1) {
-        setLablels(LabelsData);
-        setLabelsDataTotal(LabelsData.length);
-      } else if (LabelsData.length === 1 && LabelsData[0].name === undefined) {
+      if (LabelsData.labelReducer.length !== 1) {
+        setLablels(LabelsData.labelReducer);
+        setLabelsDataTotal(LabelsData.labelReducer.length);
+      } else if (
+        LabelsData.labelReducer.length === 1 &&
+        LabelsData.labelReducer[0].name === undefined
+      ) {
         setLablels(data);
         setLabelsDataTotal(data.length);
-      } else if (LabelsData.length === 1 && LabelsData[0].name !== undefined) {
+      } else if (
+        LabelsData.labelReducer.length === 1 &&
+        LabelsData.labelReducer[0].name !== undefined
+      ) {
         setLablels(data);
         setLabelsDataTotal(data.length);
       }
     }
     getLabels();
-  }, [LabelsData]);
+  }, [LabelsData.labelReducer]);
 
   function showSortList() {
     if (sortActive === false) {
@@ -1077,11 +1091,16 @@ function LabelManagement() {
     }
   }
 
+  let jwtName = JSON.parse(window.localStorage.getItem("userName") as string);
+  let jwtRepo = JSON.parse(
+    window.localStorage.getItem("userChooseRepo") as string
+  );
+
   async function setLabels() {
     const data = await api
       .setLabels({
-        owner: "Xie-MS",
-        repo: "Personal-Project",
+        owner: { jwtName },
+        repo: { jwtRepo },
         name: inputName,
         description: Description.current?.value,
         color: SeleceColor.current?.value.substring(1),
@@ -1097,8 +1116,8 @@ function LabelManagement() {
   async function deleteLabel(index: number) {
     const data = await api
       .deleteLabel({
-        owner: "Xie-MS",
-        repo: "Personal-Project",
+        owner: { jwtName },
+        repo: { jwtRepo },
         name: labels[index].name,
       })
       .then((Labeldata) => {
@@ -1112,8 +1131,8 @@ function LabelManagement() {
   async function updataLabels(index: number) {
     const data = await api
       .updataLabels({
-        owner: "Xie-MS",
-        repo: "Personal-Project",
+        owner: { jwtName },
+        repo: { jwtRepo },
         oldName: labels[index].name,
         name: updateLabelName,
         description: updateUpdateDescription,

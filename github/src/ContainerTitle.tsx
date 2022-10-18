@@ -174,13 +174,19 @@ const FunctionalImgandText = styled.button`
 `;
 
 function ContainerTitle() {
+  let jwtRepo = JSON.parse(
+    window.localStorage.getItem("userChooseRepo") as string
+  );
+
+  let jwtName = JSON.parse(window.localStorage.getItem("userName") as string);
+
   return (
     <ContainetTitle>
       <RepoInformation>
         <Repo>
           <RepoImg src={RepoImage} alt="" />
-          <RepoAndUserName>Xie-MS</RepoAndUserName>／
-          <RepoAndUserName>Personal-Project</RepoAndUserName>
+          <RepoAndUserName>{jwtName}</RepoAndUserName>／
+          <RepoAndUserName>{jwtRepo}</RepoAndUserName>
           <RepoVisibility>
             <RepoVisibilityBtn>Public</RepoVisibilityBtn>
           </RepoVisibility>
