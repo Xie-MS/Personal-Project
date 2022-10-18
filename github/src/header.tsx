@@ -81,6 +81,7 @@ const MobileMenuText = styled.li`
     padding: 8px;
     font-weight: 600;
     white-space: nowrap;
+    cursor: pointer;
     border-bottom: 1px solid rgba(255, 255, 255, 0.15);
   }
 `;
@@ -94,6 +95,7 @@ const MobileMenuTextAndImg = styled.li`
     display: flex;
     justify-content: start;
     align-items: center;
+    cursor: pointer;
   }
 `;
 
@@ -116,6 +118,7 @@ const HeaderLeftUl = styled.ul`
 const Logo = styled.li`
   width: 32px;
   margin-right: 16px;
+  cursor: pointer;
 `;
 
 const LogoImg = styled.img`
@@ -125,6 +128,7 @@ const LogoImg = styled.img`
 
 const HeaderSearch = styled.li`
   display: block;
+  cursor: pointer;
   @media screen and (max-width: 767px) {
     display: none;
   }
@@ -157,6 +161,7 @@ const HeaderLeftText = styled.li`
   color: white;
   white-space: nowrap;
   font-weight: 600;
+  cursor: pointer;
   @media screen and (max-width: 767px) {
     display: none;
   }
@@ -175,6 +180,7 @@ const HeaderRightUl = styled.ul`
 const BellImg = styled.img`
   width: 16px;
   height: 16px;
+  cursor: pointer;
 `;
 
 const More = styled.li`
@@ -182,6 +188,7 @@ const More = styled.li`
   display: flex;
   justify-content: center;
   align-items: center;
+  cursor: pointer;
   @media screen and (max-width: 767px) {
     display: none;
   }
@@ -200,6 +207,7 @@ const Pofile = styled.li`
   display: flex;
   align-items: center;
   justify-content: center;
+  cursor: pointer;
   @media screen and (max-width: 767px) {
     display: none;
   }
@@ -229,7 +237,6 @@ function Headers() {
 
   const [user, setUser]: any = useState(null);
   const [userName, setUserName] = useState("");
-  const [signIn, setSignIn] = useState(false);
 
   useEffect(() => {
     checkUser();
@@ -263,7 +270,7 @@ function Headers() {
       },
       {
         scopes: "repo gist notifications",
-        redirectTo: "https://github-ae242.web.app/signIn",
+        redirectTo: "http://localhost:3000/signIn",
       }
     );
   }
@@ -294,7 +301,7 @@ function Headers() {
               <MobileMenuText>Settings</MobileMenuText>
               <MobileMenuTextAndImg>
                 <MobileMenuImg src={LogoImage} alt="LogoImage" />
-                Xie-MS
+                {userName}
               </MobileMenuTextAndImg>
               <MobileMenuTextAndImg onClick={signOut}>
                 <MobileMenuImg src={SingOut} />
@@ -356,7 +363,7 @@ function Headers() {
           <MobileMenuText>Settings</MobileMenuText>
           <MobileMenuTextAndImg>
             <MobileMenuImg src={LogoImage} alt="LogoImage" />
-            Xie-MS
+            {userName}
           </MobileMenuTextAndImg>
           <MobileMenuTextAndImg onClick={signOut}>
             <MobileMenuImg src={SingOut} />

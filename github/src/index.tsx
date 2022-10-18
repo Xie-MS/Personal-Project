@@ -19,8 +19,6 @@ root.render(
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<App />}>
-          {/* <Route path="/OAuth" element={<OAuth />} /> */}
-          {/* <Route index element={<SignIn />} /> */}
           <Route path="/signIn" element={<SignIn />} />
           <Route path="/LabelManagement" element={<LabelManagement />} />
           <Route path="/Issue" element={<IssuePage />} />

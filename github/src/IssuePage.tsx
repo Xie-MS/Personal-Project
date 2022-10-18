@@ -255,7 +255,7 @@ function IssuePage() {
             style={{
               backgroundColor: `#${renderData[index].labels[listIndex].color}`,
             }}
-            className={`rounded-xl px-[7px] font-semibold text-sm md:text-xs`}
+            className={`rounded-xl px-[7px] font-semibold text-sm ml-1 md:text-xs`}
           >
             {renderData[index].labels[listIndex].name}
           </button>
@@ -589,7 +589,7 @@ function IssuePage() {
               <button
                 className="flex justify-center items-center ml-2 px-4 py-[5px] text-white bg-green-600 border-[1px] border-solid border-gray-400 rounded-md h-[30px] text-sm lg:ml-[15px]"
                 onClick={() => {
-                  navigate(`/NewIssuePage`);
+                  navigate(`/NewIssue`);
                 }}
               >
                 <p className="flex justify-center items-center md:hidden">
@@ -725,7 +725,7 @@ function IssuePage() {
                   <ChevronDownIcon size={16} />
                 </button>
                 <button
-                  className="flex justify-center items-center px-4 text-[#57606a] md:text-sm hover:text-black"
+                  className="flex justify-center items-center px-4 text-[#57606a] md:text-sm hover:text-black cursor-pointer"
                   onClick={() => {
                     setAssigne(true);
                     setMobileMenuBG(true);
@@ -748,7 +748,7 @@ function IssuePage() {
                     assigneMenu ? "block" : "hidden"
                   } absolute top-[25px] right-[60px] bg-white border-[1px] border-solid border-gray-300 rounded-lg w-[275px] sm:sm:fixed sm:top-[1%] sm:left-[4%] sm:bottom-[35%] px-4 text-sm sm:w-[92%]`}
                 >
-                  <li className="px-4 py-[7px] text-xs font-semibold flex justify-between items-center sm:font-semibold sm:px-4 sm:py-4">
+                  <li className="px-4 py-[7px] text-xs font-semibold flex justify-between items-center sm:font-semibold sm:px-4 sm:py-4 cursor-pointer">
                     <p>Filter by who's assigned</p>
                     <p
                       onClick={() => {
@@ -773,7 +773,7 @@ function IssuePage() {
                       }}
                     />
                   </li>
-                  <li className="py-[7px] px-4 text-xs border-t-[1px] border-solid border-gray-300 flex justify-start items-center sm:px-4 sm:py-4">
+                  <li className="py-[7px] px-4 text-xs border-t-[1px] border-solid border-gray-300 flex justify-start items-center sm:px-4 sm:py-4 cursor-pointer">
                     <div className="invisible">
                       <CheckIcon size={16} className="mr-2" />
                     </div>
@@ -782,7 +782,7 @@ function IssuePage() {
                   <li
                     className={`${
                       assigneeLI ? "flex" : "hidden"
-                    } py-[7px] px-4 border-t-[1px] border-solid border-gray-300 text-xs flex justify-start items-center sm:px-4 sm:py-4`}
+                    } py-[7px] px-4 border-t-[1px] border-solid border-gray-300 text-xs flex justify-start items-center sm:px-4 sm:py-4 cursor-pointer`}
                     onClick={() => {
                       setsortSelect("Xie-MS");
                       setAssigneeName("Xie-MS");
@@ -839,9 +839,9 @@ function IssuePage() {
                 <ul
                   className={`${
                     sortMenu ? "visible" : "invisible"
-                  } absolute top-[25px] right-0 bg-white border-[1px] border-solid border-gray-300 rounded-lg w-[275px] sm:fixed sm:top-[2%] sm:left-[2%] sm:bottom-[21%] sm:w-[95%]`}
+                  } absolute top-[25px] right-0 bg-white border-[1px] border-solid border-gray-300 rounded-lg w-[275px] sm:fixed sm:top-[2%] sm:left-[2%] sm:bottom-[21%] sm:w-[95%] cursor-pointer`}
                 >
-                  <li className="px-4 py-[7px] text-xs font-semibold flex justify-between items-center sm:py-4 sm:text-sm">
+                  <li className="px-4 py-[7px] text-xs font-semibold flex justify-between items-center sm:py-4 sm:text-sm cursor-pointer">
                     <p>Sort by</p>
                     <p
                       onClick={() => {

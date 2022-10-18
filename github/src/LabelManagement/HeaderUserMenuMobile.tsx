@@ -21,6 +21,7 @@ const MobileMenuTextAndImg = styled.li`
   display: flex;
   justify-content: start;
   align-items: center;
+  cursor: pointer;
   color: white;
   list-style: none;
 `;
@@ -30,6 +31,7 @@ const MobileMenuImg = styled.img`
   height: 20px;
   margin-right: 3px;
   color: white;
+  cursor: pointer;
 `;
 
 function Product() {

@@ -97,7 +97,7 @@ function AssigneePage({
                 .includes(assigneeInputName.toString().toLowerCase())
                 ? "flex"
                 : "hidden"
-            } xl:py-2 px-2 border-t-[1px] border-solid border-gray-300 text-xs justify-start items-center md:pl-5 md:pr-2 md:py-4 xl:pl-6 lg:pl-6 lg:relative xl:relative`}
+            } xl:py-2 px-2 border-t-[1px] border-solid border-gray-300 text-xs cursor-pointer justify-start items-center md:pl-5 md:pr-2 md:py-4 xl:pl-6 lg:pl-6 lg:relative xl:relative`}
             onClick={() => {
               if (
                 assigneeSelectData.includes(renderAssigneeData[ItemIndex].login)
@@ -156,7 +156,7 @@ function AssigneePage({
                 .includes(labelsInputSelect.toString().toLowerCase())
                 ? "flex"
                 : "hidden"
-            } xl:py-2 px-2 border-t-[1px] border-solid border-gray-300 text-xs justify-start items-center md:pl-5 md:pr-2 md:py-4 xl:pl-6 lg:pl-6 lg:relative xl:relative`}
+            } xl:py-2 px-2 cursor-pointer border-t-[1px] border-solid border-gray-300 text-xs justify-start items-center md:pl-5 md:pr-2 md:py-4 xl:pl-6 lg:pl-6 lg:relative xl:relative`}
             onClick={() => {
               if (labelSelectData.includes(renderLabelData[ItemIndex].name)) {
                 const labelSelectNum = labelSelectData.indexOf(

@@ -49,7 +49,7 @@ function IssueLabelList() {
           alignItems: "center",
           marginTop: "16px",
         }}
-        className="py-[7px] px-4 text-xs border-b-[1px] border-solid border-gray-400 flex justify-start items-center sm:font-semibold px-4 sm:py-4"
+        className="py-[7px] cursor-pointer px-4 text-xs border-b-[1px] border-solid border-gray-400 flex justify-start items-center sm:font-semibold px-4 sm:py-4"
       >
         <div
           className="invisible"

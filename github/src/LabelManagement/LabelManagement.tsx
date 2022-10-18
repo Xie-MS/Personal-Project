@@ -35,6 +35,7 @@ const MenuLeftUl = styled.ul`
 const MenuBtn = styled.li`
   border: 1px solid #000;
   border-radius: 5px;
+  background-color: white;
   display: flex;
 `;
 
@@ -44,10 +45,11 @@ const Labels = styled.button`
   justify-content: center;
   align-items: center;
   height: 32px;
-  background-color: white;
+
   border: none;
   width: 88px;
   border-right: 1px solid #000;
+
   padding: 5px 12px;
   &:focus {
     background-color: #0969da;
@@ -84,13 +86,14 @@ const Search = styled.li`
 const SearchInput = styled.input`
   padding: 5px 12px 5px 32px;
   border: 0.5px solid #000;
-  background-color: lightgray;
+  background-color: #f6f8fa;
   width: 274px;
-  height: 20px;
+  height: 32px;
   background-image: url(${SearchImage});
   background-repeat: no-repeat;
   background-position: left;
   border-radius: 5px;
+  color: black;
   &:focus {
     border: 1px solid #0969da;
     background-color: white;
@@ -174,28 +177,28 @@ const LabelTitleEventUl = styled.ul<Sortboolean>`
 const LabelTitleEventLi = styled.li`
   padding: 8px 8px 8px 37px;
   border-bottom: 1px solid #cccccc;
-  border-radius: 5px;
-  height: 16px;
+
+  height: auto;
 `;
 
 const LabelTitleEventLiTitleDefault = styled.li`
   padding: 8px 10px;
   border-bottom: 1px solid #cccccc;
-  border-radius: 5px;
+
   display: flex;
   justify-content: start;
   align-items: center;
-  height: 16px;
+  height: auto;
 `;
 
 const LabelTitleEventLiTitle = styled.li`
   padding: 8px 10px;
   border-bottom: 1px solid #cccccc;
-  border-radius: 5px;
+
   display: flex;
   justify-content: start;
   align-items: center;
-  height: 16px;
+  height: auto;
 `;
 
 const LabelTitleEventLiTitleImg = styled.img`
@@ -401,7 +404,7 @@ const Edit = styled.button`
 const Delete = styled.button`
   background-color: white;
   border: none;
-
+  margin-left: 16px;
   @media screen and (max-width: 1011px) {
     display: none;
   }
@@ -519,9 +522,11 @@ const CreateInformationInputName = styled.input`
   margin-right: 5px;
   padding: 5px 12px;
   border: 1px solid rgba(0, 0, 0, 0.25);
-  border-radius: 10px;
+  border-radius: 5px;
   width: 100%;
-  height: 20px;
+  height: 30px;
+  background-color: #f6f8fa;
+
   &:focus {
     border: 1px solid #54aeff;
   }
@@ -534,9 +539,11 @@ const CreateInformationInputDescription = styled.input`
   margin-right: 5px;
   padding: 5px 12px;
   border: 1px solid rgba(0, 0, 0, 0.25);
-  border-radius: 10px;
+  border-radius: 5px;
   width: 100%;
-  height: 20px;
+  height: 30px;
+  background-color: #f6f8fa;
+
   &:focus {
     border: 1px solid #54aeff;
   }
@@ -554,15 +561,17 @@ const CreateInformationInputColor = styled.input<ErrorColorValue>`
   margin-right: 5px;
   padding: 5px 12px;
   border: 1px solid rgba(0, 0, 0, 0.25);
-  border-radius: 10px;
-  width: 100%;
-  height: 20px;
+  border-radius: 5px;
+  width: 104px;
+  height: 30px;
+  background-color: #f6f8fa;
 
   &:focus {
     border: 1px solid #54aeff;
   }
   @media screen and (max-width: 767px) {
     width: 100%;
+    margin-bottom: 8px;
   }
 `;
 
@@ -572,11 +581,11 @@ type selectColorMenuActive = {
 
 const ColorList = styled.ul<selectColorMenuActive>`
   display: ${(props) => (props.selectColorMenuActive ? "block" : "none")};
-  width: 230px;
+  width: 240px;
   padding: 8px 8px;
   border: 1px solid rgba(0, 0, 0, 0.25);
   background-color: white;
-  height: 78px;
+  height: auto;
   border-radius: 10px;
   position: absolute;
   left: 28px;
@@ -585,7 +594,7 @@ const ColorList = styled.ul<selectColorMenuActive>`
 
 const ColorListP = styled.p`
   margin-top: 0;
-  margin-bottom: 4px;
+  margin-bottom: 8px;
   font-size: 12px;
   color: black;
   @media screen and (max-width: 767px) {
@@ -597,7 +606,7 @@ const ColorBtn = styled.button`
   height: 24px;
   background-color: ${(props) => props.color};
   border: 0.5px solid rgba(0, 0, 0, 0.25);
-  border-radius: 10px;
+  border-radius: 5px;
   margin-bottom: 8px;
   margin-right: 3px;
   @media screen and (max-width: 767px) {
@@ -634,11 +643,16 @@ const CreateCancel = styled.button`
   width: 74px;
   height: 30px;
   border: 1px solid rgba(0, 0, 0, 0.25);
-  border-radius: 10px;
+  border-radius: 5px;
   background-color: transparent;
   text-align: center;
   margin-right: 8px;
   padding: 5px 16px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 14px;
+  color: black;
   @media screen and (max-width: 767px) {
     order: 2;
     margin-left: 8px;
@@ -654,10 +668,11 @@ const CreateCreateLabel = styled.button<CreateButton>`
   height: 30px;
   pad: 5px 16px;
   border: 1px solid rgba(0, 0, 0, 0.25);
-  border-radius: 10px;
+  border-radius: 5px;
   background-color: ${(props) => (props.CreateActive ? "#94d3a2" : "#2da44e")};
   text-align: center;
   color: white;
+  font-size: 14px;
 `;
 
 const UpdateSaveBtn = styled.button`
@@ -665,10 +680,11 @@ const UpdateSaveBtn = styled.button`
   height: 30px;
   pad: 5px 16px;
   border: 1px solid rgba(0, 0, 0, 0.25);
-  border-radius: 10px;
+  border-radius: 5px;
   background-color: #2da44e;
   text-align: center;
   color: white;
+  font-size: 14px;
 `;
 
 type UpdateLabelboolean = {
@@ -1133,7 +1149,7 @@ function LabelManagement() {
               </Milestones>
             </MenuBtn>
             <Search>
-              <SearchInput value="Search all labels" />
+              <SearchInput placeholder="Search all labels" />
             </Search>
           </MenuLeftUl>
         </div>

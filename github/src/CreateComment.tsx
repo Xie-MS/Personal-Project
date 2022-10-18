@@ -558,7 +558,7 @@ function CreateComment({
                   <textarea
                     cols="30"
                     rows="10"
-                    value={issueContainer}
+                    placeholder={issueContainer}
                     className="relative md:leading-snug md:h-[82px] px-2 py-2 border-[1px] md:border-b-[0px] border-solid border-gray-400 bg-slate-100 rounded-md w-full lg:focus:bg-white lg:border-b-[1px] border-t-[0px] border-r-[0px] border-l-[0px] lg:border-dashed lg:h-[96px] lg:leading-snug lg:rounded-b-[0px] xl:focus:bg-white xl:border-dashed xl:h-[96px] xl:leading-snug xl:rounded-b-[0px]"
                     onChange={(e) => {
                       setIssueContainer(e.target.value);
@@ -633,7 +633,7 @@ function CreateComment({
                   <button
                     className={`${
                       issueDetailData.state === "open" ? "flex" : "hidden"
-                    } justify-between items-center px-4 py-[5px] border-t-[1px] border-b-[1px] border-l-[1px] border-solid border-gray-200 rounded-l-lg`}
+                    } justify-between items-center cursor-pointer px-4 py-[5px] border-t-[1px] border-b-[1px] border-l-[1px] border-solid border-gray-200 rounded-l-lg`}
                     onClick={() => {
                       setIssueDetailState("closed");
                       setIssueDetailStateReanson("completed");
@@ -652,7 +652,7 @@ function CreateComment({
                   <button
                     className={`${
                       issueDetailData.state === "closed" ? "flex" : "hidden"
-                    } justify-between items-center px-4 py-[5px] border-t-[1px] border-b-[1px] border-l-[1px] border-solid border-gray-200 rounded-l-lg`}
+                    } justify-between items-center cursor-pointer px-4 py-[5px] border-t-[1px] border-b-[1px] border-l-[1px] border-solid border-gray-200 rounded-l-lg`}
                     onClick={() => {
                       setIssueDetailState("open");
                       setIssueDetailStateReanson("reopened");
@@ -708,7 +708,7 @@ function CreateComment({
                       <div
                         className={`${
                           issueDetailData.state === "open" ? "block" : "hidden"
-                        }`}
+                        }  cursor-pointer`}
                         onClick={() => {
                           setIssueDetailState("closed");
                           setIssueDetailStateReanson("completed");
@@ -722,7 +722,7 @@ function CreateComment({
                             className="mr-1"
                           />
                           <p className="text-sm font-semibold">
-                            Close as complteted
+                            Close as completed
                           </p>
                         </div>
                         <p className="text-xs">Done, closed, fixed, resolved</p>
@@ -731,7 +731,7 @@ function CreateComment({
                       <div
                         className={`${
                           issueDetailData.state !== "open" ? "block" : "hidden"
-                        }`}
+                        }  cursor-pointer`}
                         onClick={() => {
                           setIssueDetailState("open");
                           setIssueDetailStateReanson("reopened");
@@ -766,6 +766,7 @@ function CreateComment({
                         <CheckIcon size={16} className="mr-1" />
                       </div>
                       <div
+                        className="cursor-pointer"
                         onClick={() => {
                           setIssueDetailState("closed");
                           setIssueDetailStateReanson("not_planned");

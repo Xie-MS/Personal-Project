@@ -83,7 +83,7 @@ function IssueLabelList({
                 .includes(labeslInput.current?.value))
               ? "flex"
               : "hidden"
-          } relative py-[7px] border-b-[1px] border-solid border-gray-400 text-xs justify-start items-center w-[266px] sm:font-semibold sm:py-4 sm:w-full sm:pl-11 pr-4`}
+          } relative cursor-pointer py-[7px] border-b-[1px] border-solid border-gray-400 text-xs justify-start items-center w-[266px] sm:font-semibold sm:py-4 sm:w-full sm:pl-11 pr-4`}
           onClick={() => {
             setsortSelect(labelData[LablesSelectIndex].name);
             setLabelSelectOption([
@@ -105,7 +105,7 @@ function IssueLabelList({
           >
             <CheckIcon size={16} className="mr-2" />
           </div>
-          <div className="flex items-starts">
+          <div className="flex items-starts ml-7">
             <p
               style={{
                 backgroundColor: `#${labelData[LablesSelectIndex].color}`,
@@ -188,7 +188,9 @@ function IssueLabelList({
         </div>
         Unlabeled
       </li>
-      <div className="overflow-y-auto h-[320px]">{LabelsSelect()}</div>
+      <div className="overflow-y-auto overflow-x-hidden h-[320px]">
+        {LabelsSelect()}
+      </div>
     </ul>
   );
 }

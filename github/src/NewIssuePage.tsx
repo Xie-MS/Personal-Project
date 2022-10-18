@@ -161,7 +161,7 @@ function NewIssuePage() {
           } md:bg-black md:opacity-60 top-0 bottom-0 left-0 right-0 fixed md:z-10 xl:z-0 lg:z-0`}
           onClick={() => {
             setListClose(false);
-            setItemList(false);
+            // setItemList(false);
           }}
         />
         <SharedListData
@@ -239,7 +239,9 @@ function NewIssuePage() {
       <div className="md:w-full mt-4 pt-4 md:block lg:hidden xl:hidden">
         <button
           className={`${
-            issueTitle !== "" ? "bg-[#2DA44E]" : "bg-[#94d3a2]"
+            issueTitle !== ""
+              ? "bg-[#2DA44E] cursor-pointer"
+              : "bg-[#94d3a2] cursor-no-drop"
           } mt-6 px-4 py-[5px] border-[1px] border-solid border-[rgba(27,31,36,0.15)] w-full rounded-md lg:mt-0 xl:mt-0`}
           onClick={() => {
             setIssue();

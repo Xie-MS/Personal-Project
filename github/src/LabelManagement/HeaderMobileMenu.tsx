@@ -16,6 +16,7 @@ const MobileMenuText = styled.li`
   white-space: nowrap;
   border-bottom: 1px solid rgba(255, 255, 255, 0.15);
   color: white;
+  cursor: pointer;
   list-style: none;
 `;
 

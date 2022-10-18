@@ -58,6 +58,7 @@ const RepoAndUserName = styled.li`
   font-size: 20px;
   color: #0969da;
   font-weight: bold;
+  cursor: pointer;
 `;
 
 const RepoVisibility = styled.li`
@@ -136,6 +137,15 @@ const FunctionalElementNum = styled.p`
   margin-right: 4px;
 `;
 
+const FunctionalDiv = styled.div`
+  display: block;
+  white-space: nowrap;
+  overflow-y: auto;
+  @media screen and (max-width: 768px) {
+    overflow-y: hidden;
+  }
+`;
+
 const Functional = styled.ul`
   display: flex;
   justify-content: start;
@@ -211,7 +221,7 @@ function ContainerTitle() {
           </ForkAndStar>
         </FunctionalElement>
       </RepoInformation>
-      <div>
+      <FunctionalDiv>
         <Functional>
           <FunctionalImgandText>
             <FunctionalImg src={CodeImage} alt="" />
@@ -250,7 +260,7 @@ function ContainerTitle() {
             <p>Settings</p>
           </FunctionalImgandText>
         </Functional>
-      </div>
+      </FunctionalDiv>
     </ContainetTitle>
   );
 }

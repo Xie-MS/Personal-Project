@@ -231,7 +231,6 @@ function IssueDetailPage() {
       issueDetailData.assignees.length !== 0
     ) {
       return assigneeLogin.map((assigneeData: any, assigneeIndex: number) => {
-        console.log("aaa");
         if (
           assigneeSelectData.length <= issueDetailData.assignees.length &&
           assigneeSelectData
@@ -833,10 +832,18 @@ function IssueDetailPage() {
                     <div
                       className="pt-4 cursor-pointer xl:mt-[2px] xl:pt-0 lg:mt-[2px] lg:pt-0"
                       onClick={() => {
-                        setItemList(true);
+                        if (
+                          targetText ===
+                            targetAssigneeSpan.current?.outerText &&
+                          itemList === true
+                        ) {
+                          setTargetText("");
+                          setItemList(false);
+                        } else {
+                          setTargetText(targetAssigneeSpan.current?.outerText);
+                          setItemList(true);
+                        }
                         setListClose(true);
-                        setTargetText(targetAssigneeSpan.current?.outerText);
-                        // setAssigneeSelectData([]);
                       }}
                     >
                       <GearIcon size={16} />
@@ -872,7 +879,6 @@ function IssueDetailPage() {
                   }  md:bg-black md:opacity-60 top-0 bottom-0 left-0 right-0 fixed md:z-10 xl:z-0 lg:z-0`}
                   onClick={() => {
                     setListClose(false);
-                    setItemList(false);
                   }}
                 />
                 <div>
@@ -886,9 +892,17 @@ function IssueDetailPage() {
                     <div
                       className="pt-4 cursor-pointer xl:mt-[2px] xl:pt-0 lg:mt-[2px] lg:pt-0"
                       onClick={() => {
+                        if (
+                          targetText === targetLabelSpan.current?.outerText &&
+                          itemList === true
+                        ) {
+                          setTargetText("");
+                          setItemList(false);
+                        } else {
+                          setTargetText(targetLabelSpan.current?.outerText);
+                          setItemList(true);
+                        }
                         setListClose(true);
-                        setItemList(true);
-                        setTargetText(targetLabelSpan.current?.outerText);
                       }}
                     >
                       <GearIcon size={16} />

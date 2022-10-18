@@ -324,7 +324,9 @@ function CreateNewIssue({
                   <div className="mt-4 pt-4 border-t-[1px] border-solid border-gray-200 lg:mt-0 lg:pt-0 xl:mt-0 xl:pt-0">
                     <button
                       className={`${
-                        issueTitle !== "" ? "bg-[#2DA44E]" : "bg-[#94d3a2]"
+                        issueTitle !== ""
+                          ? "bg-[#2DA44E] cursor-pointer"
+                          : "bg-[#94d3a2] cursor-no-drop"
                       } mt-6 px-4 py-[5px] border-[1px] border-solid border-[rgba(27,31,36,0.15)] w-full rounded-md lg:mt-0 xl:mt-0`}
                       onClick={() => {
                         setIssue();

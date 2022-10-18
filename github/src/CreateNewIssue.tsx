@@ -516,7 +516,7 @@ function CreateNewIssue({
                   <textarea
                     cols="30"
                     rows="10"
-                    value={issueContainer}
+                    placeholder={issueContainer}
                     className="relative md:leading-snug md:h-[200px] px-2 py-2 border-[1px] md:border-b-[0px] border-solid border-gray-400 bg-slate-100 rounded-md w-full lg:focus:bg-white lg:border-b-[1px] border-t-[0px] border-r-[0px] border-l-[0px] lg:border-dashed lg:h-[200px] lg:leading-snug lg:rounded-b-[0px] xl:focus:bg-white xl:border-dashed xl:h-[200px] xl:leading-snug xl:rounded-b-[0px]"
                     onChange={(e) => {
                       setIssueContainer(e.target.value);
@@ -600,7 +600,9 @@ function CreateNewIssue({
                   <div className="mt-4 pt-4 border-t-[1px] border-solid border-gray-200 lg:mt-0 lg:pt-0 xl:mt-0 xl:pt-0">
                     <button
                       className={`${
-                        issueTitle !== "" ? "bg-[#2DA44E]" : "bg-[#94d3a2]"
+                        issueTitle !== ""
+                          ? "bg-[#2DA44E] cursor-pointer"
+                          : "bg-[#94d3a2] cursor-no-drop"
                       } mt-6 px-4 py-[5px] border-[1px] border-solid border-[rgba(27,31,36,0.15)] w-full rounded-md lg:mt-0 xl:mt-0`}
                       onClick={() => {
                         setIssue();
