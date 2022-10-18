@@ -9,6 +9,7 @@ import { createGlobalStyle } from "styled-components";
 
 import Headers from "./header";
 import ContainerTitle from "./ContainerTitle";
+import SignIn from "./PleaseSignIn";
 import Footer from "./footer";
 import "./index.css";
 
@@ -25,6 +26,7 @@ function App() {
       <Reset />
       <GlobalStyle />
       <Headers />
+      {location.pathname === "/" && <SignIn />}
       {location.pathname !== "/" && <ContainerTitle />}
       <Outlet />
       <Footer />

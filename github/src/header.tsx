@@ -214,6 +214,24 @@ const Pofile = styled.li`
   }
 `;
 
+const SignOut = styled.div`
+  width: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  margin-left: 8px;
+`;
+
+const SignIn = styled.div`
+  width: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  margin-left: 8px;
+`;
+
 const UserImg = styled.img`
   width: 45%;
   margin-right: 5px;
@@ -313,7 +331,11 @@ function Headers() {
                 <MobileMenuImg src={LogoImage} alt="LogoImage" />
                 {userName}
               </MobileMenuTextAndImg>
-              <MobileMenuTextAndImg onClick={signOut}>
+              <MobileMenuTextAndImg
+                onClick={() => {
+                  signOut();
+                }}
+              >
                 <MobileMenuImg src={SingOut} />
                 Sign out
               </MobileMenuTextAndImg>
@@ -349,6 +371,15 @@ function Headers() {
                 <UserImg src={LogoImage} />
                 <SortDownImgUser src={SortWhite} />
               </Pofile>
+              <SignOut>
+                <p
+                  onClick={() => {
+                    signOut();
+                  }}
+                >
+                  Sign out
+                </p>
+              </SignOut>
             </HeaderRightUl>
           </div>
         </Header>
@@ -404,13 +435,13 @@ function Headers() {
             <MoreText>＋</MoreText>
             <SortDownImg src={SortWhite} />
           </More>
-          <Pofile
+          <SignIn
             onClick={() => {
               signInWithgithub();
             }}
           >
             Sign In
-          </Pofile>
+          </SignIn>
         </HeaderRightUl>
       </div>
     </Header>

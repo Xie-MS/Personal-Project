@@ -181,7 +181,7 @@ const api = {
 
   async SearchIssues(IssuesName: string) {
     const response = await fetch(
-      `https://api.github.com/search/issues?q=repo:Xie-Ms/Personal-Project%20${IssuesName}`,
+      `https://api.github.com/search/issues?q=repo:${jwtName}/${jwtRepo}%20${IssuesName}`,
       {
         headers: new Headers({
           "Content-type": "application/json",
