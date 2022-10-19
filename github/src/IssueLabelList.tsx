@@ -1,5 +1,4 @@
-import React from "react";
-import { useState, useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 import { CheckIcon } from "@primer/octicons-react";
 
@@ -24,6 +23,8 @@ function IssueLabelList({
   setLabeslSelectName,
   mobileMenuBG,
   setMobileMenuBG,
+  labeslSelectSearch,
+  setLabeslSelectSearch,
 }: {
   labelMenu: boolean;
   setLabelMenu: React.Dispatch<React.SetStateAction<boolean>>;
@@ -39,14 +40,15 @@ function IssueLabelList({
   setLabelSelectOption: any;
   noSearch: boolean;
   setNoSearch: any;
-  labeslSelectName: string;
+  labeslSelectName: any;
   setLabeslSelectName: any;
   mobileMenuBG: boolean;
   setMobileMenuBG: any;
+  labeslSelectSearch: any;
+  setLabeslSelectSearch: any;
 }) {
   const [labelData, setLabelData]: any = useState([]);
-  const [labeslSelectOption, setLabeslSelectOption] = useState(true);
-
+  const [labeslSelectClose, setLabeslSelectClose] = useState(true);
   const labeslDataArray: any[] = [];
 
   const labeslInput = useRef<HTMLInputElement | null>(null);
@@ -76,7 +78,7 @@ function IssueLabelList({
           ref={labeslName}
           className={`
           ${
-            labeslSelectOption ||
+            labeslSelectClose ||
             (labeslDataArray.toLocaleString().includes(labeslSelectName) &&
               labelData[LablesSelectIndex].name
                 .toLocaleString()
@@ -85,12 +87,44 @@ function IssueLabelList({
               : "hidden"
           } relative cursor-pointer py-[7px] border-b-[1px] border-solid border-gray-400 text-xs justify-start items-center w-[266px] sm:font-semibold sm:py-4 sm:w-full sm:pl-11 pr-4`}
           onClick={() => {
+            if (
+              labeslSelectName.includes(labelData[LablesSelectIndex].name) &&
+              labelSelectOption.includes(labelData[LablesSelectIndex].name)
+            ) {
+              const labelSelectNum = labelSelectOption.indexOf(
+                labelData[LablesSelectIndex].name
+              );
+              labeslSelectName.splice(labelSelectNum, 1);
+
+              const labelSelecOptiontNum = labelSelectOption.indexOf(
+                labelData[LablesSelectIndex].name
+              );
+              labelSelectOption.splice(labelSelecOptiontNum, 1);
+              setLabeslSelectSearch([...labeslSelectSearch, labeslSelectName]);
+            } else if (
+              labeslSelectName.includes(labelData[LablesSelectIndex].name) ===
+              false
+            ) {
+              setLabelSelectOption([
+                ...labelSelectOption,
+                labelData[LablesSelectIndex].name,
+              ]);
+              setLabeslSelectName([
+                ...labeslSelectName,
+                labelData[LablesSelectIndex].name,
+              ]);
+              setLabeslSelectSearch([...labeslSelectSearch, labeslSelectName]);
+            }
+
+            if (labeslSelectSearch.length !== 0) {
+              const labelSelect = labeslSelectSearch.slice(-1);
+              setAllSearchInformation({
+                ...allSearchInformation,
+                labels: `${labelSelect}`,
+              });
+            }
+
             setsortSelect(labelData[LablesSelectIndex].name);
-            setLabelSelectOption([
-              ...labelSelectOption,
-              labelData[LablesSelectIndex].name,
-            ]);
-            setLabeslSelectName(labelData[LablesSelectIndex].name);
             setClearSearch(true);
             setLabelMenu(false);
             setMobileMenuBG(false);
@@ -98,7 +132,11 @@ function IssueLabelList({
         >
           <div
             className={`${
-              labelSelectOption.includes(labelData[LablesSelectIndex].name)
+              labelSelectOption
+                .toLocaleString()
+                .includes(
+                  labelData[LablesSelectIndex].name.toString().toLowerCase()
+                )
                 ? "block"
                 : "hidden"
             } absolute`}
@@ -125,19 +163,21 @@ function IssueLabelList({
 
   function LabelsSelectInput(e: any) {
     if (e.target.value === "") {
-      setLabeslSelectOption(true);
+      setLabeslSelectClose(true);
     } else if (
       labeslDataArray.toLocaleString().includes(e.target.value.toLowerCase())
     ) {
-      setLabeslSelectName(e.target.value);
-      setLabeslSelectOption(false);
+      const labelSelectNum = labeslSelectName.indexOf(e.target.value);
+      labeslSelectName.splice(labelSelectNum, 1);
+      // setLabeslSelectName([...labeslSelectName, e.target.value]);
+      setLabeslSelectClose(false);
     } else if (
       labeslDataArray
         .toLocaleString()
         .includes(e.target.value.toLocaleString()) === false
     ) {
-      setLabeslSelectName(e.target.value);
-      setLabeslSelectOption(false);
+      setLabeslSelectName([...labeslSelectName, e.target.value]);
+      setLabeslSelectClose(false);
     }
   }
 
@@ -147,6 +187,14 @@ function IssueLabelList({
       setsortSelect(labeslInput.current?.value);
       setClearSearch(true);
       setLabelMenu(false);
+      setLabeslSelectSearch([...labeslSelectSearch, labeslSelectName]);
+      if (labeslSelectSearch.length !== 0) {
+        const labelSelect = labeslSelectSearch.slice(-1);
+        setAllSearchInformation({
+          ...allSearchInformation,
+          labels: `${labelSelect}`,
+        });
+      }
     }
   }
 
@@ -161,7 +209,7 @@ function IssueLabelList({
         <p
           onClick={() => {
             setLabelMenu(false);
-            setLabeslSelectName("");
+            setLabeslSelectName([]);
             setMobileMenuBG(false);
           }}
         >

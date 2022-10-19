@@ -1,16 +1,14 @@
-import React from "react";
-import styled from "styled-components";
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import styled from "styled-components";
 
 import api from "../api";
 
+import { ChevronDownIcon } from "@primer/octicons-react";
+import ChangeColorImage from "../../src/img/change.png";
 import LabelsImage from "../../src/img/Labels.svg";
 import Milestone from "../../src/img/milestone.svg";
 import SearchImage from "../../src/img/search.svg";
-import CheckImage from "../../src/img/check.svg";
-import ChangeColorImage from "../../src/img/change.png";
-import { ChevronDownIcon } from "@primer/octicons-react";
 
 const Container = styled.div`
   margin-top: 24px;
@@ -297,21 +295,6 @@ const LabelEvent = styled.td`
 `;
 
 const LabelEventBtn = styled.button`
-  display: none;
-
-  @media screen and (max-width: 1011px) {
-    display: block;
-    padding: 3px 12px;
-    border: 1px solid #cccccc;
-    width: 42px;
-    height: 28px;
-    border-radius: 10px;
-    text-align: center;
-    position: relative;
-  }
-`;
-
-const DeleteLabelEventBtn = styled.button`
   display: none;
 
   @media screen and (max-width: 1011px) {
@@ -761,7 +744,6 @@ function LabelManagement() {
   const [lightOrDarkText, setLightOrDark]: any = useState("black");
   const dispatch = useDispatch();
   const LabelsData: any = useSelector((state) => state);
-  console.log(LabelsData);
   async function getLabels() {
     const data = await api.getLabels();
     dispatch({ type: "SetLabelData", payload: data });
@@ -832,6 +814,11 @@ function LabelManagement() {
     }
     getLabels();
   }, [LabelsData.labelReducer]);
+
+  if (labels === undefined || labels?.message === "Bad credentials") {
+    window.location.assign("/");
+    localStorage.clear();
+  }
 
   function showSortList() {
     if (sortActive === false) {

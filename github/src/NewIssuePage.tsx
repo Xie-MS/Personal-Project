@@ -1,13 +1,12 @@
 import React from "react";
 
-import { useState, useEffect, useRef } from "react";
-import { useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
 import { GearIcon } from "@primer/octicons-react";
+import { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
+import api from "./api";
 import CreateNewIssue from "./CreateNewIssue";
 import SharedListData from "./SharedListData";
-import api from "./api";
 
 function NewIssuePage() {
   const [preview, setPreview] = useState(false);
@@ -30,6 +29,13 @@ function NewIssuePage() {
 
   const navigate = useNavigate();
 
+  let jwtName = JSON.parse(window.localStorage.getItem("userName") as string);
+  let jwtRepo = JSON.parse(
+    window.localStorage.getItem("userChooseRepo") as string
+  );
+
+  console.log(jwtName, jwtRepo);
+
   useEffect(() => {
     async function getAssigneeList() {
       if (targetText === targetAssigneeSpan.current?.outerText) {
@@ -45,6 +51,17 @@ function NewIssuePage() {
     }
     getAssigneeList();
   }, [targetText]);
+
+  if (
+    jwtName === null ||
+    jwtRepo === null ||
+    renderAssigneeData?.message === "Bad credentials" ||
+    renderLabelData?.message === "Bad credentials" ||
+    renderIssueData?.message === "Bad credentials"
+  ) {
+    window.location.assign("/");
+    localStorage.clear();
+  }
 
   function AssigneeSelect() {
     if (assigneeSelectData.length !== 0) {
@@ -103,11 +120,6 @@ function NewIssuePage() {
       return <p className="text-xs justify-start items-center">Noneyet</p>;
     }
   }
-
-  let jwtName = JSON.parse(window.localStorage.getItem("userName") as string);
-  let jwtRepo = JSON.parse(
-    window.localStorage.getItem("userChooseRepo") as string
-  );
 
   async function setIssue() {
     const data = await api.setIssue({

@@ -1,33 +1,27 @@
-import React from "react";
-import { useState, useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 
 import {
-  TriangleDownIcon,
-  KebabHorizontalIcon,
-  SmileyIcon,
-  TagIcon,
-  PersonIcon,
-  CheckCircleIcon,
-  IssueReopenedIcon,
-  SkipIcon,
-  GearIcon,
+  ArrowRightIcon,
   BellSlashIcon,
+  CheckCircleIcon,
+  GearIcon,
+  InfoIcon,
+  IssueOpenedIcon,
+  KebabHorizontalIcon,
   LockIcon,
   PinIcon,
-  InfoIcon,
-  ArrowRightIcon,
+  SkipIcon,
+  SmileyIcon,
   TrashIcon,
-  IssueOpenedIcon,
+  TriangleDownIcon,
 } from "@primer/octicons-react";
 
+import api from "./api";
 import CreateComment from "./CreateComment";
-import UpdateComment from "./UpdateComment";
 import IssueList from "./IssueList";
 import TimeLine from "./TimeLine";
-import api from "./api";
-import { string } from "prop-types";
-import e from "express";
+import UpdateComment from "./UpdateComment";
 
 const Emoji = ["👍", "👎", "😄", "🎉", "😕", "❤", "🚀", "👀"];
 const EmojiText = [
@@ -96,6 +90,14 @@ function IssueDetailPage() {
     }
     getIssueDetailData(IssueNum);
   }, [createCommentRender]);
+
+  if (
+    issueDetailData === undefined ||
+    issueDetailData?.message === "Bad credentials"
+  ) {
+    window.location.assign("/");
+    localStorage.clear();
+  }
 
   useEffect(() => {
     async function getAssigneeList() {
