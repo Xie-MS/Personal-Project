@@ -1,35 +1,27 @@
-import React, { Dispatch, SetStateAction } from "react";
-import { marked } from "marked";
+import React from "react";
 import ReactMarkdown from "react-markdown";
-import ReactDom from "react-dom";
-import remarkGfm from "remark-gfm";
 import { useParams } from "react-router-dom";
 
-import { useState, useRef } from "react";
+import { useRef, useState } from "react";
 
 import {
-  TypographyIcon,
-  QuoteIcon,
-  CodeIcon,
-  LinkIcon,
-  HeadingIcon,
   BoldIcon,
-  ItalicIcon,
-  ListUnorderedIcon,
-  ListOrderedIcon,
-  TasklistIcon,
-  MentionIcon,
-  FileMediaIcon,
-  CrossReferenceIcon,
-  ReplyIcon,
   ChevronDownIcon,
-  InfoIcon,
-  MarkdownIcon,
-  CheckCircleIcon,
-  TriangleDownIcon,
-  SkipIcon,
-  CheckIcon,
+  CodeIcon,
+  CrossReferenceIcon,
+  FileMediaIcon,
+  HeadingIcon,
   IssueOpenedIcon,
+  ItalicIcon,
+  LinkIcon,
+  ListOrderedIcon,
+  ListUnorderedIcon,
+  MarkdownIcon,
+  MentionIcon,
+  QuoteIcon,
+  ReplyIcon,
+  TasklistIcon,
+  TypographyIcon,
 } from "@primer/octicons-react";
 
 import UserImg from "../src/img/userImg.png";

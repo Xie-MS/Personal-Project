@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 import {
   ArrowRightIcon,
@@ -76,6 +76,13 @@ function IssueDetailPage() {
   const [emojiDate, setEmojiData]: any = useState([]);
   const [emojiSelect, setEmojiSelect]: any = useState("");
 
+  const navigate = useNavigate();
+
+  let jwtName = JSON.parse(window.localStorage.getItem("userName") as string);
+  let jwtRepo = JSON.parse(
+    window.localStorage.getItem("userChooseRepo") as string
+  );
+
   useEffect(() => {
     async function getIssueDetailData(IssueNum: string | undefined) {
       const data = await api.getIssueData(IssueNum);
@@ -92,7 +99,8 @@ function IssueDetailPage() {
   }, [createCommentRender]);
 
   if (
-    issueDetailData === undefined ||
+    jwtName === null ||
+    jwtRepo === null ||
     issueDetailData?.message === "Bad credentials"
   ) {
     window.location.assign("/");
@@ -114,11 +122,6 @@ function IssueDetailPage() {
     }
     getAssigneeList();
   }, [targetText]);
-
-  let jwtName = JSON.parse(window.localStorage.getItem("userName") as string);
-  let jwtRepo = JSON.parse(
-    window.localStorage.getItem("userChooseRepo") as string
-  );
 
   async function UpdateTitle() {
     const data = await api.UpdateIssue(
@@ -510,7 +513,12 @@ function IssueDetailPage() {
                 >
                   <p className="text-xs">Edit</p>
                 </button>
-                <button className="ml-2 px-3 py-[3px] border-[1px] border-solid border-[rgba(27,31,36,0.15)] flex justify-center items-center bg-[#2da44e] text-white rounded-md">
+                <button
+                  className="ml-2 px-3 py-[3px] border-[1px] border-solid border-[rgba(27,31,36,0.15)] flex justify-center items-center bg-[#2da44e] text-white rounded-md"
+                  onClick={() => {
+                    navigate("/NewIssue");
+                  }}
+                >
                   <p className="text-xs">New Issue</p>
                 </button>
               </div>

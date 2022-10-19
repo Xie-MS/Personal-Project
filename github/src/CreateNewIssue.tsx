@@ -514,6 +514,11 @@ function CreateNewIssue({
                     cols="30"
                     rows="10"
                     placeholder={issueContainer}
+                    value={
+                      issueContainer !== "Leave a comment"
+                        ? `${issueContainer}`
+                        : ""
+                    }
                     className="relative md:leading-snug md:h-[200px] px-2 py-2 border-[1px] md:border-b-[0px] border-solid border-gray-400 bg-slate-100 rounded-md w-full lg:focus:bg-white lg:border-b-[1px] border-t-[0px] border-r-[0px] border-l-[0px] lg:border-dashed lg:h-[200px] lg:leading-snug lg:rounded-b-[0px] xl:focus:bg-white xl:border-dashed xl:h-[200px] xl:leading-snug xl:rounded-b-[0px]"
                     onChange={(e) => {
                       setIssueContainer(e.target.value);

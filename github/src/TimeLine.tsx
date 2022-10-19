@@ -1,21 +1,19 @@
-import React from "react";
-import { useState, useEffect, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 import {
-  TriangleDownIcon,
+  CheckCircleIcon,
   KebabHorizontalIcon,
+  PencilIcon,
+  PersonIcon,
+  SkipIcon,
   SmileyIcon,
   TagIcon,
-  PersonIcon,
-  CheckCircleIcon,
-  IssueReopenedIcon,
-  PencilIcon,
-  SkipIcon,
+  TriangleDownIcon,
 } from "@primer/octicons-react";
 
-import UpdateComment from "./UpdateComment";
 import api from "./api";
+import UpdateComment from "./UpdateComment";
 
 const Emoji = ["👍", "👎", "😄", "🎉", "😕", "❤", "🚀", "👀"];
 const EmojiText = [
@@ -559,7 +557,9 @@ function TimeLine({
 
                       <ul
                         className={`${
-                          kebabHorizontal ? "block" : "hidden"
+                          kebabHorizontal && timeLineIndex === updateCommentNum
+                            ? "block"
+                            : "hidden"
                         } absolute right-0 top-[25px] w-[183px] py-1 bg-white border-[1px] border-solid border-[#d0d7de] justify-start items-center rounded-md z-20`}
                       >
                         <li>
