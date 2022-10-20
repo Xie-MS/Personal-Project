@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 
 import api from "./api";
 import CreateNewIssue from "./CreateNewIssue";
+import Loading from "./Loading";
 import SharedListData from "./SharedListData";
 
 function NewIssuePage() {
@@ -28,6 +29,8 @@ function NewIssuePage() {
   const targetLabelSpan = useRef<HTMLParagraphElement | null>(null);
 
   const navigate = useNavigate();
+
+  const [loading, serLoading]: any = useState(false);
 
   let jwtName = JSON.parse(window.localStorage.getItem("userName") as string);
   let jwtRepo = JSON.parse(
@@ -122,6 +125,7 @@ function NewIssuePage() {
   }
 
   async function setIssue() {
+    serLoading(true);
     const data = await api.setIssue({
       owner: { jwtName },
       repo: { jwtRepo },
@@ -130,7 +134,12 @@ function NewIssuePage() {
       labels: labelSelectData,
       assignees: assigneeSelectData,
     });
-    window.location.assign(`/Issue`);
+    serLoading(false);
+    navigate(`/Issue`);
+  }
+
+  if (loading) {
+    return <Loading />;
   }
 
   return (

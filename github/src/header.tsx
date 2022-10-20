@@ -1,15 +1,15 @@
 import React from "react";
 import styled from "styled-components";
 
+import BellImage from "./img/bell.png";
 import LogoImage from "./img/logo.jpg";
 import SingOut from "./img/Singout.jpg";
-import BellImage from "./img/bell.png";
 import SortWhite from "./img/SortWhite.png";
 
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "./client";
-import { useDispatch } from "react-redux";
 
 const Header = styled.div`
   display: flex;
@@ -240,7 +240,6 @@ const UserImg = styled.img`
 const SortDownImgUser = styled.img`
   width: 20%;
 `;
-
 function Headers() {
   const [mobileMenuActive, setMobileMenuActive] = useState(false);
   const [userToken, setUserToken] = useState("");

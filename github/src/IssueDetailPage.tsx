@@ -1,6 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
+import Loading from "./Loading";
+
 import {
   ArrowRightIcon,
   BellSlashIcon,
@@ -78,6 +80,8 @@ function IssueDetailPage() {
 
   const navigate = useNavigate();
 
+  const [loading, setLoading]: any = useState(false);
+
   let jwtName = JSON.parse(window.localStorage.getItem("userName") as string);
   let jwtRepo = JSON.parse(
     window.localStorage.getItem("userChooseRepo") as string
@@ -85,6 +89,7 @@ function IssueDetailPage() {
 
   useEffect(() => {
     async function getIssueDetailData(IssueNum: string | undefined) {
+      setLoading(true);
       const data = await api.getIssueData(IssueNum);
       setIssueDetailData(data);
       setEmojiData(data.reactions);
@@ -94,6 +99,7 @@ function IssueDetailPage() {
       if (data.labels.length !== 0) {
         setLabelName(data.labels);
       }
+      setLoading(false);
     }
     getIssueDetailData(IssueNum);
   }, [createCommentRender]);
@@ -124,6 +130,7 @@ function IssueDetailPage() {
   }, [targetText]);
 
   async function UpdateTitle() {
+    setLoading(true);
     const data = await api.UpdateIssue(
       {
         owner: { jwtName },
@@ -133,6 +140,7 @@ function IssueDetailPage() {
       },
       IssueNum
     );
+    setLoading(false);
     setCreateCommentRender((prev: boolean) => !prev);
   }
 
@@ -153,6 +161,7 @@ function IssueDetailPage() {
   }
 
   async function AddEmoji() {
+    setLoading(true);
     const data = await api.AddEmoji(
       {
         owner: { jwtName },
@@ -163,6 +172,7 @@ function IssueDetailPage() {
       IssueNum
     );
     setCreateCommentRender((prev: boolean) => !prev);
+    setLoading(false);
   }
 
   function EmojiIcon() {
@@ -412,6 +422,7 @@ function IssueDetailPage() {
   }
 
   async function setIssue() {
+    setLoading(true);
     const data = await api.setIssue({
       owner: { jwtName },
       repo: { jwtRepo },
@@ -420,6 +431,7 @@ function IssueDetailPage() {
       labels: labelSelectData,
       assignees: assigneeSelectData,
     });
+    setLoading(false);
     window.location.assign(`/IssuePage`);
   }
 
@@ -494,6 +506,9 @@ function IssueDetailPage() {
 
   if (issueDetailData === undefined) return <></>;
 
+  if (loading) {
+    return <Loading />;
+  }
   return (
     <div className="mt-6 px-4 xl:flex xl:justify-center xl:items-center">
       <div className="md:w-full ">
@@ -768,6 +783,8 @@ function IssueDetailPage() {
                   setKebabHorizontal={setKebabHorizontal}
                   issueUpdateContainer={issueUpdateContainer}
                   setIssueUpdateContainer={setIssueUpdateContainer}
+                  loading={loading}
+                  setLoading={setLoading}
                 />
               </div>
               <TimeLine
@@ -802,6 +819,8 @@ function IssueDetailPage() {
                 issueUpdateContainer={issueUpdateContainer}
                 setIssueUpdateContainer={setIssueUpdateContainer}
                 emojiDate={emojiDate}
+                loading={loading}
+                setLoading={setLoading}
               />
               <CreateComment
                 updateComment={updateComment}
@@ -826,6 +845,8 @@ function IssueDetailPage() {
                 setIssueDetailState={setIssueDetailState}
                 issueDetailStateReanson={issueDetailStateReanson}
                 setIssueDetailStateReanson={setIssueDetailStateReanson}
+                loading={loading}
+                setLoading={setLoading}
               />
             </div>
           </div>
@@ -886,6 +907,8 @@ function IssueDetailPage() {
                     setCreateCommentRender={setCreateCommentRender}
                     labelName={labelName}
                     setLabelName={setLabelName}
+                    loading={loading}
+                    setLoading={setLoading}
                   />
                 </div>
                 <div

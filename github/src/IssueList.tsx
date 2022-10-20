@@ -1,12 +1,11 @@
 import React from "react";
 
-import { useState, useRef, useEffect } from "react";
+import { useRef, useState } from "react";
 
 import { CheckIcon, XIcon } from "@primer/octicons-react";
 import { useParams } from "react-router-dom";
 
 import api from "./api";
-import { ItemList } from "./stories/NewIssueList.stories";
 
 function AssigneePage({
   setListClose,
@@ -30,6 +29,8 @@ function AssigneePage({
   setCreateCommentRender,
   labelName,
   setLabelName,
+  loading,
+  setLoading,
 }: {
   setListClose: any;
   targetText: string;
@@ -52,6 +53,8 @@ function AssigneePage({
   setCreateCommentRender: any;
   labelName: any;
   setLabelName: any;
+  loading: boolean;
+  setLoading: any;
 }) {
   const [assigneeInputName, setAssigneeInputName]: any = useState("");
   const [labelsInputSelect, setLabelsInputSelect]: any = useState("");
@@ -66,6 +69,7 @@ function AssigneePage({
   );
 
   async function UpdateAssignees() {
+    setLoading(true);
     const data = await api.UpdateIssue(
       {
         owner: { jwtName },
@@ -76,10 +80,12 @@ function AssigneePage({
       IssueNum
     );
     setCreateCommentRender((prev: boolean) => !prev);
-    console.log(createCommentRender, assigneeSelectData);
+    setLoading(false);
+    setItemList(false);
   }
 
   async function UpdateLabels() {
+    setLoading(true);
     const data = await api.UpdateIssue(
       {
         owner: { jwtName },
@@ -90,7 +96,8 @@ function AssigneePage({
       IssueNum
     );
     setCreateCommentRender((prev: boolean) => !prev);
-    console.log(createCommentRender);
+    setLoading(false);
+    setItemList(false);
   }
 
   function AssigneeInput(e: any) {
@@ -316,11 +323,6 @@ function AssigneePage({
       });
     }
   }
-  console.log(
-    targetText === targetAssigneeSpan.current?.outerText && itemList,
-    targetAssigneeSpan.current?.outerText && itemList,
-    targetText
-  );
   return (
     <div
       className={`${
@@ -337,9 +339,6 @@ function AssigneePage({
         className={`${
           itemList ? "block" : "hidden"
         } lg:w-[275px] xl:w-[275px] md:w-full overflow-auto md:h-[722px]`}
-        onClick={() => {
-          console.log(itemList, itemList && targetText !== "");
-        }}
       >
         <li className="xl:px-[10px] py-2 text-xs font-semibold flex justify-between items-center">
           <p

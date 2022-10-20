@@ -57,6 +57,8 @@ function CreateComment({
   setKebabHorizontal,
   issueUpdateContainer,
   setIssueUpdateContainer,
+  loading,
+  setLoading,
 }: {
   updateComment: String;
   setUpdateComment: any;
@@ -87,6 +89,8 @@ function CreateComment({
   setKebabHorizontal: any;
   issueUpdateContainer: any;
   setIssueUpdateContainer: any;
+  loading: boolean;
+  setLoading: any;
 }) {
   const Imgfile = useRef<HTMLInputElement | null | any>(null);
   const [imgURL, setImgURL]: any = useState("");
@@ -102,6 +106,7 @@ function CreateComment({
   );
 
   async function UpdateComment() {
+    setLoading(true);
     const data = await api.UpdateComment(
       {
         owner: { jwtName },
@@ -114,9 +119,11 @@ function CreateComment({
     setCreateCommentRender((prev: boolean) => !prev);
     setUpdateComment("");
     setKebabHorizontal(false);
+    setLoading(false);
   }
 
   async function UpdateContainer() {
+    setLoading(true);
     const data = await api.UpdateIssue(
       {
         owner: { jwtName },
@@ -129,6 +136,7 @@ function CreateComment({
     setCreateCommentRender((prev: boolean) => !prev);
     setUpdateComment("");
     setKebabHorizontal(false);
+    setLoading(false);
   }
 
   function PreviewText() {

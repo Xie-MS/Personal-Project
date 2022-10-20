@@ -56,6 +56,8 @@ function CreateComment({
   setIssueDetailState,
   issueDetailStateReanson,
   setIssueDetailStateReanson,
+  loading,
+  setLoading,
 }: {
   updateComment: String;
   setUpdateComment: any;
@@ -79,6 +81,8 @@ function CreateComment({
   setIssueDetailState: any;
   issueDetailStateReanson: any;
   setIssueDetailStateReanson: any;
+  loading: boolean;
+  setLoading: any;
 }) {
   const Imgfile = useRef<HTMLInputElement | null | any>(null);
   const [imgURL, setImgURL]: any = useState("");
@@ -95,6 +99,7 @@ function CreateComment({
   );
 
   async function CreateIssueComment() {
+    setLoading(true);
     const data = await api.CreateComment(
       {
         owner: { jwtName },
@@ -104,9 +109,11 @@ function CreateComment({
       IssueNum
     );
     setCreateCommentRender((prev: boolean) => !prev);
+    setLoading(false);
   }
 
   async function UpdateUssueState() {
+    setLoading(true);
     const data = await api.UpdateIssue(
       {
         owner: { jwtName },
@@ -118,6 +125,7 @@ function CreateComment({
       IssueNum
     );
     setCreateCommentRender((prev: boolean) => !prev);
+    setLoading(false);
   }
 
   function PreviewText() {

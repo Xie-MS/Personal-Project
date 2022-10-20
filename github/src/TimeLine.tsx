@@ -57,6 +57,8 @@ function TimeLine({
   issueUpdateContainer,
   setIssueUpdateContainer,
   emojiDate,
+  loading,
+  setLoading,
 }: {
   preview: Boolean;
   setPreview: any;
@@ -87,6 +89,8 @@ function TimeLine({
   issueUpdateContainer: any;
   setIssueUpdateContainer: any;
   emojiDate: any;
+  loading: boolean;
+  setLoading: any;
 }) {
   const [TimeLineCommentemojiListClose, setTimeLineCommentEmojiListClose] =
     useState(false);
@@ -126,6 +130,7 @@ function TimeLine({
   );
 
   async function DeleteComment() {
+    setLoading(true);
     const data = await api.DeleteComment(
       {
         owner: { jwtName },
@@ -134,11 +139,14 @@ function TimeLine({
       },
       commentNum
     );
+
     setCreateCommentRender((prev: boolean) => !prev);
     setKebabHorizontal(false);
+    setLoading(false);
   }
 
   async function AddEmoji() {
+    setLoading(true);
     const data = await api.AddEmojiComment(
       {
         owner: { jwtName },
@@ -150,6 +158,7 @@ function TimeLine({
     );
     setCreateCommentRender((prev: boolean) => !prev);
     setTimeLineCommentEmojiListClose(false);
+    setLoading(false);
   }
 
   function Timeline() {
@@ -648,6 +657,8 @@ function TimeLine({
                 setKebabHorizontal={setKebabHorizontal}
                 issueUpdateContainer={issueUpdateContainer}
                 setIssueUpdateContainer={setIssueUpdateContainer}
+                loading={loading}
+                setLoading={setLoading}
               />
             </div>
           </>

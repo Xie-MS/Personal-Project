@@ -24,6 +24,7 @@ import {
 
 import api from "./api";
 import IssueLabelList from "./IssueLabelList";
+import Loading from "./Loading";
 
 function IssuePage() {
   const navigate = useNavigate();
@@ -51,6 +52,8 @@ function IssuePage() {
   const [allSearchInformation, setAllSearchInformation] = useState<any>({});
   const [labeslSelectSearch, setLabeslSelectSearch] = useState<any>([]);
 
+  const [loading, serLoading]: any = useState(false);
+
   const [sortSelect, setsortSelect]: any = useState("");
   const assigneeUserName: any = useRef<HTMLParagraphElement | null>(null);
   const AssigneeOnChange = useRef<HTMLInputElement | null>(null);
@@ -73,6 +76,7 @@ function IssuePage() {
 
   useEffect(() => {
     async function getListIssues() {
+      serLoading(true);
       const newQuery = `${allSearchInformation.sort || ""}${
         allSearchInformation.labels
           ? "&labels=" + allSearchInformation.labels
@@ -137,6 +141,7 @@ function IssuePage() {
 
         setRenderData(data);
       }
+      serLoading(false);
     }
 
     getListIssues();
@@ -461,6 +466,10 @@ function IssuePage() {
       setsortSelect(inputIssueName);
       setClearSearch(true);
     }
+  }
+
+  if (loading) {
+    return <Loading />;
   }
 
   return (

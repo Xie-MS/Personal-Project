@@ -8,6 +8,7 @@ import EditLabel from "./EditLabel";
 import { ChevronDownIcon } from "@primer/octicons-react";
 import ChangeColorImage from "../../src/img/change.png";
 import LabelsImage from "../../src/img/Labels.svg";
+import LoadingImg from "../../src/img/loading.gif";
 import Milestone from "../../src/img/milestone.svg";
 import SearchImage from "../../src/img/search.svg";
 
@@ -473,6 +474,13 @@ const CreateCreateLabel = styled.button<CreateButton>`
   font-size: 14px;
 `;
 
+const Loading = styled.img`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+`;
+
 let colorListArray: any = [
   "#B60205",
   "#D93F0B",
@@ -509,7 +517,7 @@ function LabelManagement() {
     useState(false);
   const [colorMathFloorNum, setColorMathFloorNum]: any = useState(0);
   const [LabelBtnColor, setLabelBtnColor]: any = useState();
-  const [UpdateChangeColor, setUpdateChangeColor]: any = useState();
+
   const [LabelBtnColorNum, setLabelBtnColorNum]: any = useState(-1);
   const [errorColorValue, setErrorColorValue]: any = useState(false);
   const [labelsDataTotal, setLabelsDataTotal]: any = useState();
@@ -517,13 +525,18 @@ function LabelManagement() {
   const [textLightOrDark, setTextLightOrDark]: any = useState("black");
 
   const [labelTextLightOrDark, serLabelTextLightOrDark]: any = useState("");
+  const [loading, setLoading]: any = useState(false);
 
   const dispatch = useDispatch();
   const LabelsData: any = useSelector((state) => state);
+
   async function getLabels() {
+    setLoading(true);
     const data = await api.getLabels();
     dispatch({ type: "SetLabelData", payload: data });
+    setLoading(false);
   }
+
   useEffect(() => {
     getLabels();
   }, []);
@@ -619,7 +632,6 @@ function LabelManagement() {
           color={item}
           onClick={() => {
             setNewLabelsSelectColor({ item }.item);
-            setUpdateChangeColor({ item }.item.substring(1));
             setLabelBtnColorNum(index);
             if (selectColorMenuActive === true) {
               setSelectColorMenuActive(false);
@@ -639,7 +651,6 @@ function LabelManagement() {
     setColorMathFloorNum(MathFloorColorNum);
     setUpdateLabelsSelectColor(colorListArray[colorMathFloorNum]);
     setNewLabelsSelectColor(colorListArray[colorMathFloorNum]);
-    setUpdateChangeColor(colorListArray[colorMathFloorNum].substring(1));
     lightOrDark(colorListArray[colorMathFloorNum]);
   }
 
@@ -669,6 +680,7 @@ function LabelManagement() {
   );
 
   async function setLabels() {
+    setLoading(true);
     const data = await api
       .setLabels({
         owner: { jwtName },
@@ -683,6 +695,15 @@ function LabelManagement() {
           payload: { Labeldata },
         });
       });
+    setLoading(false);
+  }
+
+  if (loading) {
+    return (
+      <Container>
+        <Loading src={LoadingImg} alt="LoadingImg" />
+      </Container>
+    );
   }
 
   return (
@@ -822,35 +843,40 @@ function LabelManagement() {
           </LableListTitle>
         </LableListTitleTable>
         <LableList>
-          <EditLabel
-            labels={labels}
-            setLablels={setLablels}
-            moreBtnNumActive={moreBtnNumActive}
-            setMoreBtnNumActive={setMoreBtnNumActive}
-            SeleceColor={SeleceColor}
-            setInputName={setInputName}
-            setNewLabelsSelectColor={setNewLabelsSelectColor}
-            selectColorMenuActive={selectColorMenuActive}
-            setSelectColorMenuActive={setSelectColorMenuActive}
-            colorMathFloorNum={colorMathFloorNum}
-            setColorMathFloorNum={setColorMathFloorNum}
-            LabelBtnColor={LabelBtnColor}
-            setLabelBtnColor={setLabelBtnColor}
-            UpdateChangeColor={UpdateChangeColor}
-            setUpdateChangeColor={setUpdateChangeColor}
-            LabelBtnColorNum={LabelBtnColorNum}
-            setLabelBtnColorNum={setLabelBtnColorNum}
-            errorColorValue={errorColorValue}
-            setErrorColorValue={setErrorColorValue}
-            labelsDataTotal={labelsDataTotal}
-            setLabelsDataTotal={setLabelsDataTotal}
-            lightOrDarkCreateText={lightOrDarkCreateText}
-            setLightOrCreateDark={setLightOrCreateDark}
-            textLightOrDark={textLightOrDark}
-            setTextLightOrDark={setTextLightOrDark}
-            labelTextLightOrDark={labelTextLightOrDark}
-            serLabelTextLightOrDark={serLabelTextLightOrDark}
-          />
+          {labels.map((item: any, index: number) => {
+            return (
+              <EditLabel
+                index={index}
+                labels={labels}
+                setLablels={setLablels}
+                moreBtnNumActive={moreBtnNumActive}
+                setMoreBtnNumActive={setMoreBtnNumActive}
+                SeleceColor={SeleceColor}
+                setInputName={setInputName}
+                setNewLabelsSelectColor={setNewLabelsSelectColor}
+                selectColorMenuActive={selectColorMenuActive}
+                setSelectColorMenuActive={setSelectColorMenuActive}
+                colorMathFloorNum={colorMathFloorNum}
+                setColorMathFloorNum={setColorMathFloorNum}
+                LabelBtnColor={LabelBtnColor}
+                setLabelBtnColor={setLabelBtnColor}
+                LabelBtnColorNum={LabelBtnColorNum}
+                setLabelBtnColorNum={setLabelBtnColorNum}
+                errorColorValue={errorColorValue}
+                setErrorColorValue={setErrorColorValue}
+                labelsDataTotal={labelsDataTotal}
+                setLabelsDataTotal={setLabelsDataTotal}
+                lightOrDarkCreateText={lightOrDarkCreateText}
+                setLightOrCreateDark={setLightOrCreateDark}
+                textLightOrDark={textLightOrDark}
+                setTextLightOrDark={setTextLightOrDark}
+                labelTextLightOrDark={labelTextLightOrDark}
+                serLabelTextLightOrDark={serLabelTextLightOrDark}
+                loading={loading}
+                setLoading={setLoading}
+              />
+            );
+          })}
         </LableList>
       </ContainerLabelList>
     </Container>

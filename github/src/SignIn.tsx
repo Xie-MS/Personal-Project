@@ -1,19 +1,19 @@
-import React from "react";
-import { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
 
 import api from "./api";
+import Loading from "./Loading";
 
 function IssueDetailPage() {
   const [repoData, setRepoData] = useState<any>(undefined);
-
+  const [loading, serLoading]: any = useState(false);
   const userData: any = useSelector((state) => state);
 
   let userImg = JSON.parse(window.localStorage.getItem("userImg") as string);
 
   useEffect(() => {
     async function getRepoName() {
+      serLoading(true);
       const data = await api.getRepo(
         userData.tokenReducer.name,
         userData.tokenReducer.token
@@ -21,6 +21,7 @@ function IssueDetailPage() {
       if (data !== null) {
         setRepoData(data);
       }
+      serLoading(false);
     }
     getRepoName();
   }, [userData]);
@@ -47,7 +48,9 @@ function IssueDetailPage() {
       );
     });
   }
-
+  if (loading) {
+    return <Loading />;
+  }
   return (
     <div className="block justify-center items-center mt-5">
       <div className="w-full block justify-center items-center">

@@ -13,8 +13,6 @@ import { store } from "./store";
 
 import "./index.css";
 
-if (process.env.NODE_ENV !== "development") console.log = () => {};
-
 const root = ReactDOM.createRoot(document.getElementById("root")!);
 root.render(
   <Provider store={store}>
