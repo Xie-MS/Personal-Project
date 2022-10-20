@@ -102,8 +102,10 @@ function TimeLine({
 
   useEffect(() => {
     async function getIssueTimeline(IssueNum: string | undefined) {
+      // setLoading(true);
       const data = await api.getIssueTimeline(IssueNum);
       setIssueDetailTimeline(data);
+      // setLoading(false);
     }
     getIssueTimeline(IssueNum);
   }, [createCommentRender]);

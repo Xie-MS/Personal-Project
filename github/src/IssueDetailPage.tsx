@@ -81,6 +81,7 @@ function IssueDetailPage() {
   const navigate = useNavigate();
 
   const [loading, setLoading]: any = useState(false);
+  console.log(loading);
 
   let jwtName = JSON.parse(window.localStorage.getItem("userName") as string);
   let jwtRepo = JSON.parse(
@@ -504,11 +505,11 @@ function IssueDetailPage() {
     }
   }
 
-  if (issueDetailData === undefined) return <></>;
-
   if (loading) {
     return <Loading />;
   }
+  if (issueDetailData === undefined) return <></>;
+
   return (
     <div className="mt-6 px-4 xl:flex xl:justify-center xl:items-center">
       <div className="md:w-full ">

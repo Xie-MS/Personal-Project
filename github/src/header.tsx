@@ -296,7 +296,7 @@ function Headers() {
       },
       {
         scopes: "repo gist notifications",
-        redirectTo: "http://localhost:3000/signIn",
+        redirectTo: "https://github-ae242.web.app/signIn",
       }
     );
   }
