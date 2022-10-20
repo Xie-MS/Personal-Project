@@ -92,6 +92,7 @@
     "@types/redux-logger": "^3.0.9",
     "@types/styled-components": "^5.1.26",
     "babel-plugin-named-exports-order": "^0.0.2",
+    "babel-plugin-transform-remove-console": "^6.9.4",
     "prop-types": "^15.8.1",
     "webpack": "^5.74.0"
   }

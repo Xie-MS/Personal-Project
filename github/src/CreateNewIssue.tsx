@@ -200,6 +200,16 @@ function CreateNewIssue({
     }
   }
 
+  function TextAreaIncludes(e: any) {
+    if (e.key === "Enter") {
+      if (issueContainer.includes("- ")) {
+        setIssueContainer(issueContainer + `\r\n- `);
+      } else if (issueContainer.includes("1. ")) {
+        setIssueContainer(issueContainer + `\r\n2. `);
+      }
+    }
+  }
+
   function TagIssue() {
     if (issueContainer.includes("#") && issueClose) {
       // setTargetText("Issues");
@@ -522,6 +532,9 @@ function CreateNewIssue({
                     className="relative md:leading-snug md:h-[200px] px-2 py-2 border-[1px] md:border-b-[0px] border-solid border-gray-400 bg-slate-100 rounded-md w-full lg:focus:bg-white lg:border-b-[1px] border-t-[0px] border-r-[0px] border-l-[0px] lg:border-dashed lg:h-[200px] lg:leading-snug lg:rounded-b-[0px] xl:focus:bg-white xl:border-dashed xl:h-[200px] xl:leading-snug xl:rounded-b-[0px]"
                     onChange={(e) => {
                       setIssueContainer(e.target.value);
+                    }}
+                    onKeyDown={(e) => {
+                      TextAreaIncludes(e);
                     }}
                   />
                 </div>

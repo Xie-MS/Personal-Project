@@ -1,18 +1,19 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { Provider } from "react-redux";
-import { store } from "./store";
-import App from "./App";
-import OAuth from "./OAuth";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import Error from "./404";
-import LabelManagement from "./LabelManagement/LabelManagement";
-import IssuePage from "./IssuePage";
-import NewIssuePage from "./NewIssuePage";
+import App from "./App";
 import IssueDetailPage from "./IssueDetailPage";
+import IssuePage from "./IssuePage";
+import LabelManagement from "./LabelManagement/LabelManagement";
+import NewIssuePage from "./NewIssuePage";
 import SignIn from "./SignIn";
+import { store } from "./store";
 
 import "./index.css";
+
+if (process.env.NODE_ENV !== "development") console.log = () => {};
 
 const root = ReactDOM.createRoot(document.getElementById("root")!);
 root.render(
