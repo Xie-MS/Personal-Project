@@ -1,5 +1,5 @@
-import styled from "styled-components";
 import React from "react";
+import styled from "styled-components";
 
 import LabelsImage from "../src/img/Labels.svg";
 import Milestone from "../src/img/milestone.svg";
@@ -7,8 +7,9 @@ import Milestone from "../src/img/milestone.svg";
 const MenuBtn = styled.li`
   border: 1px solid #000;
   border-radius: 5px;
+  background-color: white;
   display: flex;
-  width: 210px;
+  width: fit-content;
 `;
 
 const Labels = styled.button`
@@ -17,10 +18,11 @@ const Labels = styled.button`
   justify-content: center;
   align-items: center;
   height: 32px;
-  background-color: white;
+
   border: none;
   width: 88px;
   border-right: 1px solid #000;
+
   padding: 5px 12px;
   &:focus {
     background-color: #0969da;
@@ -35,6 +37,7 @@ const LabelsImg = styled.img`
 
 const Milestones = styled.button`
   display: flex;
+  padding-right: 10px;
   justify-content: center;
   align-items: center;
   height: 32px;
@@ -42,8 +45,7 @@ const Milestones = styled.button`
   background-color: white;
   border: none;
   width: 122px;
-  padding: 5px 0px;
-  margin-left: 0px;
+  padding: 5px 12px;
   &:focus {
     background-color: #0969da;
     color: white;

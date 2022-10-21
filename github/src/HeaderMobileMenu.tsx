@@ -1,8 +1,18 @@
-import styled from "styled-components";
 import React from "react";
+import styled from "styled-components";
 
 import LogoImage from "../src/img/logo.jpg";
 import SingOut from "../src/img/Singout.jpg";
+
+const MobileMenuText = styled.li`
+  padding: 8px;
+  font-weight: 600;
+  white-space: nowrap;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+  color: white;
+  cursor: pointer;
+  list-style: none;
+`;
 
 const MobileMenuUl = styled.ul`
   background-color: #000;
@@ -37,6 +47,14 @@ const MobileMenuImg = styled.img`
 function Product() {
   return (
     <MobileMenuUl>
+      <MobileMenuText>Dashboard</MobileMenuText>
+      <MobileMenuText>Pull Requests</MobileMenuText>
+      <MobileMenuText>Issues</MobileMenuText>
+      <MobileMenuText>Codespaces</MobileMenuText>
+      <MobileMenuText>Marketplace</MobileMenuText>
+      <MobileMenuText>Explore</MobileMenuText>
+      <MobileMenuText>Sponsors</MobileMenuText>
+      <MobileMenuText>Settings</MobileMenuText>
       <MobileMenuTextAndImg>
         <MobileMenuImg src={LogoImage} alt="LogoImage" />
         Xie-MS
