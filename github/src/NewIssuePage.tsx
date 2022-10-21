@@ -134,8 +134,7 @@ function NewIssuePage() {
       labels: labelSelectData,
       assignees: assigneeSelectData,
     });
-    serLoading(false);
-    navigate(`/Issue`);
+    window.location.assign(`/Issue`);
   }
 
   if (loading) {

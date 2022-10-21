@@ -30,6 +30,12 @@ const MenuLeftUl = styled.ul`
   list-style: none;
   padding-left: 0px;
   margin-bottom: 24px;
+
+  @media screen and (max-width: 767px) {
+    display: block;
+    justify-content: start;
+    align-items: center;
+  }
 `;
 
 const MenuBtn = styled.li`
@@ -37,6 +43,9 @@ const MenuBtn = styled.li`
   border-radius: 5px;
   background-color: white;
   display: flex;
+  @media screen and (max-width: 767px) {
+    width: fit-content;
+  }
 `;
 
 const Labels = styled.button`
@@ -60,6 +69,7 @@ const Labels = styled.button`
 const LabelsImg = styled.img`
   width: 16px;
   height: 16px;
+  margin-right: 4px;
 `;
 
 const Milestones = styled.button`
@@ -81,6 +91,10 @@ const Milestones = styled.button`
 
 const Search = styled.li`
   padding: 0px 24px 0px 8px;
+  @media screen and (max-width: 767px) {
+    padding-left: 0px;
+    margin-top: 16px;
+  }
 `;
 
 const SearchInput = styled.input`
@@ -97,6 +111,9 @@ const SearchInput = styled.input`
   &:focus {
     border: 1px solid #0969da;
     background-color: white;
+  }
+  @media screen and (max-width: 767px) {
+    width: 320px;
   }
 `;
 
@@ -687,7 +704,7 @@ function LabelManagement() {
         repo: { jwtRepo },
         name: inputName,
         description: Description.current?.value,
-        color: SeleceColor.current?.value.substring(1),
+        color: newLabelsSelectColor.substring(1),
       })
       .then((Labeldata) => {
         dispatch({

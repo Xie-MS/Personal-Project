@@ -26,6 +26,10 @@ function IssueDetailPage() {
     getRepoName();
   }, [userData]);
 
+  if (loading) {
+    return <Loading />;
+  }
+
   if (repoData === undefined || repoData?.message === "Bad credentials") {
     return <></>;
   }
@@ -48,9 +52,7 @@ function IssueDetailPage() {
       );
     });
   }
-  if (loading) {
-    return <Loading />;
-  }
+
   return (
     <div className="block justify-center items-center mt-5">
       <div className="w-full block justify-center items-center">

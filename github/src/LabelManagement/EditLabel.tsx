@@ -42,7 +42,7 @@ const LabelStyle = styled.td`
 `;
 
 type LabelBtnColor = {
-  LabelBtnColor: string;
+  LabelBtnBgColor: string;
   UpdateChangeColor: string;
   index: number;
   LabelBtnColorNum: number;
@@ -51,7 +51,7 @@ type LabelBtnColor = {
 };
 
 const LabelBtn: any = styled.button<LabelBtnColor>`
-  background-color: #${(props) => props.UpdateChangeColor};
+  background-color: #${(props) => (props.UpdateChangeColor === "" ? props.LabelBtnBgColor : props.UpdateChangeColor)};
   color: ${(props) =>
     props.LabelBtnColorNum === props.index
       ? props.updateChangeColorText
@@ -91,11 +91,13 @@ const LabelEventBtn = styled.button`
 
   @media screen and (max-width: 1011px) {
     display: block;
+    justify-content: center;
+    align-items: center;
     padding: 3px 12px;
     border: 1px solid #cccccc;
     width: 42px;
     height: 28px;
-    border-radius: 10px;
+    border-radius: 5px;
     text-align: center;
     position: relative;
   }
@@ -115,8 +117,7 @@ const LabelEventUl = styled.ul<MoreButtonBoolean>`
     padding: 3px 0px;
     border: 1px solid #cccccc;
     width: 158px;
-    height: 68px;
-    border-radius: 10px;
+    border-radius: 5px;
     text-align: center;
     position: relative;
     left: -130px;
@@ -137,7 +138,7 @@ const LabelEventLi = styled.li`
     display: block;
     padding: 8px 16px 8px 8px;
     width: 134px;
-    height: 18px;
+    height: 34px;
     background: white;
     padding-top: 8px;
     padding-bottom: 8px;
@@ -486,13 +487,16 @@ function LabelEditManagement({
     labels[index].name
   );
   const [updateUpdateDescription, setupdateUpdateDescription]: any = useState();
-  const [updateUpdateColor, setupdateUpdateColor]: any = useState();
   const [updateChangeColorText, setUpdateChangeColorText]: any = useState();
   const [labelBtnColorText, setLabelBtnColorText]: any = useState();
 
-  const [UpdateChangeColor, setUpdateChangeColor]: any = useState(
+  const [labelBtnBgColor, setLabelBtnBgColor]: any = useState(
     labels[index].color
   );
+
+  const [UpdateChangeColor, setUpdateChangeColor]: any = useState("");
+
+  console.log(UpdateChangeColor);
 
   const dispatch = useDispatch();
   const LabelsData: any = useSelector((state) => state);
@@ -602,9 +606,7 @@ function LabelEditManagement({
     let MathFloorColorNum;
     MathFloorColorNum = Math.floor(Math.random() * colorListArray.length);
     setColorMathFloorNum(MathFloorColorNum);
-    setLabelBtnColorNum(MathFloorColorNum);
     setUpdateChangeColor(colorListArray[colorMathFloorNum].substring(1));
-    console.log(LabelBtnColorNum, UpdateChangeColor);
   }
 
   function UpdateLabelName(e: any) {
@@ -621,7 +623,7 @@ function LabelEditManagement({
 
   function PostLabelColor(e: any) {
     setSelectColorMenuActive(false);
-    console.log(UpdateChangeColor);
+
     if (e.target.value.length !== 7) {
       setErrorColorValue(true);
     } else {
@@ -652,6 +654,8 @@ function LabelEditManagement({
       });
     setLoading(false);
   }
+
+  // console.log(UpdateChangeColor);
 
   async function updataLabels(index: number) {
     setLoading(true);
@@ -689,7 +693,7 @@ function LabelEditManagement({
         <LabelStyle>
           <LabelBtn
             key={index}
-            LabelBtnColor={labels[index].color}
+            LabelBtnBgColor={labelBtnBgColor}
             UpdateChangeColor={UpdateChangeColor}
             index={index}
             LabelBtnColorNum={LabelBtnColorNum}
@@ -715,13 +719,11 @@ function LabelEditManagement({
               <LabelEventLi
                 onClick={() => {
                   setLabelBtnColorNum(index);
-                  setUpdateChangeColor(labels[index].color);
                   setMoreBtnNumActive(-1);
                   setUpdateActive(index);
                   setCloseLabelTr(-1);
                   setUpdateLabelName(labels[index].name);
                   setupdateUpdateDescription(labels[index].description);
-                  setupdateUpdateColor(labels[index].color);
                   setNewLabelsSelectColor(`#` + labels[index].color);
                 }}
               >
@@ -742,7 +744,6 @@ function LabelEditManagement({
               setUpdateActive(index);
               setUpdateLabelName(labels[index].name);
               setupdateUpdateDescription(labels[index].description);
-              setupdateUpdateColor(labels[index].color);
             }}
           >
             Edit
