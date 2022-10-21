@@ -1,25 +1,27 @@
 import React from "react";
 import styled from "styled-components";
 
-import RepoImage from "./img/repo.svg";
+import ActionImage from "./img/action.svg";
 import CodeImage from "./img/code.svg";
+import InsightsImage from "./img/Insights.svg";
 import IssueImage from "./img/issue.svg";
 import PRImage from "./img/pr.svg";
-import ActionImage from "./img/action.svg";
 import ProjectsImage from "./img/Projects.svg";
-import WikiImage from "./img/wiki.svg";
+import RepoImage from "./img/repo.svg";
 import SecurityImage from "./img/Security.svg";
-import InsightsImage from "./img/Insights.svg";
 import SettingImage from "./img/setting.svg";
+import WikiImage from "./img/wiki.svg";
 
 import {
-  PinIcon,
   EyeIcon,
+  PinIcon,
   RepoForkedIcon,
   StarIcon,
 } from "@primer/octicons-react";
 
 import { ChevronDownIcon } from "@primer/octicons-react";
+
+import { useNavigate } from "react-router-dom";
 
 const ContainetTitle = styled.div`
   background-color: #eaeef2;
@@ -174,6 +176,7 @@ const FunctionalImgandText = styled.button`
 `;
 
 function ContainerTitle() {
+  const navigate = useNavigate();
   let jwtRepo = JSON.parse(
     window.localStorage.getItem("userChooseRepo") as string
   );
@@ -233,7 +236,11 @@ function ContainerTitle() {
             <FunctionalImg src={CodeImage} alt="" />
             <p>code</p>
           </FunctionalImgandText>
-          <FunctionalImgandText>
+          <FunctionalImgandText
+            onClick={() => {
+              navigate("/Issue");
+            }}
+          >
             <FunctionalImg src={IssueImage} alt="" />
             <p>Issues</p>
           </FunctionalImgandText>

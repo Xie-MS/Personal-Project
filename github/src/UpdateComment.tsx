@@ -24,7 +24,6 @@ import {
   TypographyIcon,
 } from "@primer/octicons-react";
 
-import UserImg from "../src/img/userImg.png";
 import api from "./api";
 
 function CreateComment({
@@ -104,6 +103,7 @@ function CreateComment({
   let jwtRepo = JSON.parse(
     window.localStorage.getItem("userChooseRepo") as string
   );
+  let userImg = JSON.parse(window.localStorage.getItem("userImg") as string);
 
   async function UpdateComment() {
     setLoading(true);
@@ -311,7 +311,7 @@ function CreateComment({
     <div className="md:w-full lg:w-auto justify-start lg:relative flex items-start xl:flex relative mt-4">
       <div className="md:hidden lg:block w-[7.24%] xl:block">
         <img
-          src={UserImg}
+          src={userImg}
           alt=""
           className="w-10 h-10 rounded-full sm:hidden"
         />

@@ -24,8 +24,6 @@ import {
   TypographyIcon,
 } from "@primer/octicons-react";
 
-import UserImg from "../src/img/userImg.png";
-
 function CreateNewIssue({
   preview,
   setPreview,
@@ -61,6 +59,8 @@ function CreateNewIssue({
   const [issueClose, setIssueClose]: any = useState(true);
   const [tagsName, setTagsName]: any = useState("");
   const [issueNum, setIssueNum]: any = useState(-1);
+
+  let userImg = JSON.parse(window.localStorage.getItem("userImg") as string);
 
   function PreviewText() {
     if (issueContainer === "" || issueContainer === "Leave a comment") {
@@ -237,7 +237,7 @@ function CreateNewIssue({
   return (
     <div className="lg:relative flex justify-evenly items-start xl:flex relative">
       <div className="md:hidden lg:block w-[7.24%] xl:block">
-        <img src={UserImg} alt="" className="w-[70%] rounded-full sm:hidden" />
+        <img src={userImg} alt="" className="w-[70%] rounded-full sm:hidden" />
       </div>
       <div className="md:w-full lg:w-[88.7%] xl:w-[88.7%]">
         <div>

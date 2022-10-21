@@ -490,10 +490,9 @@ function LabelEditManagement({
   const [updateChangeColorText, setUpdateChangeColorText]: any = useState();
   const [labelBtnColorText, setLabelBtnColorText]: any = useState();
 
-  const [labelBtnBgColor, setLabelBtnBgColor]: any = useState(
+  const [ColorInputDefault, setColorInputDefault]: any = useState(
     labels[index].color
   );
-
   const [UpdateChangeColor, setUpdateChangeColor]: any = useState("");
 
   console.log(UpdateChangeColor);
@@ -589,6 +588,7 @@ function LabelEditManagement({
           onClick={() => {
             setNewLabelsSelectColor({ item }.item);
             setUpdateChangeColor({ item }.item.substring(1));
+            setColorInputDefault({ item }.item.substring(1));
             setLabelBtnColorNum(index);
             if (selectColorMenuActive === true) {
               setSelectColorMenuActive(false);
@@ -607,6 +607,7 @@ function LabelEditManagement({
     MathFloorColorNum = Math.floor(Math.random() * colorListArray.length);
     setColorMathFloorNum(MathFloorColorNum);
     setUpdateChangeColor(colorListArray[colorMathFloorNum].substring(1));
+    setColorInputDefault(colorListArray[colorMathFloorNum].substring(1));
   }
 
   function UpdateLabelName(e: any) {
@@ -631,6 +632,7 @@ function LabelEditManagement({
       lightOrDark(e.target.value);
     }
     setUpdateChangeColor(e.target.value.split("#")[1]);
+    setColorInputDefault(e.target.value.split("#")[1]);
   }
 
   let jwtName = JSON.parse(window.localStorage.getItem("userName") as string);
@@ -693,7 +695,7 @@ function LabelEditManagement({
         <LabelStyle>
           <LabelBtn
             key={index}
-            LabelBtnBgColor={labelBtnBgColor}
+            LabelBtnBgColor={labels[index].color}
             UpdateChangeColor={UpdateChangeColor}
             index={index}
             LabelBtnColorNum={LabelBtnColorNum}
@@ -804,7 +806,7 @@ function LabelEditManagement({
               </CreateInformationInputUl>
               <CreateInformationInputColor
                 type="text"
-                value={`#${UpdateChangeColor}`}
+                value={`#${ColorInputDefault}`}
                 pattern="#?([a-fA-F0-9]{6})"
                 maxLength={7}
                 ref={SeleceColor}
