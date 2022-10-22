@@ -687,11 +687,8 @@ function LabelManagement() {
   const [moreBtnNumActive, setMoreBtnNumActive] = useState(-1);
   const Description = useRef<HTMLInputElement | null>(null);
   const SeleceColor = useRef<HTMLInputElement | null>(null);
-<<<<<<< HEAD
-  const [inputName, setInputName]: any = useState("");
-=======
   const [inputName, setInputName]: any = useState("Label Preview");
->>>>>>> Sprint5
+
   const [newLabelsSelectColor, setNewLabelsSelectColor]: any =
     useState("#FFFFFF");
   const [updateLabelsSelectColor, setUpdateLabelsSelectColor]: any =
@@ -714,42 +711,6 @@ function LabelManagement() {
 
   const LabelsData: any = useSelector((state) => state);
 
-<<<<<<< HEAD
-  // function lightOrDarkCreate() {
-  //   const r1 = parseInt(newLabelsSelectColor.substring(1).slice(0, 1), 16)
-  //   const r2 = parseInt(newLabelsSelectColor.substring(1).slice(1, 2), 16)
-  //   const g1 = parseInt(newLabelsSelectColor.substring(1).slice(2, 3), 16)
-  //   const g2 = parseInt(newLabelsSelectColor.substring(1).slice(3, 4), 16)
-  //   const b1 = parseInt(newLabelsSelectColor.substring(1).slice(4, 5), 16)
-  //   const b2 = parseInt(newLabelsSelectColor.substring(1).slice(5, 6), 16)
-  //   const hsp = r1  + r2  + g1 + g2 + b1 + b2
-  //   console.log(hsp,newLabelsSelectColor,newLabelsSelectColor)
-  //   if (hsp > 45) {
-  //     setLightOrCreateDark("black")
-  //   } else {
-  //     setLightOrCreateDark("white")
-  //   }
-  // }
-
-  function lightOrDark() {
-    let BGColor: string;
-    if (LabelBtnColor !== UpdateChangeColor) {
-      BGColor = UpdateChangeColor;
-    } else {
-      BGColor = LabelBtnColor;
-    }
-
-    const r1 = parseInt(UpdateChangeColor.slice(0, 1), 16);
-    const r2 = parseInt(UpdateChangeColor.slice(1, 2), 16);
-    const g1 = parseInt(UpdateChangeColor.slice(2, 3), 16);
-    const g2 = parseInt(UpdateChangeColor.slice(3, 4), 16);
-    const b1 = parseInt(UpdateChangeColor.slice(4, 5), 16);
-    const b2 = parseInt(UpdateChangeColor.slice(5, 6), 16);
-    const hsp = r1 + r2 + g1 + g2 + b1 + b2;
-
-    if (hsp < 45) {
-      setLightOrDark("black");
-=======
   async function getLabels() {
     setLoading(true);
     const data = await api.getLabels();
@@ -779,8 +740,6 @@ function LabelManagement() {
         setTextLightOrDark("white");
         serLabelTextLightOrDark("white");
       }
-      console.log(hsp, r1, r2, g1, g2, b1, b2);
->>>>>>> Sprint5
     } else {
       const r1 = parseInt(SelectColor.slice(0, 1), 16);
       const r2 = parseInt(SelectColor.slice(1, 2), 16);
