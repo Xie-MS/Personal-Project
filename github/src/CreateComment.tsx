@@ -113,7 +113,6 @@ function CreateComment({
   }
 
   async function UpdateUssueState() {
-    setLoading(true);
     const data = await api.UpdateIssue(
       {
         owner: { jwtName },
@@ -125,7 +124,6 @@ function CreateComment({
       IssueNum
     );
     setCreateCommentRender((prev: boolean) => !prev);
-    setLoading(false);
   }
 
   function PreviewText() {

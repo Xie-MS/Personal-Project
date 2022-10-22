@@ -162,7 +162,6 @@ function IssueDetailPage() {
   }
 
   async function AddEmoji() {
-    setLoading(true);
     const data = await api.AddEmoji(
       {
         owner: { jwtName },
@@ -173,7 +172,6 @@ function IssueDetailPage() {
       IssueNum
     );
     setCreateCommentRender((prev: boolean) => !prev);
-    setLoading(false);
   }
 
   function EmojiIcon() {
