@@ -7,8 +7,6 @@ let jwtRepo = JSON.parse(
 const api = {
   hostname: `https://api.github.com/repos/${jwtName}/${jwtRepo}`,
   async getRepo(userName: string, userToken: string) {
-    console.log(userName, userToken);
-
     const response = await fetch(
       `https://api.github.com/users/${userName}/repos`,
       {
@@ -36,7 +34,6 @@ const api = {
   },
 
   async setLabels(data: any) {
-    console.log(`token ${jwtToken}`);
     const response = await fetch(`${this.hostname}/labels`, {
       body: JSON.stringify(data),
       headers: new Headers({
@@ -51,7 +48,6 @@ const api = {
   },
 
   async deleteLabel(data: any) {
-    console.log(data.name);
     const response = await fetch(`${this.hostname}/labels/${data.name}`, {
       headers: new Headers({
         Accept: "application/vnd.github+json",
@@ -60,7 +56,6 @@ const api = {
       }),
       method: "DELETE",
     });
-    console.log(response);
     return await response;
   },
   async updataLabels(data: any) {
@@ -73,7 +68,6 @@ const api = {
       }),
       method: "POST",
     });
-    console.log(response);
     return await response.json();
   },
 
@@ -229,7 +223,6 @@ const api = {
       }),
       method: "POST",
     });
-    console.log(data);
     return await response.json();
   },
 
@@ -272,7 +265,6 @@ const api = {
         method: "POST",
       }
     );
-    console.log(response);
     return await response.json();
   },
 
@@ -289,7 +281,6 @@ const api = {
         method: "PATCH",
       }
     );
-    console.log(response);
     return await response.json();
   },
 
@@ -306,7 +297,6 @@ const api = {
         method: "DELETE",
       }
     );
-    console.log(response);
     return await response;
   },
 
@@ -320,7 +310,6 @@ const api = {
       }),
       method: "PATCH",
     });
-    console.log(response);
     return await response.json();
   },
 
@@ -337,7 +326,6 @@ const api = {
         method: "POST",
       }
     );
-    console.log(response);
     return await response.json();
   },
 
@@ -354,7 +342,6 @@ const api = {
         method: "POST",
       }
     );
-    console.log(response);
     return await response.json();
   },
 };

@@ -109,6 +109,7 @@ function CreateComment({
       IssueNum
     );
     setCreateCommentRender((prev: boolean) => !prev);
+    setIssueContainer("");
     setLoading(false);
   }
 
@@ -529,7 +530,6 @@ function CreateComment({
                           );
                           setTagsName("");
                           setIssueNum(-1);
-                          console.log(URL.createObjectURL(file[0]));
                         }
                       }}
                     />
@@ -618,7 +618,6 @@ function CreateComment({
                           );
                           setTagsName("");
                           setIssueNum(-1);
-                          console.log(URL.createObjectURL(file[0]));
                         }
                       }}
                     />

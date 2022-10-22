@@ -576,7 +576,6 @@ function LabelManagement() {
         setTextLightOrDark("white");
         serLabelTextLightOrDark("white");
       }
-      console.log(hsp, r1, r2, g1, g2, b1, b2);
     } else {
       const r1 = parseInt(SelectColor.slice(0, 1), 16);
       const r2 = parseInt(SelectColor.slice(1, 2), 16);
@@ -589,12 +588,10 @@ function LabelManagement() {
         setLightOrCreateDark("black");
         setTextLightOrDark("black");
         serLabelTextLightOrDark("black");
-        console.log(hsp, r1, r2, g1, g2, b1, b2, "black");
       } else {
         setLightOrCreateDark("white");
         setTextLightOrDark("white");
         serLabelTextLightOrDark("white");
-        console.log(hsp, r1, r2, g1, g2, b1, b2, "white");
       }
     }
   }

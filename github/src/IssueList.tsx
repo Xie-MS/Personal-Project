@@ -377,7 +377,6 @@ function AssigneePage({
             }}
             onClick={() => {
               setTargetText(targetAssigneeSpan.current?.outerText);
-              console.log(targetText);
             }}
           />
           <input

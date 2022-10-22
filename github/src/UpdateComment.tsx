@@ -223,7 +223,7 @@ function CreateComment({
       tagsName === "" &&
       issueNum === -1
     ) {
-      return <img src={imgURL} alt="" />;
+      return <img src={imgURL} alt="" className="w-[20%]" />;
     } else if (
       issueUpdateInputDefaultValue !== "" &&
       imgURL === "" &&

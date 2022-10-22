@@ -143,7 +143,6 @@ function CreateNewIssue({
       tagsName === "" &&
       issueNum === -1
     ) {
-      console.log(imgURL);
       return <img src={imgURL} alt="" />;
     } else if (
       issueContainer !== "" &&

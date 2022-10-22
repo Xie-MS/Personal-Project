@@ -495,8 +495,6 @@ function LabelEditManagement({
   );
   const [UpdateChangeColor, setUpdateChangeColor]: any = useState("");
 
-  console.log(UpdateChangeColor);
-
   const dispatch = useDispatch();
   const LabelsData: any = useSelector((state) => state);
 
@@ -526,7 +524,6 @@ function LabelEditManagement({
         setLabelBtnColorText("white");
         setUpdateChangeColorText("white");
       }
-      console.log(hsp, r1, r2, g1, g2, b1, b2);
     } else {
       const r1 = parseInt(SelectColor.slice(0, 1), 16);
       const r2 = parseInt(SelectColor.slice(1, 2), 16);
@@ -656,8 +653,6 @@ function LabelEditManagement({
       });
     setLoading(false);
   }
-
-  // console.log(UpdateChangeColor);
 
   async function updataLabels(index: number) {
     setLoading(true);

@@ -37,8 +37,6 @@ function NewIssuePage() {
     window.localStorage.getItem("userChooseRepo") as string
   );
 
-  console.log(jwtName, jwtRepo);
-
   useEffect(() => {
     async function getAssigneeList() {
       if (targetText === targetAssigneeSpan.current?.outerText) {
