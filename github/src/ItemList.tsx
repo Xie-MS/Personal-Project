@@ -9,7 +9,7 @@ function ItemListData({ data }: { data: any }) {
     return data.map((_item: any, Index: number) => {
       return (
         <div className="overflow-y-auto md:max-h[607px] lg:max-h[270px] xl:max-h[270px]">
-          <li className="xl:py-2 px-2 border-t-[1px] border-solid border-gray-300 text-xs justify-start items-center md:pl-5 md:pr-2 md:py-4 xl:pl-6 lg:pl-6 lg:relative xl:relative">
+          <li className="xl:py-2 px-2 cursor-pointer border-t-[1px] border-solid border-gray-300 text-xs justify-start items-center md:pl-5 md:pr-2 md:py-4 xl:pl-6 lg:pl-6 lg:relative xl:relative">
             <div
               className={`${
                 data[Index].name.includes("Xie-MS") ? "block" : "hidden"

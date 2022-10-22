@@ -1,29 +1,30 @@
 import React from "react";
 
-import LabelsImage from "../src/img/Labels.svg";
-import Milestone from "../src/img/milestone.svg";
-import issueOpened from "../src/img/issueOpened.svg";
-import Check from "../src/img/check.svg";
-import UserImg from "../src/img/userImg.png";
-import Light from "../src/img/light.svg";
-import { useState, useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Check from "../src/img/check.svg";
+import issueOpened from "../src/img/issueOpened.svg";
+import LabelsImage from "../src/img/Labels.svg";
+import Light from "../src/img/light.svg";
+import Milestone from "../src/img/milestone.svg";
+import UserImg from "../src/img/userImg.png";
 
 import {
+  CheckCircleIcon,
+  CheckIcon,
+  ChevronDownIcon,
+  ChevronLeftIcon,
+  ChevronRightIcon,
+  CircleSlashIcon,
+  CommentIcon,
   IssueOpenedIcon,
   LinkExternalIcon,
-  CheckIcon,
   XIcon,
-  ChevronRightIcon,
-  ChevronLeftIcon,
-  CommentIcon,
-  CheckCircleIcon,
-  CircleSlashIcon,
-  ChevronDownIcon,
 } from "@primer/octicons-react";
 
 import api from "./api";
 import IssueLabelList from "./IssueLabelList";
+import Loading from "./Loading";
 
 function IssuePage() {
   const navigate = useNavigate();
@@ -43,12 +44,15 @@ function IssuePage() {
   const [page, setPage] = useState(1);
   const [firstpage, setFirstpage] = useState(false);
   const [endpage, setEndpage] = useState(true);
-  const [labeslSelectName, setLabeslSelectName] = useState("");
+  const [labeslSelectName, setLabeslSelectName] = useState<any>([]);
   const [labeslSelectLength, setLabeslSelectLength] = useState(0);
   const [inputIssueName, setInputIssueName] = useState("");
   const [state, setState] = useState("open");
   const [renderData, setRenderData]: any = useState([]);
-  const [allSearchInformation, setAllSearchInformation] = useState<any>([]);
+  const [allSearchInformation, setAllSearchInformation] = useState<any>({});
+  const [labeslSelectSearch, setLabeslSelectSearch] = useState<any>([]);
+
+  const [loading, serLoading]: any = useState(false);
 
   const [sortSelect, setsortSelect]: any = useState("");
   const assigneeUserName: any = useRef<HTMLParagraphElement | null>(null);
@@ -71,32 +75,17 @@ function IssuePage() {
   ];
 
   useEffect(() => {
-    let newQuery: string[] = [];
-    if (
-      assigneeName === sortSelect ||
-      sortSelect === "Everything assigned to you"
-    ) {
-      newQuery = [...allSearchInformation, "assignee=" + assigneeName];
-    } else if (sortSelect === "Your issues") {
-      newQuery = [...allSearchInformation, "creator=Xie-MS"];
-    } else if (sortSelect === "Everything mentioning you") {
-      newQuery = [...allSearchInformation, "mentioned=Xie-MS"];
-    } else if (sortSelect === sortSelectName && date !== "" && sort !== "") {
-      newQuery = [...allSearchInformation, `sort=${date}-${sort}`];
-    } else if (sortSelect === labeslSelectName && labeslSelectName !== "") {
-      newQuery = [...allSearchInformation, `labels=${labeslSelectName}`];
-    }
-  }, [sortSelect]);
-
-  useEffect(() => {
     async function getListIssues() {
-      let newQuery: string[] | string | any = [];
-      if (allSearchInformation.length > 1) {
-        for (let i = 0; i < allSearchInformation.length; i++) {
-          newQuery[i] = "&" + allSearchInformation[i];
-        }
-      }
-      newQuery = `${newQuery.join("")}`;
+      serLoading(true);
+      const newQuery = `${allSearchInformation.sort || ""}${
+        allSearchInformation.labels
+          ? "&labels=" + allSearchInformation.labels
+          : ""
+      }${
+        allSearchInformation.Assignee
+          ? "&assignee=" + allSearchInformation.Assignee
+          : ""
+      }`;
 
       if (sortSelect === page && page !== null && state === "open") {
         const data = await api.getListIssuesState(page);
@@ -140,24 +129,6 @@ function IssuePage() {
         } else {
           setNoSearch(false);
         }
-      } else if (
-        sortSelect === sortSelectName &&
-        date !== null &&
-        sort !== null &&
-        allSearchInformation.length !== labeslSelectLength
-      ) {
-        const data = await api.getIssuesSort(date, sort);
-        setRenderData(data);
-      } else if (
-        newQuery !== "" &&
-        allSearchInformation.length >= 1 &&
-        allSearchInformation.length !== labeslSelectLength
-      ) {
-        const data = await api.SearchAll(newQuery);
-        setRenderData(data);
-      } else if (newQuery !== "") {
-        const data = await api.SearchAll(newQuery);
-        setRenderData(data);
       } else if (sortSelect === inputIssueName) {
         const data = await api.SearchIssues(inputIssueName);
         let items: any;
@@ -165,18 +136,21 @@ function IssuePage() {
       } else if (sortSelect === "closed") {
         const data = await api.ClosedIssues();
         setRenderData(data);
-      } else if (
-        labeslSelectName !== "" &&
-        labeslSelectName === sortSelect &&
-        allSearchInformation.length !== labeslSelectLength
-      ) {
-        const data = await api.getIssuesLabels(labeslSelectName);
+      } else {
+        const data = await api.SearchAll(newQuery);
+
         setRenderData(data);
       }
+      serLoading(false);
     }
 
     getListIssues();
   }, [sortSelect, allSearchInformation]);
+
+  if (renderData === undefined || renderData?.message === "Bad credentials") {
+    window.location.assign("/");
+    localStorage.clear();
+  }
 
   function getIssues() {
     return renderData.map((item: any, index: number) => {
@@ -255,7 +229,7 @@ function IssuePage() {
             style={{
               backgroundColor: `#${renderData[index].labels[listIndex].color}`,
             }}
-            className={`rounded-xl px-[7px] font-semibold text-sm md:text-xs`}
+            className={`rounded-xl px-[7px] font-semibold text-sm ml-1 md:text-xs`}
           >
             {renderData[index].labels[listIndex].name}
           </button>
@@ -360,6 +334,7 @@ function IssuePage() {
           onClick={() => {
             setAssigneeName("Xie-MS");
             setsortSelect(Filters[FiltersDSelectIndex]);
+            setAllSearchInformation(Filters[FiltersDSelectIndex]);
             setFiletersMenu(false);
             setClearSearch(true);
             setMobileMenuBG(false);
@@ -390,32 +365,60 @@ function IssuePage() {
             setClearSearch(true);
             setSortMenu(false);
             setMobileMenuBG(false);
+
             if (SortsSelect[SortsSelectIndex] === "Newest") {
               setSort("desc");
               setDate("created");
+              setAllSearchInformation({
+                ...allSearchInformation,
+                sort: "sort=created-desc",
+              });
             } else if (SortsSelect[SortsSelectIndex] === "Oldest") {
               setSort("asc");
               setDate("created");
+              setAllSearchInformation({
+                ...allSearchInformation,
+                sort: "sort=created-asc",
+              });
             } else if (SortsSelect[SortsSelectIndex] === "Most commented") {
               setSort("desc");
               setDate("comments");
+              setAllSearchInformation({
+                ...allSearchInformation,
+                sort: "sort=comments-desc",
+              });
             } else if (SortsSelect[SortsSelectIndex] === "Least commented") {
               setSort("asc");
               setDate("comments");
+              setSortSelectName(SortsSelect[SortsSelectIndex]);
+              setAllSearchInformation({
+                ...allSearchInformation,
+                sort: "sort=comments-asc",
+              });
             } else if (SortsSelect[SortsSelectIndex] === "Recently updated") {
               setSort("desc");
               setDate("updateed");
+              setAllSearchInformation({
+                ...allSearchInformation,
+                sort: "sort=updateed-desc",
+              });
             } else if (
               SortsSelect[SortsSelectIndex] === "Least recently updated"
             ) {
               setSort("asc");
               setDate("updateed");
+              setAllSearchInformation({
+                ...allSearchInformation,
+                sort: "sort=updateed-asc",
+              });
             }
           }}
         >
           <div
             className={`${
-              sortSelect === SortsSelect[SortsSelectIndex] ? "block" : "hidden"
+              sortSelectName === SortsSelect[SortsSelectIndex]
+                ? "block"
+                : "hidden"
             } absolute left-3 `}
           >
             <CheckIcon size={16} className="mr-2" />
@@ -447,6 +450,10 @@ function IssuePage() {
     if (e.key === "Enter") {
       setAssigneeName(e.target.value);
       setsortSelect(e.target.value);
+      setAllSearchInformation({
+        ...allSearchInformation,
+        Assignee: e.target.value,
+      });
     }
   }
 
@@ -459,6 +466,10 @@ function IssuePage() {
       setsortSelect(inputIssueName);
       setClearSearch(true);
     }
+  }
+
+  if (loading) {
+    return <Loading />;
   }
 
   return (
@@ -589,7 +600,7 @@ function IssuePage() {
               <button
                 className="flex justify-center items-center ml-2 px-4 py-[5px] text-white bg-green-600 border-[1px] border-solid border-gray-400 rounded-md h-[30px] text-sm lg:ml-[15px]"
                 onClick={() => {
-                  navigate(`/NewIssuePage`);
+                  navigate(`/NewIssue`);
                 }}
               >
                 <p className="flex justify-center items-center md:hidden">
@@ -617,6 +628,9 @@ function IssuePage() {
                   setClearSearch(false);
                   setAllSearchInformation([]);
                   setLabelSelectOption([]);
+                  setSortSelectName("");
+                  setLabeslSelectName([]);
+                  setLabeslSelectSearch([]);
                 }}
               >
                 Clear current search query, filters, and sorts
@@ -715,6 +729,8 @@ function IssuePage() {
                   setLabeslSelectName={setLabeslSelectName}
                   mobileMenuBG={mobileMenuBG}
                   setMobileMenuBG={setMobileMenuBG}
+                  labeslSelectSearch={labeslSelectSearch}
+                  setLabeslSelectSearch={setLabeslSelectSearch}
                 />
                 <button className="flex justify-center items-center px-4 text-[#57606a] md:hidden hover:text-black">
                   Projects
@@ -725,7 +741,7 @@ function IssuePage() {
                   <ChevronDownIcon size={16} />
                 </button>
                 <button
-                  className="flex justify-center items-center px-4 text-[#57606a] md:text-sm hover:text-black"
+                  className="flex justify-center items-center px-4 text-[#57606a] md:text-sm hover:text-black cursor-pointer"
                   onClick={() => {
                     setAssigne(true);
                     setMobileMenuBG(true);
@@ -748,7 +764,7 @@ function IssuePage() {
                     assigneMenu ? "block" : "hidden"
                   } absolute top-[25px] right-[60px] bg-white border-[1px] border-solid border-gray-300 rounded-lg w-[275px] sm:sm:fixed sm:top-[1%] sm:left-[4%] sm:bottom-[35%] px-4 text-sm sm:w-[92%]`}
                 >
-                  <li className="px-4 py-[7px] text-xs font-semibold flex justify-between items-center sm:font-semibold sm:px-4 sm:py-4">
+                  <li className="px-4 py-[7px] text-xs font-semibold flex justify-between items-center sm:font-semibold sm:px-4 sm:py-4 cursor-pointer">
                     <p>Filter by who's assigned</p>
                     <p
                       onClick={() => {
@@ -773,8 +789,16 @@ function IssuePage() {
                       }}
                     />
                   </li>
-                  <li className="py-[7px] px-4 text-xs border-t-[1px] border-solid border-gray-300 flex justify-start items-center sm:px-4 sm:py-4">
-                    <div className="invisible">
+                  <li className="py-[7px] px-4 text-xs border-t-[1px] border-solid border-gray-300 flex justify-start items-center sm:px-4 sm:py-4 cursor-pointer">
+                    <div
+                      className="invisible"
+                      onClick={() => {
+                        setAllSearchInformation({
+                          ...allSearchInformation,
+                          Assignee: "",
+                        });
+                      }}
+                    >
                       <CheckIcon size={16} className="mr-2" />
                     </div>
                     Assigned to nobody
@@ -782,12 +806,16 @@ function IssuePage() {
                   <li
                     className={`${
                       assigneeLI ? "flex" : "hidden"
-                    } py-[7px] px-4 border-t-[1px] border-solid border-gray-300 text-xs flex justify-start items-center sm:px-4 sm:py-4`}
+                    } py-[7px] px-4 border-t-[1px] border-solid border-gray-300 text-xs flex justify-start items-center sm:px-4 sm:py-4 cursor-pointer`}
                     onClick={() => {
                       setsortSelect("Xie-MS");
                       setAssigneeName("Xie-MS");
                       setAssigne(false);
                       setClearSearch(true);
+                      setAllSearchInformation({
+                        ...allSearchInformation,
+                        Assignee: "Xie-MS",
+                      });
                     }}
                   >
                     <div
@@ -822,6 +850,7 @@ function IssuePage() {
                   onClick={() => {
                     setSortMenu(true);
                     setMobileMenuBG(true);
+
                     if (
                       filtersMenu === true ||
                       labelMenu === true ||
@@ -839,9 +868,9 @@ function IssuePage() {
                 <ul
                   className={`${
                     sortMenu ? "visible" : "invisible"
-                  } absolute top-[25px] right-0 bg-white border-[1px] border-solid border-gray-300 rounded-lg w-[275px] sm:fixed sm:top-[2%] sm:left-[2%] sm:bottom-[21%] sm:w-[95%]`}
+                  } absolute top-[25px] right-0 bg-white border-[1px] border-solid border-gray-300 rounded-lg w-[275px] sm:fixed sm:top-[2%] sm:left-[2%] sm:bottom-[21%] sm:w-[95%] cursor-pointer`}
                 >
-                  <li className="px-4 py-[7px] text-xs font-semibold flex justify-between items-center sm:py-4 sm:text-sm">
+                  <li className="px-4 py-[7px] text-xs font-semibold flex justify-between items-center sm:py-4 sm:text-sm cursor-pointer">
                     <p>Sort by</p>
                     <p
                       onClick={() => {

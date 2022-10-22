@@ -1,27 +1,38 @@
-import React from "react";
-import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 
 import api from "./api";
+import Loading from "./Loading";
 
 function IssueDetailPage() {
   const [repoData, setRepoData] = useState<any>(undefined);
-  const navigate = useNavigate();
+  const [loading, serLoading]: any = useState(false);
+  const userData: any = useSelector((state) => state);
+
+  let userImg = JSON.parse(window.localStorage.getItem("userImg") as string);
 
   useEffect(() => {
     async function getRepoName() {
-      const data = await api.getRepo();
-      setRepoData(data);
+      serLoading(true);
+      const data = await api.getRepo(
+        userData.tokenReducer.name,
+        userData.tokenReducer.token
+      );
+      if (data !== null) {
+        setRepoData(data);
+      }
+      serLoading(false);
     }
     getRepoName();
-  }, []);
+  }, [userData]);
 
-  let jwtImg = JSON.parse(window.localStorage.getItem("userImg") as string);
-  let jwtName = JSON.parse(window.localStorage.getItem("userName") as string);
+  if (loading) {
+    return <Loading />;
+  }
 
-  if (repoData === undefined || repoData?.message === "Bad credentials")
+  if (repoData === undefined || repoData?.message === "Bad credentials") {
     return <></>;
-  console.log(repoData);
+  }
 
   function getRepoData() {
     return repoData?.map((repo: any) => {
@@ -47,10 +58,12 @@ function IssueDetailPage() {
       <div className="w-full block justify-center items-center">
         <div className="block justify-center items-center">
           <img
-            src={jwtImg}
+            src={userImg}
             className="w-[10%] rounded-ful mx-auto flex rounded-full"
           />
-          <p className="text-[32px] text-center mt-2">{jwtName}</p>
+          <p className="text-[32px] text-center mt-2">
+            {userData.tokenReducer.name}
+          </p>
         </div>
 
         <div className="block justify-center items-center mt-8">

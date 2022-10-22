@@ -6,14 +6,17 @@ let jwtRepo = JSON.parse(
 
 const api = {
   hostname: `https://api.github.com/repos/${jwtName}/${jwtRepo}`,
-  async getRepo() {
+  async getRepo(userName: string, userToken: string) {
+    console.log(userName, userToken);
+
     const response = await fetch(
-      `https://api.github.com/users/${jwtName}/repos`,
+      `https://api.github.com/users/${userName}/repos`,
       {
         headers: new Headers({
           "Content-type": "application/json",
           Accept: "application/vnd.github+json",
-          Authorization: `token ${jwtToken}`,
+          Authorization: `token ${userToken}`,
+          "if-none-match": "",
         }),
       }
     );
@@ -26,6 +29,7 @@ const api = {
         "Content-type": "application/json",
         Accept: "application/vnd.github+json",
         Authorization: `token ${jwtToken}`,
+        "if-none-match": "",
       }),
     });
     return await response.json();
@@ -39,6 +43,7 @@ const api = {
         "Content-type": "application/json",
         Accept: "application/vnd.github+json",
         Authorization: `token ${jwtToken}`,
+        "if-none-match": "",
       }),
       method: "POST",
     });
@@ -51,6 +56,7 @@ const api = {
       headers: new Headers({
         Accept: "application/vnd.github+json",
         Authorization: `token ${jwtToken}`,
+        "if-none-match": "",
       }),
       method: "DELETE",
     });
@@ -63,6 +69,7 @@ const api = {
       headers: new Headers({
         Accept: "application/vnd.github+json",
         Authorization: `token ${jwtToken}`,
+        "if-none-match": "",
       }),
       method: "POST",
     });
@@ -76,6 +83,7 @@ const api = {
         "Content-type": "application/json",
         Accept: "application/vnd.github+json",
         Authorization: `token ${jwtToken}`,
+        "if-none-match": "",
       }),
     });
     return await response.json();
@@ -87,6 +95,7 @@ const api = {
         "Content-type": "application/json",
         Accept: "application/vnd.github+json",
         Authorization: `token ${jwtToken}`,
+        "if-none-match": "",
       }),
     });
     return await response.json();
@@ -98,6 +107,7 @@ const api = {
         "Content-type": "application/json",
         Accept: "application/vnd.github+json",
         Authorization: `token ${jwtToken}`,
+        "if-none-match": "",
       }),
     });
     return await response.json();
@@ -109,6 +119,7 @@ const api = {
         "Content-type": "application/json",
         Accept: "application/vnd.github+json",
         Authorization: `token ${jwtToken}`,
+        "if-none-match": "",
       }),
     });
     return await response.json();
@@ -122,6 +133,7 @@ const api = {
           "Content-type": "application/json",
           Accept: "application/vnd.github+json",
           Authorization: `token ${jwtToken}`,
+          "if-none-match": "",
         }),
       }
     );
@@ -134,6 +146,7 @@ const api = {
         "Content-type": "application/json",
         Accept: "application/vnd.github+json",
         Authorization: `token ${jwtToken}`,
+        "if-none-match": "",
       }),
     });
     return await response.json();
@@ -147,6 +160,7 @@ const api = {
           "Content-type": "application/json",
           Accept: "application/vnd.github+json",
           Authorization: `token ${jwtToken}`,
+          "if-none-match": "",
         }),
       }
     );
@@ -159,6 +173,7 @@ const api = {
         "Content-type": "application/json",
         Accept: "application/vnd.github+json",
         Authorization: `token ${jwtToken}`,
+        "if-none-match": "",
       }),
     });
     return await response.json();
@@ -170,6 +185,7 @@ const api = {
         "Content-type": "application/json",
         Accept: "application/vnd.github+json",
         Authorization: `token ${jwtToken}`,
+        "if-none-match": "",
       }),
     });
     return await response.json();
@@ -177,12 +193,13 @@ const api = {
 
   async SearchIssues(IssuesName: string) {
     const response = await fetch(
-      `https://api.github.com/search/issues?q=repo:Xie-Ms/Personal-Project%20${IssuesName}`,
+      `https://api.github.com/search/issues?q=repo:${jwtName}/${jwtRepo}%20${IssuesName}`,
       {
         headers: new Headers({
           "Content-type": "application/json",
           Accept: "application/vnd.github+json",
           Authorization: `token ${jwtToken}`,
+          "if-none-match": "",
         }),
       }
     );
@@ -195,6 +212,7 @@ const api = {
         "Content-type": "application/json",
         Accept: "application/vnd.github+json",
         Authorization: `token ${jwtToken}`,
+        "if-none-match": "",
       }),
     });
     return await response.json();
@@ -207,6 +225,7 @@ const api = {
         "Content-type": "application/json",
         Accept: "application/vnd.github+json",
         Authorization: `token ${jwtToken}`,
+        "if-none-match": "",
       }),
       method: "POST",
     });
@@ -220,6 +239,7 @@ const api = {
         "Content-type": "application/json",
         Accept: "application/vnd.github+json",
         Authorization: `token ${jwtToken}`,
+        "if-none-match": "",
       }),
     });
     return await response.json();
@@ -233,6 +253,7 @@ const api = {
           "Content-type": "application/json",
           Accept: "application/vnd.github+json",
           Authorization: `token ${jwtToken}`,
+          "if-none-match": "",
         }),
       }
     );
@@ -246,6 +267,7 @@ const api = {
         headers: new Headers({
           Accept: "application/vnd.github+json",
           Authorization: `token ${jwtToken}`,
+          "if-none-match": "",
         }),
         method: "POST",
       }
@@ -262,6 +284,7 @@ const api = {
         headers: new Headers({
           Accept: "application/vnd.github+json",
           Authorization: `token ${jwtToken}`,
+          "if-none-match": "",
         }),
         method: "PATCH",
       }
@@ -278,6 +301,7 @@ const api = {
         headers: new Headers({
           Accept: "application/vnd.github+json",
           Authorization: `token ${jwtToken}`,
+          "if-none-match": "",
         }),
         method: "DELETE",
       }
@@ -292,6 +316,7 @@ const api = {
       headers: new Headers({
         Accept: "application/vnd.github+json",
         Authorization: `token ${jwtToken}`,
+        "if-none-match": "",
       }),
       method: "PATCH",
     });
@@ -307,6 +332,7 @@ const api = {
         headers: new Headers({
           Accept: "application/vnd.github+json",
           Authorization: `token ${jwtToken}`,
+          "if-none-match": "",
         }),
         method: "POST",
       }
@@ -323,6 +349,7 @@ const api = {
         headers: new Headers({
           Accept: "application/vnd.github+json",
           Authorization: `token ${jwtToken}`,
+          "if-none-match": "",
         }),
         method: "POST",
       }

@@ -1,6 +1,6 @@
 import React from "react";
 
-import { useState, useRef, useEffect } from "react";
+import { useRef, useState } from "react";
 
 import { CheckIcon, XIcon } from "@primer/octicons-react";
 import { useParams } from "react-router-dom";
@@ -29,6 +29,8 @@ function AssigneePage({
   setCreateCommentRender,
   labelName,
   setLabelName,
+  loading,
+  setLoading,
 }: {
   setListClose: any;
   targetText: string;
@@ -51,6 +53,8 @@ function AssigneePage({
   setCreateCommentRender: any;
   labelName: any;
   setLabelName: any;
+  loading: boolean;
+  setLoading: any;
 }) {
   const [assigneeInputName, setAssigneeInputName]: any = useState("");
   const [labelsInputSelect, setLabelsInputSelect]: any = useState("");
@@ -59,32 +63,41 @@ function AssigneePage({
   const LabelSelectName = useRef<HTMLParagraphElement | null>(null);
   const { IssueNum } = useParams();
 
+  let jwtName = JSON.parse(window.localStorage.getItem("userName") as string);
+  let jwtRepo = JSON.parse(
+    window.localStorage.getItem("userChooseRepo") as string
+  );
+
   async function UpdateAssignees() {
+    setLoading(true);
     const data = await api.UpdateIssue(
       {
-        owner: "Xie-MS",
-        repo: "Personal-Project",
+        owner: { jwtName },
+        repo: { jwtRepo },
         issue_number: IssueNum,
         assignees: assigneeSelectData,
       },
       IssueNum
     );
     setCreateCommentRender((prev: boolean) => !prev);
-    console.log(createCommentRender, assigneeSelectData);
+    setLoading(false);
+    setItemList(false);
   }
 
   async function UpdateLabels() {
+    setLoading(true);
     const data = await api.UpdateIssue(
       {
-        owner: "Xie-MS",
-        repo: "Personal-Project",
+        owner: { jwtName },
+        repo: { jwtRepo },
         issue_number: IssueNum,
         labels: labelSelectData,
       },
       IssueNum
     );
     setCreateCommentRender((prev: boolean) => !prev);
-    console.log(createCommentRender);
+    setLoading(false);
+    setItemList(false);
   }
 
   function AssigneeInput(e: any) {
@@ -167,7 +180,7 @@ function AssigneePage({
                 .includes(assigneeInputName.toString().toLowerCase())
                 ? "flex"
                 : "hidden"
-            } xl:py-2 px-2 border-t-[1px] border-solid border-gray-300 text-xs justify-start items-center md:pl-5 md:pr-2 md:py-4 xl:pl-6 lg:pl-6 lg:relative xl:relative`}
+            } xl:py-2 px-2 cursor-pointer border-t-[1px] border-solid border-gray-300 text-xs justify-start items-center md:pl-5 md:pr-2 md:py-4 xl:pl-6 lg:pl-6 lg:relative xl:relative`}
             onClick={() => {
               if (
                 assigneeSelectData.includes(renderAssigneeData[ItemIndex].login)
@@ -237,7 +250,7 @@ function AssigneePage({
                 .includes(labelsInputSelect.toString().toLowerCase())
                 ? "flex"
                 : "hidden"
-            } xl:py-2 px-2 border-t-[1px] border-solid border-gray-300 text-xs justify-start items-center md:pl-5 md:pr-2 md:py-4 xl:pl-6 lg:pl-6 lg:relative xl:relative`}
+            } xl:py-2 px-2 cursor-pointer border-t-[1px] border-solid border-gray-300 text-xs justify-start items-center md:pl-5 md:pr-2 md:py-4 xl:pl-6 lg:pl-6 lg:relative xl:relative`}
             onClick={() => {
               if (
                 labelSelectData.includes(renderLabelData[ItemIndex].name) ||
@@ -310,23 +323,21 @@ function AssigneePage({
       });
     }
   }
-
   return (
     <div
       className={`${
-        targetText === targetAssigneeSpan.current?.outerText
-          ? "xl:top-[40px] md:h-[775px] lg:z-20 xl:z-20 md:top-[-100px]"
-          : "xl:top-[115px] xl:z-30 md:top-[-100px] md:max-h[775px]"
+        (targetText === targetAssigneeSpan.current?.outerText && itemList) ||
+        (targetText === "" && itemList)
+          ? "xl:top-[40px] md:h-[775px] lg:z-20 xl:z-20 md:top-[-100px] md:hidden"
+          : "xl:top-[115px] xl:z-30 md:top-[-100px] md:max-h[775px] md:hidden"
       } md:left-[2.3%] md:bottom-[25%] md:top-[-470px] text-sm md:w-[95.5%] md:h-0 xl:absolute top-0 bottom-0 bg-white border-[1px] border-solid border-gray-300 rounded-md xl:right-[10px] xl:h-fit lg:h-fit md:z-30 xl:z-30 lg:z-30`}
       onClick={() => {
         setListClose(false);
-        setItemList(false);
-        setTargetText("");
       }}
     >
       <ul
         className={`${
-          itemList && targetText !== "" ? "block" : "hidden"
+          itemList ? "block" : "hidden"
         } lg:w-[275px] xl:w-[275px] md:w-full overflow-auto md:h-[722px]`}
       >
         <li className="xl:px-[10px] py-2 text-xs font-semibold flex justify-between items-center">
@@ -354,7 +365,7 @@ function AssigneePage({
             type="text"
             defaultValue="Type or choose a user"
             className={`${
-              targetText === targetAssigneeSpan.current?.outerText
+              targetText === targetAssigneeSpan.current?.outerText && itemList
                 ? "block"
                 : "hidden"
             } xl:py-[5px] px-3 bg-white border-[1px] border-solid border-gray-300 rounded-md text-sm w-full`}
@@ -363,6 +374,10 @@ function AssigneePage({
             }}
             onChange={(e) => {
               AssigneeInput(e);
+            }}
+            onClick={() => {
+              setTargetText(targetAssigneeSpan.current?.outerText);
+              console.log(targetText);
             }}
           />
           <input
@@ -378,6 +393,9 @@ function AssigneePage({
             }}
             onChange={(e) => {
               LabelInput(e);
+            }}
+            onClick={() => {
+              setTargetText(targetLabelSpan.current?.outerText);
             }}
           />
         </li>

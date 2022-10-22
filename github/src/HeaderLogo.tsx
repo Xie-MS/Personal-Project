@@ -6,6 +6,7 @@ const Logo = styled.li`
   width: 32px;
   margin-right: 16px;
   list-style: none;
+  cursor: pointer;
 `;
 
 const LogoImg = styled.img`

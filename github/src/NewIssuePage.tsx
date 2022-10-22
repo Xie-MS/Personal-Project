@@ -1,13 +1,13 @@
 import React from "react";
 
-import { useState, useEffect, useRef } from "react";
-import { useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
 import { GearIcon } from "@primer/octicons-react";
+import { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
-import CreateNewIssue from "./CreateNewIssue";
-import SharedListData from "./SharedListData";
 import api from "./api";
+import CreateNewIssue from "./CreateNewIssue";
+import Loading from "./Loading";
+import SharedListData from "./SharedListData";
 
 function NewIssuePage() {
   const [preview, setPreview] = useState(false);
@@ -30,6 +30,15 @@ function NewIssuePage() {
 
   const navigate = useNavigate();
 
+  const [loading, serLoading]: any = useState(false);
+
+  let jwtName = JSON.parse(window.localStorage.getItem("userName") as string);
+  let jwtRepo = JSON.parse(
+    window.localStorage.getItem("userChooseRepo") as string
+  );
+
+  console.log(jwtName, jwtRepo);
+
   useEffect(() => {
     async function getAssigneeList() {
       if (targetText === targetAssigneeSpan.current?.outerText) {
@@ -45,6 +54,17 @@ function NewIssuePage() {
     }
     getAssigneeList();
   }, [targetText]);
+
+  if (
+    jwtName === null ||
+    jwtRepo === null ||
+    renderAssigneeData?.message === "Bad credentials" ||
+    renderLabelData?.message === "Bad credentials" ||
+    renderIssueData?.message === "Bad credentials"
+  ) {
+    window.location.assign("/");
+    localStorage.clear();
+  }
 
   function AssigneeSelect() {
     if (assigneeSelectData.length !== 0) {
@@ -105,15 +125,20 @@ function NewIssuePage() {
   }
 
   async function setIssue() {
+    serLoading(true);
     const data = await api.setIssue({
-      owner: "Xie-MS",
-      repo: "Personal-Project",
+      owner: { jwtName },
+      repo: { jwtRepo },
       title: issueTitle,
       body: issueContainer,
       labels: labelSelectData,
       assignees: assigneeSelectData,
     });
     window.location.assign(`/Issue`);
+  }
+
+  if (loading) {
+    return <Loading />;
   }
 
   return (
@@ -161,7 +186,7 @@ function NewIssuePage() {
           } md:bg-black md:opacity-60 top-0 bottom-0 left-0 right-0 fixed md:z-10 xl:z-0 lg:z-0`}
           onClick={() => {
             setListClose(false);
-            setItemList(false);
+            // setItemList(false);
           }}
         />
         <SharedListData
@@ -239,7 +264,9 @@ function NewIssuePage() {
       <div className="md:w-full mt-4 pt-4 md:block lg:hidden xl:hidden">
         <button
           className={`${
-            issueTitle !== "" ? "bg-[#2DA44E]" : "bg-[#94d3a2]"
+            issueTitle !== ""
+              ? "bg-[#2DA44E] cursor-pointer"
+              : "bg-[#94d3a2] cursor-no-drop"
           } mt-6 px-4 py-[5px] border-[1px] border-solid border-[rgba(27,31,36,0.15)] w-full rounded-md lg:mt-0 xl:mt-0`}
           onClick={() => {
             setIssue();

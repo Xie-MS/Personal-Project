@@ -1,12 +1,15 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import { useState } from "react";
-import { Outlet } from "react-router-dom";
+
+import { useReducer } from "react";
+import { Outlet, useLocation } from "react-router-dom";
 import { Reset } from "styled-reset";
 import { createGlobalStyle } from "styled-components";
 
 import Headers from "./header";
 import ContainerTitle from "./ContainerTitle";
+import SignIn from "./PleaseSignIn";
 import Footer from "./footer";
 import "./index.css";
 
@@ -17,13 +20,14 @@ const GlobalStyle = createGlobalStyle`
 `;
 
 function App() {
-  const LabelsData = useSelector((state) => state);
+  const location = useLocation();
   return (
     <>
       <Reset />
       <GlobalStyle />
       <Headers />
-      <ContainerTitle />
+      {location.pathname === "/" && <SignIn />}
+      {location.pathname !== "/" && <ContainerTitle />}
       <Outlet />
       <Footer />
     </>

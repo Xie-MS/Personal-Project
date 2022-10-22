@@ -1,38 +1,29 @@
-import React, { Dispatch, SetStateAction } from "react";
-import { marked } from "marked";
+import React from "react";
 import ReactMarkdown from "react-markdown";
-import ReactDom from "react-dom";
-import remarkGfm from "remark-gfm";
 import { useParams } from "react-router-dom";
 
-import { useState, useRef } from "react";
+import { useRef, useState } from "react";
 
 import {
-  TypographyIcon,
-  QuoteIcon,
-  CodeIcon,
-  LinkIcon,
-  HeadingIcon,
   BoldIcon,
-  ItalicIcon,
-  ListUnorderedIcon,
-  ListOrderedIcon,
-  TasklistIcon,
-  MentionIcon,
-  FileMediaIcon,
-  CrossReferenceIcon,
-  ReplyIcon,
   ChevronDownIcon,
-  InfoIcon,
-  MarkdownIcon,
-  CheckCircleIcon,
-  TriangleDownIcon,
-  SkipIcon,
-  CheckIcon,
+  CodeIcon,
+  CrossReferenceIcon,
+  FileMediaIcon,
+  HeadingIcon,
   IssueOpenedIcon,
+  ItalicIcon,
+  LinkIcon,
+  ListOrderedIcon,
+  ListUnorderedIcon,
+  MarkdownIcon,
+  MentionIcon,
+  QuoteIcon,
+  ReplyIcon,
+  TasklistIcon,
+  TypographyIcon,
 } from "@primer/octicons-react";
 
-import UserImg from "../src/img/userImg.png";
 import api from "./api";
 
 function CreateComment({
@@ -65,6 +56,8 @@ function CreateComment({
   setKebabHorizontal,
   issueUpdateContainer,
   setIssueUpdateContainer,
+  loading,
+  setLoading,
 }: {
   updateComment: String;
   setUpdateComment: any;
@@ -95,6 +88,8 @@ function CreateComment({
   setKebabHorizontal: any;
   issueUpdateContainer: any;
   setIssueUpdateContainer: any;
+  loading: boolean;
+  setLoading: any;
 }) {
   const Imgfile = useRef<HTMLInputElement | null | any>(null);
   const [imgURL, setImgURL]: any = useState("");
@@ -104,11 +99,18 @@ function CreateComment({
   const [issueNum, setIssueNum]: any = useState(-1);
   const { IssueNum } = useParams();
 
+  let jwtName = JSON.parse(window.localStorage.getItem("userName") as string);
+  let jwtRepo = JSON.parse(
+    window.localStorage.getItem("userChooseRepo") as string
+  );
+  let userImg = JSON.parse(window.localStorage.getItem("userImg") as string);
+
   async function UpdateComment() {
+    setLoading(true);
     const data = await api.UpdateComment(
       {
-        owner: "Xie-MS",
-        repo: "Personal-Project",
+        owner: { jwtName },
+        repo: { jwtRepo },
         comment_id: commentNum,
         body: issueUpdateInputDefaultValue,
       },
@@ -117,13 +119,15 @@ function CreateComment({
     setCreateCommentRender((prev: boolean) => !prev);
     setUpdateComment("");
     setKebabHorizontal(false);
+    setLoading(false);
   }
 
   async function UpdateContainer() {
+    setLoading(true);
     const data = await api.UpdateIssue(
       {
-        owner: "Xie-MS",
-        repo: "Personal-Project",
+        owner: { jwtName },
+        repo: { jwtRepo },
         issue_number: IssueNum,
         body: issueUpdateContainer,
       },
@@ -132,6 +136,7 @@ function CreateComment({
     setCreateCommentRender((prev: boolean) => !prev);
     setUpdateComment("");
     setKebabHorizontal(false);
+    setLoading(false);
   }
 
   function PreviewText() {
@@ -306,7 +311,7 @@ function CreateComment({
     <div className="md:w-full lg:w-auto justify-start lg:relative flex items-start xl:flex relative mt-4">
       <div className="md:hidden lg:block w-[7.24%] xl:block">
         <img
-          src={UserImg}
+          src={userImg}
           alt=""
           className="w-10 h-10 rounded-full sm:hidden"
         />

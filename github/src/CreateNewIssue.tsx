@@ -1,33 +1,28 @@
-import React, { Dispatch, SetStateAction } from "react";
-import { marked } from "marked";
+import React from "react";
 import ReactMarkdown from "react-markdown";
-import ReactDom from "react-dom";
-import remarkGfm from "remark-gfm";
 
-import { useState, useEffect, useRef } from "react";
+import { useRef, useState } from "react";
 
 import {
-  TypographyIcon,
-  QuoteIcon,
-  CodeIcon,
-  LinkIcon,
-  HeadingIcon,
   BoldIcon,
-  ItalicIcon,
-  ListUnorderedIcon,
-  ListOrderedIcon,
-  TasklistIcon,
-  MentionIcon,
-  FileMediaIcon,
-  CrossReferenceIcon,
-  ReplyIcon,
   ChevronDownIcon,
+  CodeIcon,
+  CrossReferenceIcon,
+  FileMediaIcon,
+  HeadingIcon,
   InfoIcon,
-  MarkdownIcon,
   IssueOpenedIcon,
+  ItalicIcon,
+  LinkIcon,
+  ListOrderedIcon,
+  ListUnorderedIcon,
+  MarkdownIcon,
+  MentionIcon,
+  QuoteIcon,
+  ReplyIcon,
+  TasklistIcon,
+  TypographyIcon,
 } from "@primer/octicons-react";
-
-import UserImg from "../src/img/userImg.png";
 
 function CreateNewIssue({
   preview,
@@ -64,6 +59,8 @@ function CreateNewIssue({
   const [issueClose, setIssueClose]: any = useState(true);
   const [tagsName, setTagsName]: any = useState("");
   const [issueNum, setIssueNum]: any = useState(-1);
+
+  let userImg = JSON.parse(window.localStorage.getItem("userImg") as string);
 
   function PreviewText() {
     if (issueContainer === "" || issueContainer === "Leave a comment") {
@@ -203,6 +200,16 @@ function CreateNewIssue({
     }
   }
 
+  function TextAreaIncludes(e: any) {
+    if (e.key === "Enter") {
+      if (issueContainer.includes("- ")) {
+        setIssueContainer(issueContainer + `\r\n- `);
+      } else if (issueContainer.includes("1. ")) {
+        setIssueContainer(issueContainer + `\r\n2. `);
+      }
+    }
+  }
+
   function TagIssue() {
     if (issueContainer.includes("#") && issueClose) {
       // setTargetText("Issues");
@@ -230,7 +237,7 @@ function CreateNewIssue({
   return (
     <div className="lg:relative flex justify-evenly items-start xl:flex relative">
       <div className="md:hidden lg:block w-[7.24%] xl:block">
-        <img src={UserImg} alt="" className="w-[70%] rounded-full sm:hidden" />
+        <img src={userImg} alt="" className="w-[70%] rounded-full sm:hidden" />
       </div>
       <div className="md:w-full lg:w-[88.7%] xl:w-[88.7%]">
         <div>
@@ -516,10 +523,18 @@ function CreateNewIssue({
                   <textarea
                     cols="30"
                     rows="10"
-                    value={issueContainer}
+                    placeholder={issueContainer}
+                    value={
+                      issueContainer !== "Leave a comment"
+                        ? `${issueContainer}`
+                        : ""
+                    }
                     className="relative md:leading-snug md:h-[200px] px-2 py-2 border-[1px] md:border-b-[0px] border-solid border-gray-400 bg-slate-100 rounded-md w-full lg:focus:bg-white lg:border-b-[1px] border-t-[0px] border-r-[0px] border-l-[0px] lg:border-dashed lg:h-[200px] lg:leading-snug lg:rounded-b-[0px] xl:focus:bg-white xl:border-dashed xl:h-[200px] xl:leading-snug xl:rounded-b-[0px]"
                     onChange={(e) => {
                       setIssueContainer(e.target.value);
+                    }}
+                    onKeyDown={(e) => {
+                      TextAreaIncludes(e);
                     }}
                   />
                 </div>
@@ -600,7 +615,9 @@ function CreateNewIssue({
                   <div className="mt-4 pt-4 border-t-[1px] border-solid border-gray-200 lg:mt-0 lg:pt-0 xl:mt-0 xl:pt-0">
                     <button
                       className={`${
-                        issueTitle !== "" ? "bg-[#2DA44E]" : "bg-[#94d3a2]"
+                        issueTitle !== ""
+                          ? "bg-[#2DA44E] cursor-pointer"
+                          : "bg-[#94d3a2] cursor-no-drop"
                       } mt-6 px-4 py-[5px] border-[1px] border-solid border-[rgba(27,31,36,0.15)] w-full rounded-md lg:mt-0 xl:mt-0`}
                       onClick={() => {
                         setIssue();

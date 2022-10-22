@@ -1,161 +1,75 @@
 import React from "react";
-import { useState } from "react";
-import { CheckIcon } from "@primer/octicons-react";
-import styled from "styled-components";
 
+import { CheckIcon, XIcon } from "@primer/octicons-react";
 function IssueLabelList() {
   return (
-    <ul
-      style={{
-        listStyleType: "none",
-        width: "400px",
-        border: "1px solid lightgray",
-        borderRadius: "5px",
-        padding: "0px",
-        marginLeft: "40px",
-        paddingLeft: "16px",
-      }}
-      className="block w-[300px] h-[446px] absolute top-[25px] left-[-7px] bg-white border-[1px] border-solid border-gray-400 rounded-lg sm:sm:fixed sm:top-[25%] sm:left-[6.5%] px-4 text-sm sm:w-[87%] z-10"
+    <div
+      className={`
+          xl:top-[115px] md:max-h[775px]
+       md:left-[2.3%] md:bottom-[25%] md:top-[-470px] text-sm md:w-[95.5%] md:h-0 xl:absolute top-0 bottom-0 bg-white border-[1px] border-solid border-gray-300 rounded-md xl:right-[10px] xl:h-fit lg:h-fit md:z-30 xl:z-30 lg:z-30`}
     >
-      <li
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-        }}
-        className="px-4 py-[7px] text-xs font-semibold border-b-[1px] border-solid border-gray-400 sm:font-semibold sm:px-4 sm:py-4"
+      <ul
+        className={`block lg:w-[275px] xl:w-[275px] md:w-full overflow-auto md:h-[722px]`}
       >
-        <p>Filter by label</p>
-        <p
-          style={{
-            marginRight: "16px",
-          }}
-        >
-          X
-        </p>
-      </li>
-      <li className="px-2 py-2 border-b-[1px] border-solid border-gray-400 sm:px-4 py-4">
-        <input
-          type="text"
-          defaultValue="Filter labels"
-          style={{ width: "95%" }}
-          className="py-[5px] px-3 bg-white border-[1px] border-solid border-gray-400 rounded-lg text-xs w-full sm:font-semibold sm:w-full"
-        />
-      </li>
-      <li
-        style={{
-          display: "flex",
-          justifyContent: "start",
-          alignItems: "center",
-          marginTop: "16px",
-        }}
-        className="py-[7px] px-4 text-xs border-b-[1px] border-solid border-gray-400 flex justify-start items-center sm:font-semibold px-4 sm:py-4"
-      >
-        <div
-          className="invisible"
-          style={{
-            marginRight: "7px",
-            visibility: "hidden",
-          }}
-        >
-          <CheckIcon size={16} className="mr-2" />
-        </div>
-        Unlabeled
-      </li>
-      <div className="overflow-y-auto h-[320px]">
-        <li
-          style={{
-            display: "flex",
-            justifyContent: "start",
-            alignItems: "center",
-            marginTop: "0px",
-          }}
-          className={`
-          flex relative py-[7px] border-b-[1px] border-solid border-gray-400 text-xs justify-start items-center w-[266px] sm:font-semibold px-4 sm:py-4`}
-        >
-          <div
-            style={{
-              marginRight: "7px",
-              visibility: "hidden",
-            }}
-            className={`block absolute left-3 `}
-          >
-            <CheckIcon size={16} className="mr-2" />
-          </div>
-          <div
-            style={{
-              display: "flex",
-              alignItems: "start",
-              marginTop: "16px",
-            }}
-          >
-            <p
-              style={{
-                background: "#BFDADC",
-                width: "16px",
-                height: "16px",
-                border: "1px solid lightgary",
-                borderRadius: "50%",
-                marginRight: "8px",
-              }}
-            />
-            <p
-              style={{
-                marginTop: "14px",
-              }}
-            >
-              test
-              <br />
-              test0930
-            </p>
-          </div>
+        <li className="xl:px-[10px] py-2 text-xs font-semibold flex justify-between items-center">
+          <p className={`block`}>Assign labels to this issue</p>
+        </li>
+        <li className="xl:px-[10px] py-[10px] border-t-[1px] border-solid border-gray-300 md:px-4 md:py-4">
+          <input
+            type="text"
+            defaultValue="Filter labels"
+            className={`block xl:py-[5px] px-3 bg-white border-[1px] border-solid border-gray-300 rounded-md text-sm w-full`}
+          />
         </li>
 
-        <li
-          style={{
-            display: "flex",
-            justifyContent: "start",
-            alignItems: "center",
-            marginTop: "0px",
-          }}
-          className={`
-          flex relative py-[7px] border-b-[1px] border-solid border-gray-400 text-xs justify-start items-center w-[266px] sm:font-semibold px-4 sm:py-4`}
-        >
-          <div
-            style={{
-              marginRight: "7px",
-            }}
-            className={`block absolute left-3 `}
+        <div className="overflow-y-auto md:max-h[607px] lg:max-h[270px] xl:max-h[270px]">
+          <li
+            className={`flex xl:py-2 px-2 cursor-pointer border-t-[1px] border-solid border-gray-300 text-xs justify-start items-center md:pl-5 md:pr-2 md:py-4 xl:pl-6 lg:pl-6 lg:relative xl:relative`}
           >
-            <CheckIcon size={16} className="mr-2" />
-          </div>
-          <div
-            style={{
-              display: "flex",
-              alignItems: "start",
-            }}
-          >
-            <p
-              style={{
-                background: "yellow",
-                width: "16px",
-                height: "16px",
-                border: "1px solid lightgary",
-                borderRadius: "50%",
-                marginRight: "8px",
-              }}
-            />
-            <p
-              style={{
-                marginTop: "14px",
-              }}
+            <div
+              className={`block xl:absolute xl:left-[20px] xl:top-[10px] xl:mx-1 lg:mx-1`}
             >
-              NOOOO
-            </p>
-          </div>
-        </li>
-      </div>
-    </ul>
+              <CheckIcon size={16} className="mr-2" />
+            </div>
+            <div className="xl:block items-center justify-start">
+              <div className="xl:flex items-center justify-start">
+                <p
+                  style={{
+                    backgroundColor: `yellow`,
+                  }}
+                  className="xl:w-[14px] h-[14px] rounded-full mr-2 mt-[2px]"
+                />
+                <p className="xl:mr-2 font-semibold xl:text-sm">abcde</p>
+              </div>
+              <p className="xl:text-xs">abcde description</p>
+            </div>
+            <div className={`block xl:absolute xl:right-0 xl:mx-1 lg:mx-1`}>
+              <XIcon size={16} />
+            </div>
+          </li>
+          <li
+            className={`flex xl:py-2 px-2 cursor-pointer border-t-[1px] border-solid border-gray-300 text-xs justify-start items-center md:pl-5 md:pr-2 md:py-4 xl:pl-6 lg:pl-6 lg:relative xl:relative`}
+          >
+            <div
+              className={`hidden xl:absolute xl:left-[20px] xl:top-[10px] xl:mx-1 lg:mx-1`}
+            >
+              <CheckIcon size={16} className="mr-2" />
+            </div>
+            <div className="xl:block items-center justify-start">
+              <div className="xl:flex items-center justify-start">
+                <p
+                  style={{
+                    backgroundColor: `lightblue`,
+                  }}
+                  className="xl:w-[14px] h-[14px] rounded-full mr-2 mt-[2px]"
+                />
+                <p className="xl:mr-2 font-semibold xl:text-sm">test</p>
+              </div>
+            </div>
+          </li>
+        </div>
+      </ul>
+    </div>
   );
 }
 

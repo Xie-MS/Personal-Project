@@ -1,21 +1,19 @@
-import React from "react";
-import { useState, useEffect, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 import {
-  TriangleDownIcon,
+  CheckCircleIcon,
   KebabHorizontalIcon,
+  PencilIcon,
+  PersonIcon,
+  SkipIcon,
   SmileyIcon,
   TagIcon,
-  PersonIcon,
-  CheckCircleIcon,
-  IssueReopenedIcon,
-  PencilIcon,
-  SkipIcon,
+  TriangleDownIcon,
 } from "@primer/octicons-react";
 
-import UpdateComment from "./UpdateComment";
 import api from "./api";
+import UpdateComment from "./UpdateComment";
 
 const Emoji = ["👍", "👎", "😄", "🎉", "😕", "❤", "🚀", "👀"];
 const EmojiText = [
@@ -59,6 +57,8 @@ function TimeLine({
   issueUpdateContainer,
   setIssueUpdateContainer,
   emojiDate,
+  loading,
+  setLoading,
 }: {
   preview: Boolean;
   setPreview: any;
@@ -89,6 +89,8 @@ function TimeLine({
   issueUpdateContainer: any;
   setIssueUpdateContainer: any;
   emojiDate: any;
+  loading: boolean;
+  setLoading: any;
 }) {
   const [TimeLineCommentemojiListClose, setTimeLineCommentEmojiListClose] =
     useState(false);
@@ -100,8 +102,10 @@ function TimeLine({
 
   useEffect(() => {
     async function getIssueTimeline(IssueNum: string | undefined) {
+      // setLoading(true);
       const data = await api.getIssueTimeline(IssueNum);
       setIssueDetailTimeline(data);
+      // setLoading(false);
     }
     getIssueTimeline(IssueNum);
   }, [createCommentRender]);
@@ -122,24 +126,33 @@ function TimeLine({
     });
   }
 
+  let jwtName = JSON.parse(window.localStorage.getItem("userName") as string);
+  let jwtRepo = JSON.parse(
+    window.localStorage.getItem("userChooseRepo") as string
+  );
+
   async function DeleteComment() {
+    setLoading(true);
     const data = await api.DeleteComment(
       {
-        owner: "Xie-MS",
-        repo: "Personal-Project",
+        owner: { jwtName },
+        repo: { jwtRepo },
         comment_id: commentNum,
       },
       commentNum
     );
+
     setCreateCommentRender((prev: boolean) => !prev);
     setKebabHorizontal(false);
+    setLoading(false);
   }
 
   async function AddEmoji() {
+    setLoading(true);
     const data = await api.AddEmojiComment(
       {
-        owner: "Xie-MS",
-        repo: "Personal-Project",
+        owner: { jwtName },
+        repo: { jwtRepo },
         comment_id: commentNum,
         content: emojiSelect,
       },
@@ -147,6 +160,7 @@ function TimeLine({
     );
     setCreateCommentRender((prev: boolean) => !prev);
     setTimeLineCommentEmojiListClose(false);
+    setLoading(false);
   }
 
   function Timeline() {
@@ -554,7 +568,9 @@ function TimeLine({
 
                       <ul
                         className={`${
-                          kebabHorizontal ? "block" : "hidden"
+                          kebabHorizontal && timeLineIndex === updateCommentNum
+                            ? "block"
+                            : "hidden"
                         } absolute right-0 top-[25px] w-[183px] py-1 bg-white border-[1px] border-solid border-[#d0d7de] justify-start items-center rounded-md z-20`}
                       >
                         <li>
@@ -643,6 +659,8 @@ function TimeLine({
                 setKebabHorizontal={setKebabHorizontal}
                 issueUpdateContainer={issueUpdateContainer}
                 setIssueUpdateContainer={setIssueUpdateContainer}
+                loading={loading}
+                setLoading={setLoading}
               />
             </div>
           </>

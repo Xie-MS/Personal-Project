@@ -1,39 +1,35 @@
-import React, { Dispatch, SetStateAction } from "react";
-import { useParams } from "react-router-dom";
-import { marked } from "marked";
+import React from "react";
 import ReactMarkdown from "react-markdown";
-import ReactDom from "react-dom";
-import remarkGfm from "remark-gfm";
+import { useParams } from "react-router-dom";
 
-import { useState, useRef } from "react";
+import { useRef, useState } from "react";
 
 import {
-  TypographyIcon,
-  QuoteIcon,
-  CodeIcon,
-  LinkIcon,
-  HeadingIcon,
   BoldIcon,
-  ItalicIcon,
-  ListUnorderedIcon,
-  ListOrderedIcon,
-  TasklistIcon,
-  MentionIcon,
-  FileMediaIcon,
-  CrossReferenceIcon,
-  ReplyIcon,
-  ChevronDownIcon,
-  InfoIcon,
-  MarkdownIcon,
   CheckCircleIcon,
-  TriangleDownIcon,
-  SkipIcon,
   CheckIcon,
+  ChevronDownIcon,
+  CodeIcon,
+  CrossReferenceIcon,
+  FileMediaIcon,
+  HeadingIcon,
+  InfoIcon,
   IssueOpenedIcon,
   IssueReopenedIcon,
+  ItalicIcon,
+  LinkIcon,
+  ListOrderedIcon,
+  ListUnorderedIcon,
+  MarkdownIcon,
+  MentionIcon,
+  QuoteIcon,
+  ReplyIcon,
+  SkipIcon,
+  TasklistIcon,
+  TriangleDownIcon,
+  TypographyIcon,
 } from "@primer/octicons-react";
 
-import UserImg from "../src/img/userImg.png";
 import api from "./api";
 
 function CreateComment({
@@ -59,6 +55,8 @@ function CreateComment({
   setIssueDetailState,
   issueDetailStateReanson,
   setIssueDetailStateReanson,
+  loading,
+  setLoading,
 }: {
   updateComment: String;
   setUpdateComment: any;
@@ -82,6 +80,8 @@ function CreateComment({
   setIssueDetailState: any;
   issueDetailStateReanson: any;
   setIssueDetailStateReanson: any;
+  loading: boolean;
+  setLoading: any;
 }) {
   const Imgfile = useRef<HTMLInputElement | null | any>(null);
   const [imgURL, setImgURL]: any = useState("");
@@ -92,23 +92,31 @@ function CreateComment({
   const [closeIssue, setCloseIssue]: any = useState(false);
   const { IssueNum } = useParams();
 
+  let jwtName = JSON.parse(window.localStorage.getItem("userName") as string);
+  let jwtRepo = JSON.parse(
+    window.localStorage.getItem("userChooseRepo") as string
+  );
+  let userImg = JSON.parse(window.localStorage.getItem("userImg") as string);
+
   async function CreateIssueComment() {
+    setLoading(true);
     const data = await api.CreateComment(
       {
-        owner: "Xie-MS",
-        repo: "Personal-Project",
+        owner: { jwtName },
+        repo: { jwtRepo },
         body: issueContainer,
       },
       IssueNum
     );
     setCreateCommentRender((prev: boolean) => !prev);
+    setLoading(false);
   }
 
   async function UpdateUssueState() {
     const data = await api.UpdateIssue(
       {
-        owner: "Xie-MS",
-        repo: "Personal-Project",
+        owner: { jwtName },
+        repo: { jwtRepo },
         state: issueDetailState,
         state_reason: issueDetailStateReanson,
         issue_number: IssueNum,
@@ -282,7 +290,7 @@ function CreateComment({
   return (
     <div className="w-full justify-start lg:relative flex items-start xl:flex relative mt-4">
       <div className="md:hidden lg:block w-[7.24%] xl:block">
-        <img src={UserImg} alt="" className="w-[70%] rounded-full sm:hidden" />
+        <img src={userImg} alt="" className="w-[70%] rounded-full sm:hidden" />
       </div>
       <div className="md:w-full lg:w-[88.7%] xl:w-[88.7%]">
         <div>
@@ -519,6 +527,9 @@ function CreateComment({
                               file[0]
                             )})`
                           );
+                          setTagsName("");
+                          setIssueNum(-1);
+                          console.log(URL.createObjectURL(file[0]));
                         }
                       }}
                     />
@@ -558,11 +569,15 @@ function CreateComment({
                   <textarea
                     cols="30"
                     rows="10"
-                    value={issueContainer}
+                    placeholder={issueContainer}
+                    value={
+                      issueContainer !== "Leave a comment"
+                        ? `${issueContainer}`
+                        : ""
+                    }
                     className="relative md:leading-snug md:h-[82px] px-2 py-2 border-[1px] md:border-b-[0px] border-solid border-gray-400 bg-slate-100 rounded-md w-full lg:focus:bg-white lg:border-b-[1px] border-t-[0px] border-r-[0px] border-l-[0px] lg:border-dashed lg:h-[96px] lg:leading-snug lg:rounded-b-[0px] xl:focus:bg-white xl:border-dashed xl:h-[96px] xl:leading-snug xl:rounded-b-[0px]"
                     onChange={(e) => {
                       setIssueContainer(e.target.value);
-                      console.log(issueDetailData);
                     }}
                   />
                 </div>
@@ -601,6 +616,9 @@ function CreateComment({
                               file[0]
                             )})`
                           );
+                          setTagsName("");
+                          setIssueNum(-1);
+                          console.log(URL.createObjectURL(file[0]));
                         }
                       }}
                     />
@@ -633,7 +651,7 @@ function CreateComment({
                   <button
                     className={`${
                       issueDetailData.state === "open" ? "flex" : "hidden"
-                    } justify-between items-center px-4 py-[5px] border-t-[1px] border-b-[1px] border-l-[1px] border-solid border-gray-200 rounded-l-lg`}
+                    } justify-between items-center cursor-pointer px-4 py-[5px] border-t-[1px] border-b-[1px] border-l-[1px] border-solid border-gray-200 rounded-l-lg`}
                     onClick={() => {
                       setIssueDetailState("closed");
                       setIssueDetailStateReanson("completed");
@@ -652,7 +670,7 @@ function CreateComment({
                   <button
                     className={`${
                       issueDetailData.state === "closed" ? "flex" : "hidden"
-                    } justify-between items-center px-4 py-[5px] border-t-[1px] border-b-[1px] border-l-[1px] border-solid border-gray-200 rounded-l-lg`}
+                    } justify-between items-center cursor-pointer px-4 py-[5px] border-t-[1px] border-b-[1px] border-l-[1px] border-solid border-gray-200 rounded-l-lg`}
                     onClick={() => {
                       setIssueDetailState("open");
                       setIssueDetailStateReanson("reopened");
@@ -708,7 +726,7 @@ function CreateComment({
                       <div
                         className={`${
                           issueDetailData.state === "open" ? "block" : "hidden"
-                        }`}
+                        }  cursor-pointer`}
                         onClick={() => {
                           setIssueDetailState("closed");
                           setIssueDetailStateReanson("completed");
@@ -722,7 +740,7 @@ function CreateComment({
                             className="mr-1"
                           />
                           <p className="text-sm font-semibold">
-                            Close as complteted
+                            Close as completed
                           </p>
                         </div>
                         <p className="text-xs">Done, closed, fixed, resolved</p>
@@ -731,7 +749,7 @@ function CreateComment({
                       <div
                         className={`${
                           issueDetailData.state !== "open" ? "block" : "hidden"
-                        }`}
+                        }  cursor-pointer`}
                         onClick={() => {
                           setIssueDetailState("open");
                           setIssueDetailStateReanson("reopened");
@@ -766,6 +784,7 @@ function CreateComment({
                         <CheckIcon size={16} className="mr-1" />
                       </div>
                       <div
+                        className="cursor-pointer"
                         onClick={() => {
                           setIssueDetailState("closed");
                           setIssueDetailStateReanson("not_planned");

@@ -1,25 +1,27 @@
 import React from "react";
 import styled from "styled-components";
 
-import RepoImage from "./img/repo.svg";
+import ActionImage from "./img/action.svg";
 import CodeImage from "./img/code.svg";
+import InsightsImage from "./img/Insights.svg";
 import IssueImage from "./img/issue.svg";
 import PRImage from "./img/pr.svg";
-import ActionImage from "./img/action.svg";
 import ProjectsImage from "./img/Projects.svg";
-import WikiImage from "./img/wiki.svg";
+import RepoImage from "./img/repo.svg";
 import SecurityImage from "./img/Security.svg";
-import InsightsImage from "./img/Insights.svg";
 import SettingImage from "./img/setting.svg";
+import WikiImage from "./img/wiki.svg";
 
 import {
-  PinIcon,
   EyeIcon,
+  PinIcon,
   RepoForkedIcon,
   StarIcon,
 } from "@primer/octicons-react";
 
 import { ChevronDownIcon } from "@primer/octicons-react";
+
+import { useNavigate } from "react-router-dom";
 
 const ContainetTitle = styled.div`
   background-color: #eaeef2;
@@ -58,6 +60,7 @@ const RepoAndUserName = styled.li`
   font-size: 20px;
   color: #0969da;
   font-weight: bold;
+  cursor: pointer;
 `;
 
 const RepoVisibility = styled.li`
@@ -136,6 +139,15 @@ const FunctionalElementNum = styled.p`
   margin-right: 4px;
 `;
 
+const FunctionalDiv = styled.div`
+  display: block;
+  white-space: nowrap;
+  overflow-y: auto;
+  @media screen and (max-width: 768px) {
+    overflow-y: hidden;
+  }
+`;
+
 const Functional = styled.ul`
   display: flex;
   justify-content: start;
@@ -164,13 +176,20 @@ const FunctionalImgandText = styled.button`
 `;
 
 function ContainerTitle() {
+  const navigate = useNavigate();
+  let jwtRepo = JSON.parse(
+    window.localStorage.getItem("userChooseRepo") as string
+  );
+
+  let jwtName = JSON.parse(window.localStorage.getItem("userName") as string);
+
   return (
     <ContainetTitle>
       <RepoInformation>
         <Repo>
           <RepoImg src={RepoImage} alt="" />
-          <RepoAndUserName>Xie-MS</RepoAndUserName>／
-          <RepoAndUserName>Personal-Project</RepoAndUserName>
+          <RepoAndUserName>{jwtName}</RepoAndUserName>／
+          <RepoAndUserName>{jwtRepo}</RepoAndUserName>
           <RepoVisibility>
             <RepoVisibilityBtn>Public</RepoVisibilityBtn>
           </RepoVisibility>
@@ -211,13 +230,17 @@ function ContainerTitle() {
           </ForkAndStar>
         </FunctionalElement>
       </RepoInformation>
-      <div>
+      <FunctionalDiv>
         <Functional>
           <FunctionalImgandText>
             <FunctionalImg src={CodeImage} alt="" />
             <p>code</p>
           </FunctionalImgandText>
-          <FunctionalImgandText>
+          <FunctionalImgandText
+            onClick={() => {
+              navigate("/Issue");
+            }}
+          >
             <FunctionalImg src={IssueImage} alt="" />
             <p>Issues</p>
           </FunctionalImgandText>
@@ -250,7 +273,7 @@ function ContainerTitle() {
             <p>Settings</p>
           </FunctionalImgandText>
         </Functional>
-      </div>
+      </FunctionalDiv>
     </ContainetTitle>
   );
 }

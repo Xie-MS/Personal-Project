@@ -1,33 +1,29 @@
-import React from "react";
-import { useState, useEffect, useRef } from "react";
-import { useParams } from "react-router-dom";
+import React, { useEffect, useRef, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+
+import Loading from "./Loading";
 
 import {
-  TriangleDownIcon,
-  KebabHorizontalIcon,
-  SmileyIcon,
-  TagIcon,
-  PersonIcon,
-  CheckCircleIcon,
-  IssueReopenedIcon,
-  SkipIcon,
-  GearIcon,
+  ArrowRightIcon,
   BellSlashIcon,
+  CheckCircleIcon,
+  GearIcon,
+  InfoIcon,
+  IssueOpenedIcon,
+  KebabHorizontalIcon,
   LockIcon,
   PinIcon,
-  InfoIcon,
-  ArrowRightIcon,
+  SkipIcon,
+  SmileyIcon,
   TrashIcon,
-  IssueOpenedIcon,
+  TriangleDownIcon,
 } from "@primer/octicons-react";
 
+import api from "./api";
 import CreateComment from "./CreateComment";
-import UpdateComment from "./UpdateComment";
 import IssueList from "./IssueList";
 import TimeLine from "./TimeLine";
-import api from "./api";
-import { string } from "prop-types";
-import e from "express";
+import UpdateComment from "./UpdateComment";
 
 const Emoji = ["👍", "👎", "😄", "🎉", "😕", "❤", "🚀", "👀"];
 const EmojiText = [
@@ -82,8 +78,19 @@ function IssueDetailPage() {
   const [emojiDate, setEmojiData]: any = useState([]);
   const [emojiSelect, setEmojiSelect]: any = useState("");
 
+  const navigate = useNavigate();
+
+  const [loading, setLoading]: any = useState(false);
+  console.log(loading);
+
+  let jwtName = JSON.parse(window.localStorage.getItem("userName") as string);
+  let jwtRepo = JSON.parse(
+    window.localStorage.getItem("userChooseRepo") as string
+  );
+
   useEffect(() => {
     async function getIssueDetailData(IssueNum: string | undefined) {
+      setLoading(true);
       const data = await api.getIssueData(IssueNum);
       setIssueDetailData(data);
       setEmojiData(data.reactions);
@@ -93,9 +100,19 @@ function IssueDetailPage() {
       if (data.labels.length !== 0) {
         setLabelName(data.labels);
       }
+      setLoading(false);
     }
     getIssueDetailData(IssueNum);
   }, [createCommentRender]);
+
+  if (
+    jwtName === null ||
+    jwtRepo === null ||
+    issueDetailData?.message === "Bad credentials"
+  ) {
+    window.location.assign("/");
+    localStorage.clear();
+  }
 
   useEffect(() => {
     async function getAssigneeList() {
@@ -114,15 +131,17 @@ function IssueDetailPage() {
   }, [targetText]);
 
   async function UpdateTitle() {
+    setLoading(true);
     const data = await api.UpdateIssue(
       {
-        owner: "Xie-MS",
-        repo: "Personal-Project",
+        owner: { jwtName },
+        repo: { jwtRepo },
         issue_number: IssueNum,
         title: issueTitle,
       },
       IssueNum
     );
+    setLoading(false);
     setCreateCommentRender((prev: boolean) => !prev);
   }
 
@@ -145,8 +164,8 @@ function IssueDetailPage() {
   async function AddEmoji() {
     const data = await api.AddEmoji(
       {
-        owner: "Xie-MS",
-        repo: "Personal-Project",
+        owner: { jwtName },
+        repo: { jwtRepo },
         issue_number: IssueNum,
         content: emojiSelect,
       },
@@ -231,7 +250,6 @@ function IssueDetailPage() {
       issueDetailData.assignees.length !== 0
     ) {
       return assigneeLogin.map((assigneeData: any, assigneeIndex: number) => {
-        console.log("aaa");
         if (
           assigneeSelectData.length <= issueDetailData.assignees.length &&
           assigneeSelectData
@@ -403,14 +421,16 @@ function IssueDetailPage() {
   }
 
   async function setIssue() {
+    setLoading(true);
     const data = await api.setIssue({
-      owner: "Xie-MS",
-      repo: "Personal-Project",
+      owner: { jwtName },
+      repo: { jwtRepo },
       title: issueTitle,
       body: issueContainer,
       labels: labelSelectData,
       assignees: assigneeSelectData,
     });
+    setLoading(false);
     window.location.assign(`/IssuePage`);
   }
 
@@ -483,6 +503,9 @@ function IssueDetailPage() {
     }
   }
 
+  if (loading) {
+    return <Loading />;
+  }
   if (issueDetailData === undefined) return <></>;
 
   return (
@@ -504,7 +527,12 @@ function IssueDetailPage() {
                 >
                   <p className="text-xs">Edit</p>
                 </button>
-                <button className="ml-2 px-3 py-[3px] border-[1px] border-solid border-[rgba(27,31,36,0.15)] flex justify-center items-center bg-[#2da44e] text-white rounded-md">
+                <button
+                  className="ml-2 px-3 py-[3px] border-[1px] border-solid border-[rgba(27,31,36,0.15)] flex justify-center items-center bg-[#2da44e] text-white rounded-md"
+                  onClick={() => {
+                    navigate("/NewIssue");
+                  }}
+                >
                   <p className="text-xs">New Issue</p>
                 </button>
               </div>
@@ -754,6 +782,8 @@ function IssueDetailPage() {
                   setKebabHorizontal={setKebabHorizontal}
                   issueUpdateContainer={issueUpdateContainer}
                   setIssueUpdateContainer={setIssueUpdateContainer}
+                  loading={loading}
+                  setLoading={setLoading}
                 />
               </div>
               <TimeLine
@@ -788,6 +818,8 @@ function IssueDetailPage() {
                 issueUpdateContainer={issueUpdateContainer}
                 setIssueUpdateContainer={setIssueUpdateContainer}
                 emojiDate={emojiDate}
+                loading={loading}
+                setLoading={setLoading}
               />
               <CreateComment
                 updateComment={updateComment}
@@ -812,6 +844,8 @@ function IssueDetailPage() {
                 setIssueDetailState={setIssueDetailState}
                 issueDetailStateReanson={issueDetailStateReanson}
                 setIssueDetailStateReanson={setIssueDetailStateReanson}
+                loading={loading}
+                setLoading={setLoading}
               />
             </div>
           </div>
@@ -833,10 +867,18 @@ function IssueDetailPage() {
                     <div
                       className="pt-4 cursor-pointer xl:mt-[2px] xl:pt-0 lg:mt-[2px] lg:pt-0"
                       onClick={() => {
-                        setItemList(true);
+                        if (
+                          targetText ===
+                            targetAssigneeSpan.current?.outerText &&
+                          itemList === true
+                        ) {
+                          setTargetText("");
+                          setItemList(false);
+                        } else {
+                          setTargetText(targetAssigneeSpan.current?.outerText);
+                          setItemList(true);
+                        }
                         setListClose(true);
-                        setTargetText(targetAssigneeSpan.current?.outerText);
-                        // setAssigneeSelectData([]);
                       }}
                     >
                       <GearIcon size={16} />
@@ -864,6 +906,8 @@ function IssueDetailPage() {
                     setCreateCommentRender={setCreateCommentRender}
                     labelName={labelName}
                     setLabelName={setLabelName}
+                    loading={loading}
+                    setLoading={setLoading}
                   />
                 </div>
                 <div
@@ -872,7 +916,6 @@ function IssueDetailPage() {
                   }  md:bg-black md:opacity-60 top-0 bottom-0 left-0 right-0 fixed md:z-10 xl:z-0 lg:z-0`}
                   onClick={() => {
                     setListClose(false);
-                    setItemList(false);
                   }}
                 />
                 <div>
@@ -886,9 +929,17 @@ function IssueDetailPage() {
                     <div
                       className="pt-4 cursor-pointer xl:mt-[2px] xl:pt-0 lg:mt-[2px] lg:pt-0"
                       onClick={() => {
+                        if (
+                          targetText === targetLabelSpan.current?.outerText &&
+                          itemList === true
+                        ) {
+                          setTargetText("");
+                          setItemList(false);
+                        } else {
+                          setTargetText(targetLabelSpan.current?.outerText);
+                          setItemList(true);
+                        }
                         setListClose(true);
-                        setItemList(true);
-                        setTargetText(targetLabelSpan.current?.outerText);
                       }}
                     >
                       <GearIcon size={16} />
