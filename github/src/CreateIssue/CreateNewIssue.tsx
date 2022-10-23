@@ -244,7 +244,7 @@ function CreateNewIssue({
             <div className="md:mb-4 md:px-0 md:py-0 lg:mb-0 lg:px-2 lg:py-2 xl:mb-0 xl:px-2 xl:py-2">
               <input
                 type="text"
-                defaultValue="Title"
+                placeholder="Title"
                 className="px-3 py-[5px] border-[1px] border-solid border-gray-400 bg-slate-50 rounded-md w-full lg:focus:bg-white lg:focus:border-[#218bff] xl:focus:bg-white xl:focus:border-blue-400"
                 onChange={(e) => {
                   setIssueTitle(e.target.value);
