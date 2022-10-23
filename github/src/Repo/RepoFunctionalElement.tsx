@@ -70,7 +70,7 @@ const FunctionalElementText = styled.p`
   margin: 0px 4px;
 `;
 
-function Product() {
+function RepoFunctionalElement() {
   return (
     <FunctionalElement>
       <li>
@@ -110,4 +110,4 @@ function Product() {
   );
 }
 
-export default Product;
+export default RepoFunctionalElement;

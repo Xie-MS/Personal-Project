@@ -13,8 +13,8 @@ const CreateLabel = styled.button`
   font-size: 14px;
 `;
 
-function Product() {
+function NewLabelBtn() {
   return <CreateLabel>New label</CreateLabel>;
 }
 
-export default Product;
+export default NewLabelBtn;

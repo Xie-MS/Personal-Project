@@ -35,22 +35,20 @@ function CreateNewIssue({
   markDownBtn,
   setmarkDownBtn,
   renderAssigneeData,
-  renderLabelData,
   setTargetText,
   renderIssueData,
 }: {
   preview: boolean;
-  setPreview: any;
+  setPreview: React.Dispatch<React.SetStateAction<boolean>>;
   issueContainer: string;
-  setIssueContainer: any;
+  setIssueContainer: React.Dispatch<React.SetStateAction<string>>;
   issueTitle: string;
-  setIssueTitle: any;
+  setIssueTitle: React.Dispatch<React.SetStateAction<string>>;
   setIssue: any;
   markDownBtn: boolean;
-  setmarkDownBtn: any;
+  setmarkDownBtn: React.Dispatch<React.SetStateAction<boolean>>;
   renderAssigneeData: any;
-  renderLabelData: any;
-  setTargetText: any;
+  setTargetText: React.Dispatch<any>;
   renderIssueData: any;
 }) {
   const Imgfile = useRef<HTMLInputElement | null | any>(null);

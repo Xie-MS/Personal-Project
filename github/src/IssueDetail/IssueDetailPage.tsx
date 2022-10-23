@@ -42,10 +42,10 @@ function IssueDetailPage() {
   const [listClose, setListClose] = useState(false);
   const [itemList, setItemList] = useState(false);
   const [targetText, setTargetText]: any = useState("");
-  const [issueTitle, setIssueTitle]: any = useState("");
-  const [issueContainer, setIssueContainer]: any = useState("Leave a comment");
-  const [issueUpdateContainer, setIssueUpdateContainer]: any = useState("");
-  const [markDownBtn, setmarkDownBtn]: any = useState(true);
+  const [issueTitle, setIssueTitle] = useState("");
+  const [issueContainer, setIssueContainer] = useState("Leave a comment");
+  const [issueUpdateContainer, setIssueUpdateContainer] = useState("");
+  const [markDownBtn, setmarkDownBtn] = useState(true);
   const [renderAssigneeData, setRenderAssigneeData]: any = useState([]);
   const [renderLabelData, setRenderLabelData]: any = useState([]);
   const [assigneeSelectData, setAssigneeSelectData]: any = useState([]);
@@ -60,27 +60,26 @@ function IssueDetailPage() {
   const [updateCommentNum, setUpdateCommentNum] = useState(-1);
   const [EditTitle, setEditTitle] = useState(false);
   const { IssueNum } = useParams();
-  const [issueDetailData, setIssueDetailData]: any = useState<any>();
-  const [timeLineIndex, settimeLineIndex]: any = useState(-2);
-  const [commentNum, setCommentNum]: any = useState(0);
+  const [issueDetailData, setIssueDetailData] = useState<any>();
+  const [timeLineIndex, settimeLineIndex] = useState(-2);
+  const [commentNum, setCommentNum] = useState(0);
 
   const [assigneeLogin, setAssigneeLogin]: any = useState([]);
   const [labelName, setLabelName]: any = useState([]);
 
-  const [createCommentRender, setCreateCommentRender]: any = useState(true);
-  const [issueUpdateInputDefaultValue, setIssueUpdateInputDefaultValue]: any =
+  const [createCommentRender, setCreateCommentRender] = useState(true);
+  const [issueUpdateInputDefaultValue, setIssueUpdateInputDefaultValue] =
     useState("");
 
-  const [issueDetailState, setIssueDetailState]: any = useState("");
-  const [issueDetailStateReanson, setIssueDetailStateReanson]: any =
-    useState("");
+  const [issueDetailState, setIssueDetailState] = useState("");
+  const [issueDetailStateReanson, setIssueDetailStateReanson] = useState("");
 
   const [emojiDate, setEmojiData]: any = useState([]);
-  const [emojiSelect, setEmojiSelect]: any = useState("");
+  const [emojiSelect, setEmojiSelect] = useState("");
 
   const navigate = useNavigate();
 
-  const [loading, setLoading]: any = useState(false);
+  const [loading, setLoading] = useState(false);
 
   let jwtName = JSON.parse(window.localStorage.getItem("userName") as string);
   let jwtRepo = JSON.parse(
@@ -811,38 +810,24 @@ function IssueDetailPage() {
                 }`}
               >
                 <UpdateComment
-                  updateComment={updateComment}
                   setUpdateComment={setUpdateComment}
                   preview={preview}
                   setPreview={setPreview}
-                  issueContainer={issueContainer}
-                  setIssueContainer={setIssueContainer}
-                  issueTitle={issueTitle}
-                  setIssueTitle={setIssueTitle}
                   markDownBtn={markDownBtn}
                   setmarkDownBtn={setmarkDownBtn}
                   renderAssigneeData={renderAssigneeData}
-                  renderLabelData={renderLabelData}
                   setTargetText={setTargetText}
                   renderIssueData={renderIssueData}
-                  issueDetailData={issueDetailData}
-                  setIssueDetailData={setIssueDetailData}
                   updateCommentNum={updateCommentNum}
-                  setUpdateCommentNum={setUpdateCommentNum}
-                  timeLineIndex={timeLineIndex}
-                  settimeLineIndex={settimeLineIndex}
-                  createCommentRender={createCommentRender}
                   setCreateCommentRender={setCreateCommentRender}
                   commentNum={commentNum}
                   issueUpdateInputDefaultValue={issueUpdateInputDefaultValue}
                   setIssueUpdateInputDefaultValue={
                     setIssueUpdateInputDefaultValue
                   }
-                  kebabHorizontal={kebabHorizontal}
                   setKebabHorizontal={setKebabHorizontal}
                   issueUpdateContainer={issueUpdateContainer}
                   setIssueUpdateContainer={setIssueUpdateContainer}
-                  loading={loading}
                   setLoading={setLoading}
                 />
               </div>
@@ -850,23 +835,15 @@ function IssueDetailPage() {
                 preview={preview}
                 setPreview={setPreview}
                 setTargetText={setTargetText}
-                issueTitle={issueTitle}
-                setIssueTitle={setIssueTitle}
-                issueContainer={issueContainer}
-                setIssueContainer={setIssueContainer}
                 markDownBtn={markDownBtn}
                 setmarkDownBtn={setmarkDownBtn}
                 renderAssigneeData={renderAssigneeData}
-                renderLabelData={renderLabelData}
                 renderIssueData={renderIssueData}
                 updateComment={updateComment}
                 setUpdateComment={setUpdateComment}
                 issueDetailData={issueDetailData}
-                setIssueDetailData={setIssueDetailData}
                 updateCommentNum={updateCommentNum}
                 setUpdateCommentNum={setUpdateCommentNum}
-                timeLineIndex={timeLineIndex}
-                settimeLineIndex={settimeLineIndex}
                 commentNum={commentNum}
                 setCommentNum={setCommentNum}
                 createCommentRender={createCommentRender}
@@ -877,34 +854,24 @@ function IssueDetailPage() {
                 }
                 issueUpdateContainer={issueUpdateContainer}
                 setIssueUpdateContainer={setIssueUpdateContainer}
-                emojiDate={emojiDate}
-                loading={loading}
                 setLoading={setLoading}
               />
               <CreateComment
-                updateComment={updateComment}
-                setUpdateComment={setUpdateComment}
                 preview={preview}
                 setPreview={setPreview}
                 issueContainer={issueContainer}
                 setIssueContainer={setIssueContainer}
-                issueTitle={issueTitle}
-                setIssueTitle={setIssueTitle}
                 markDownBtn={markDownBtn}
                 setmarkDownBtn={setmarkDownBtn}
                 renderAssigneeData={renderAssigneeData}
-                renderLabelData={renderLabelData}
                 setTargetText={setTargetText}
                 renderIssueData={renderIssueData}
                 issueDetailData={issueDetailData}
-                setIssueDetailData={setIssueDetailData}
-                createCommentRender={createCommentRender}
                 setCreateCommentRender={setCreateCommentRender}
                 issueDetailState={issueDetailState}
                 setIssueDetailState={setIssueDetailState}
                 issueDetailStateReanson={issueDetailStateReanson}
                 setIssueDetailStateReanson={setIssueDetailStateReanson}
-                loading={loading}
                 setLoading={setLoading}
               />
             </div>
@@ -958,15 +925,11 @@ function IssueDetailPage() {
                     setAssigneeSelectData={setAssigneeSelectData}
                     labelSelectData={labelSelectData}
                     setLabelSelectData={setLabelSelectData}
-                    issueDetailData={issueDetailData}
-                    setIssueDetailData={setIssueDetailData}
                     assigneeLogin={assigneeLogin}
                     setAssigneeLogin={setAssigneeLogin}
-                    createCommentRender={createCommentRender}
                     setCreateCommentRender={setCreateCommentRender}
                     labelName={labelName}
                     setLabelName={setLabelName}
-                    loading={loading}
                     setLoading={setLoading}
                   />
                 </div>

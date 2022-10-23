@@ -9,43 +9,31 @@ function IssueLabelList({
   setLabelMenu,
   sortSelect,
   setsortSelect,
-  renderData,
-  setRenderData,
-  clearSearch,
   setClearSearch,
   allSearchInformation,
   setAllSearchInformation,
   labelSelectOption,
   setLabelSelectOption,
-  noSearch,
-  setNoSearch,
   labeslSelectName,
   setLabeslSelectName,
-  mobileMenuBG,
   setMobileMenuBG,
   labeslSelectSearch,
   setLabeslSelectSearch,
 }: {
   labelMenu: boolean;
   setLabelMenu: React.Dispatch<React.SetStateAction<boolean>>;
-  sortSelect: any;
+  sortSelect: React.Dispatch<React.SetStateAction<boolean>>;
   setsortSelect: any;
-  renderData: any;
-  setRenderData: any;
-  clearSearch: boolean;
   setClearSearch: React.Dispatch<React.SetStateAction<boolean>>;
   allSearchInformation: any;
-  setAllSearchInformation: any;
+  setAllSearchInformation: React.Dispatch<any>;
   labelSelectOption: any;
   setLabelSelectOption: any;
-  noSearch: boolean;
-  setNoSearch: any;
   labeslSelectName: any;
-  setLabeslSelectName: any;
-  mobileMenuBG: boolean;
-  setMobileMenuBG: any;
+  setLabeslSelectName: React.Dispatch<any>;
+  setMobileMenuBG: React.Dispatch<React.SetStateAction<boolean>>;
   labeslSelectSearch: any;
-  setLabeslSelectSearch: any;
+  setLabeslSelectSearch: React.Dispatch<any>;
 }) {
   const [labelData, setLabelData]: any = useState([]);
   const [labeslSelectClose, setLabeslSelectClose] = useState(true);

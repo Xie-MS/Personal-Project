@@ -22,7 +22,7 @@ import {
 
 import UserImg from "../img/userImg.png";
 
-function CreateNewIssue({
+function CreateIssue({
   preview,
   setPreview,
   issueContainer,
@@ -32,24 +32,16 @@ function CreateNewIssue({
   setIssue,
   markDownBtn,
   setmarkDownBtn,
-  renderAssigneeData,
-  renderLabelData,
-  setTargetText,
-  renderIssueData,
 }: {
   preview: boolean;
-  setPreview: any;
+  setPreview: React.Dispatch<React.SetStateAction<boolean>>;
   issueContainer: string;
-  setIssueContainer: any;
+  setIssueContainer: React.Dispatch<React.SetStateAction<string>>;
   issueTitle: string;
-  setIssueTitle: any;
+  setIssueTitle: React.Dispatch<React.SetStateAction<string>>;
   setIssue: any;
   markDownBtn: boolean;
-  setmarkDownBtn: any;
-  renderAssigneeData: any;
-  renderLabelData: any;
-  setTargetText: any;
-  renderIssueData: any;
+  setmarkDownBtn: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   return (
     <div className="lg:relative flex justify-evenly items-start xl:flex relative">
@@ -356,4 +348,4 @@ function CreateNewIssue({
   );
 }
 
-export default CreateNewIssue;
+export default CreateIssue;

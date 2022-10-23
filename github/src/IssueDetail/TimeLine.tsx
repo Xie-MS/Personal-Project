@@ -32,23 +32,15 @@ function TimeLine({
   preview,
   setPreview,
   setTargetText,
-  issueTitle,
-  setIssueTitle,
-  issueContainer,
-  setIssueContainer,
   markDownBtn,
   setmarkDownBtn,
   renderAssigneeData,
-  renderLabelData,
   renderIssueData,
   updateComment,
   setUpdateComment,
   issueDetailData,
-  setIssueDetailData,
   updateCommentNum,
   setUpdateCommentNum,
-  timeLineIndex,
-  settimeLineIndex,
   commentNum,
   setCommentNum,
   createCommentRender,
@@ -57,41 +49,29 @@ function TimeLine({
   setIssueUpdateInputDefaultValue,
   issueUpdateContainer,
   setIssueUpdateContainer,
-  emojiDate,
-  loading,
   setLoading,
 }: {
   preview: Boolean;
-  setPreview: any;
+  setPreview: React.Dispatch<React.SetStateAction<boolean>>;
   setTargetText: any;
-  issueTitle: String;
-  setIssueTitle: any;
-  issueContainer: any;
-  setIssueContainer: any;
   markDownBtn: Boolean;
-  setmarkDownBtn: any;
+  setmarkDownBtn: React.Dispatch<React.SetStateAction<boolean>>;
   renderAssigneeData: any;
-  renderLabelData: any;
   renderIssueData: any;
   updateComment: String;
-  setUpdateComment: any;
+  setUpdateComment: React.Dispatch<React.SetStateAction<string>>;
   issueDetailData: any;
-  setIssueDetailData: any;
   updateCommentNum: number;
-  setUpdateCommentNum: any;
-  timeLineIndex: number;
-  settimeLineIndex: any;
-  commentNum: number | string | undefined;
-  setCommentNum: any;
+  setUpdateCommentNum: React.Dispatch<React.SetStateAction<number>>;
+  commentNum: number;
+  setCommentNum: React.Dispatch<React.SetStateAction<number>>;
   createCommentRender: boolean;
-  setCreateCommentRender: any;
-  issueUpdateInputDefaultValue: any;
-  setIssueUpdateInputDefaultValue: any;
-  issueUpdateContainer: any;
-  setIssueUpdateContainer: any;
-  emojiDate: any;
-  loading: boolean;
-  setLoading: any;
+  setCreateCommentRender: React.Dispatch<React.SetStateAction<boolean>>;
+  issueUpdateInputDefaultValue: string;
+  setIssueUpdateInputDefaultValue: React.Dispatch<React.SetStateAction<string>>;
+  issueUpdateContainer: string;
+  setIssueUpdateContainer: React.Dispatch<React.SetStateAction<string>>;
+  setLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   const [TimeLineCommentemojiListClose, setTimeLineCommentEmojiListClose] =
     useState(false);
@@ -698,38 +678,24 @@ function TimeLine({
               }`}
             >
               <UpdateComment
-                updateComment={updateComment}
                 setUpdateComment={setUpdateComment}
                 preview={preview}
                 setPreview={setPreview}
-                issueContainer={issueContainer}
-                setIssueContainer={setIssueContainer}
-                issueTitle={issueTitle}
-                setIssueTitle={setIssueTitle}
                 markDownBtn={markDownBtn}
                 setmarkDownBtn={setmarkDownBtn}
                 renderAssigneeData={renderAssigneeData}
-                renderLabelData={renderLabelData}
                 setTargetText={setTargetText}
                 renderIssueData={renderIssueData}
-                issueDetailData={issueDetailData}
-                setIssueDetailData={setIssueDetailData}
                 updateCommentNum={updateCommentNum}
-                setUpdateCommentNum={setUpdateCommentNum}
-                timeLineIndex={timeLineIndex}
-                settimeLineIndex={settimeLineIndex}
-                createCommentRender={createCommentRender}
                 setCreateCommentRender={setCreateCommentRender}
                 commentNum={commentNum}
                 issueUpdateInputDefaultValue={issueUpdateInputDefaultValue}
                 setIssueUpdateInputDefaultValue={
                   setIssueUpdateInputDefaultValue
                 }
-                kebabHorizontal={kebabHorizontal}
                 setKebabHorizontal={setKebabHorizontal}
                 issueUpdateContainer={issueUpdateContainer}
                 setIssueUpdateContainer={setIssueUpdateContainer}
-                loading={loading}
                 setLoading={setLoading}
               />
             </div>

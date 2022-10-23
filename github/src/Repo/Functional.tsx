@@ -48,7 +48,7 @@ const FunctionalDiv = styled.div`
   }
 `;
 
-function Product() {
+function RepoFunctional() {
   return (
     <FunctionalDiv>
       <Functional>
@@ -93,4 +93,4 @@ function Product() {
   );
 }
 
-export default Product;
+export default RepoFunctional;

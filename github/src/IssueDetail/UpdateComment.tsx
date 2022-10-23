@@ -26,70 +26,42 @@ import {
 
 import api from "../api";
 
-function CreateComment({
-  updateComment,
+function UpdateComment({
   setUpdateComment,
   preview,
   setPreview,
-  issueContainer,
-  setIssueContainer,
-  issueTitle,
-  setIssueTitle,
   markDownBtn,
   setmarkDownBtn,
   renderAssigneeData,
-  renderLabelData,
   setTargetText,
   renderIssueData,
-  issueDetailData,
-  setIssueDetailData,
   updateCommentNum,
-  setUpdateCommentNum,
-  timeLineIndex,
-  settimeLineIndex,
-  createCommentRender,
   setCreateCommentRender,
   commentNum,
   issueUpdateInputDefaultValue,
   setIssueUpdateInputDefaultValue,
-  kebabHorizontal,
   setKebabHorizontal,
   issueUpdateContainer,
   setIssueUpdateContainer,
-  loading,
   setLoading,
 }: {
-  updateComment: String;
-  setUpdateComment: any;
+  setUpdateComment: React.Dispatch<React.SetStateAction<string>>;
   preview: Boolean;
-  setPreview: any;
-  issueContainer: any;
-  setIssueContainer: any;
-  issueTitle: String;
-  setIssueTitle: any;
+  setPreview: React.Dispatch<React.SetStateAction<boolean>>;
   markDownBtn: Boolean;
-  setmarkDownBtn: any;
+  setmarkDownBtn: React.Dispatch<React.SetStateAction<boolean>>;
   renderAssigneeData: any;
-  renderLabelData: any;
   setTargetText: any;
   renderIssueData: any;
-  issueDetailData: any;
-  setIssueDetailData: any;
   updateCommentNum: number;
-  setUpdateCommentNum: any;
-  timeLineIndex: number;
-  settimeLineIndex: any;
-  createCommentRender: boolean;
-  setCreateCommentRender: any;
+  setCreateCommentRender: React.Dispatch<React.SetStateAction<boolean>>;
   commentNum: string | number | undefined;
-  issueUpdateInputDefaultValue: any;
-  setIssueUpdateInputDefaultValue: any;
-  kebabHorizontal: any;
-  setKebabHorizontal: any;
-  issueUpdateContainer: any;
-  setIssueUpdateContainer: any;
-  loading: boolean;
-  setLoading: any;
+  issueUpdateInputDefaultValue: string;
+  setIssueUpdateInputDefaultValue: React.Dispatch<React.SetStateAction<string>>;
+  setKebabHorizontal: React.Dispatch<React.SetStateAction<boolean>>;
+  issueUpdateContainer: string;
+  setIssueUpdateContainer: React.Dispatch<React.SetStateAction<string>>;
+  setLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   const Imgfile = useRef<HTMLInputElement | null | any>(null);
   const [imgURL, setImgURL]: any = useState("");
@@ -722,7 +694,4 @@ function CreateComment({
     </div>
   );
 }
-export default CreateComment;
-function readAsDataURL(arg0: any) {
-  throw new Error("Function not implemented.");
-}
+export default UpdateComment;

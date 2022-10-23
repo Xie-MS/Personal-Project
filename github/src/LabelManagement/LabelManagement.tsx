@@ -518,31 +518,28 @@ let colorListArray: any = [
 ];
 
 function LabelManagement() {
-  const [labels, setLablels]: any = useState([]);
+  const [labels, setLablels] = useState<any>([]);
   const [active, setActive] = useState(false);
   const [sortActive, setSortActive] = useState(false);
-  const [createActive, setCreateActive]: any = useState(true);
+  const [createActive, setCreateActive] = useState(true);
   const [moreBtnNumActive, setMoreBtnNumActive] = useState(-1);
   const Description = useRef<HTMLInputElement | null>(null);
   const SeleceColor = useRef<HTMLInputElement | null>(null);
   const [inputName, setInputName]: any = useState("Label Preview");
-  const [newLabelsSelectColor, setNewLabelsSelectColor]: any =
-    useState("#FFFFFF");
-  const [updateLabelsSelectColor, setUpdateLabelsSelectColor]: any =
-    useState("");
-  const [selectColorMenuActive, setSelectColorMenuActive]: any =
-    useState(false);
-  const [colorMathFloorNum, setColorMathFloorNum]: any = useState(0);
-  const [LabelBtnColor, setLabelBtnColor]: any = useState();
+  const [newLabelsSelectColor, setNewLabelsSelectColor] = useState("#FFFFFF");
+  const [updateLabelsSelectColor, setUpdateLabelsSelectColor] = useState("");
+  const [selectColorMenuActive, setSelectColorMenuActive] = useState(false);
+  const [colorMathFloorNum, setColorMathFloorNum] = useState(0);
+  const [LabelBtnColor, setLabelBtnColor] = useState();
 
-  const [LabelBtnColorNum, setLabelBtnColorNum]: any = useState(-1);
-  const [errorColorValue, setErrorColorValue]: any = useState(false);
-  const [labelsDataTotal, setLabelsDataTotal]: any = useState();
-  const [lightOrDarkCreateText, setLightOrCreateDark]: any = useState("black");
-  const [textLightOrDark, setTextLightOrDark]: any = useState("black");
+  const [LabelBtnColorNum, setLabelBtnColorNum] = useState(-1);
+  const [errorColorValue, setErrorColorValue] = useState(false);
+  const [labelsDataTotal, setLabelsDataTotal] = useState();
+  const [lightOrDarkCreateText, setLightOrCreateDark] = useState("black");
+  const [textLightOrDark, setTextLightOrDark] = useState("black");
 
-  const [labelTextLightOrDark, serLabelTextLightOrDark]: any = useState("");
-  const [loading, setLoading]: any = useState(false);
+  const [labelTextLightOrDark, serLabelTextLightOrDark] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const dispatch = useDispatch();
   const LabelsData: any = useSelector((state) => state);
@@ -866,25 +863,17 @@ function LabelManagement() {
                 moreBtnNumActive={moreBtnNumActive}
                 setMoreBtnNumActive={setMoreBtnNumActive}
                 SeleceColor={SeleceColor}
-                setInputName={setInputName}
                 setNewLabelsSelectColor={setNewLabelsSelectColor}
                 selectColorMenuActive={selectColorMenuActive}
                 setSelectColorMenuActive={setSelectColorMenuActive}
                 colorMathFloorNum={colorMathFloorNum}
                 setColorMathFloorNum={setColorMathFloorNum}
-                LabelBtnColor={LabelBtnColor}
-                setLabelBtnColor={setLabelBtnColor}
                 LabelBtnColorNum={LabelBtnColorNum}
                 setLabelBtnColorNum={setLabelBtnColorNum}
                 errorColorValue={errorColorValue}
                 setErrorColorValue={setErrorColorValue}
-                labelsDataTotal={labelsDataTotal}
                 setLabelsDataTotal={setLabelsDataTotal}
-                lightOrDarkCreateText={lightOrDarkCreateText}
-                setLightOrCreateDark={setLightOrCreateDark}
-                textLightOrDark={textLightOrDark}
                 setTextLightOrDark={setTextLightOrDark}
-                labelTextLightOrDark={labelTextLightOrDark}
                 serLabelTextLightOrDark={serLabelTextLightOrDark}
                 loading={loading}
                 setLoading={setLoading}

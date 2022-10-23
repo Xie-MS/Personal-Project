@@ -33,55 +33,39 @@ import {
 import api from "../api";
 
 function CreateComment({
-  updateComment,
-  setUpdateComment,
   preview,
   setPreview,
   issueContainer,
   setIssueContainer,
-  issueTitle,
-  setIssueTitle,
   markDownBtn,
   setmarkDownBtn,
   renderAssigneeData,
-  renderLabelData,
   setTargetText,
   renderIssueData,
   issueDetailData,
-  setIssueDetailData,
-  createCommentRender,
   setCreateCommentRender,
   issueDetailState,
   setIssueDetailState,
   issueDetailStateReanson,
   setIssueDetailStateReanson,
-  loading,
   setLoading,
 }: {
-  updateComment: String;
-  setUpdateComment: any;
-  preview: Boolean;
-  setPreview: any;
-  issueContainer: any;
-  setIssueContainer: any;
-  issueTitle: String;
-  setIssueTitle: any;
-  markDownBtn: Boolean;
-  setmarkDownBtn: any;
+  preview: boolean;
+  setPreview: React.Dispatch<React.SetStateAction<boolean>>;
+  issueContainer: string;
+  setIssueContainer: React.Dispatch<React.SetStateAction<string>>;
+  markDownBtn: boolean;
+  setmarkDownBtn: React.Dispatch<React.SetStateAction<boolean>>;
   renderAssigneeData: any;
-  renderLabelData: any;
   setTargetText: any;
   renderIssueData: any;
   issueDetailData: any;
-  setIssueDetailData: any;
-  createCommentRender: Boolean;
-  setCreateCommentRender: any;
-  issueDetailState: any;
-  setIssueDetailState: any;
-  issueDetailStateReanson: any;
-  setIssueDetailStateReanson: any;
-  loading: boolean;
-  setLoading: any;
+  setCreateCommentRender: React.Dispatch<React.SetStateAction<boolean>>;
+  issueDetailState: string;
+  setIssueDetailState: React.Dispatch<React.SetStateAction<string>>;
+  issueDetailStateReanson: string;
+  setIssueDetailStateReanson: React.Dispatch<React.SetStateAction<string>>;
+  setLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   const Imgfile = useRef<HTMLInputElement | null | any>(null);
   const [imgURL, setImgURL]: any = useState("");

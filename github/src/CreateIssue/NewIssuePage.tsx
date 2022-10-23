@@ -8,26 +8,27 @@ import Loading from "../Loading";
 import CreateNewIssue from "./CreateNewIssue";
 import SharedListData from "./SharedListData";
 
-function NewIssuePage() {
-  const [preview, setPreview] = useState(false);
-  const [listClose, setListClose] = useState(false);
-  const [itemList, setItemList] = useState(false);
-  const [targetText, setTargetText]: any = useState("");
-  const [issueTitle, setIssueTitle]: any = useState("");
-  const [issueContainer, setIssueContainer]: any = useState("Leave a comment");
-  const [markDownBtn, setmarkDownBtn]: any = useState(true);
+function NewIssue() {
+  const [preview, setPreview] = useState<boolean>(false);
+  const [listClose, setListClose] = useState<boolean>(false);
+  const [itemList, setItemList] = useState<boolean>(false);
+  const [targetText, setTargetText] = useState<any>("");
+  const [issueTitle, setIssueTitle] = useState<string>("");
+  const [issueContainer, setIssueContainer] =
+    useState<string>("Leave a comment");
+  const [markDownBtn, setmarkDownBtn] = useState<boolean>(true);
 
-  const [renderAssigneeData, setRenderAssigneeData]: any = useState([]);
-  const [renderLabelData, setRenderLabelData]: any = useState([]);
-  const [renderIssueData, setRenderIssueData]: any = useState([]);
+  const [renderAssigneeData, setRenderAssigneeData] = useState<any>([]);
+  const [renderLabelData, setRenderLabelData] = useState<any>([]);
+  const [renderIssueData, setRenderIssueData] = useState<any>([]);
 
-  const [assigneeSelectData, setAssigneeSelectData]: any = useState([]);
-  const [labelSelectData, setLabelSelectData]: any = useState([]);
+  const [assigneeSelectData, setAssigneeSelectData] = useState<any>([]);
+  const [labelSelectData, setLabelSelectData] = useState<any>([]);
 
   const targetAssigneeSpan = useRef<HTMLParagraphElement | null>(null);
   const targetLabelSpan = useRef<HTMLParagraphElement | null>(null);
 
-  const [loading, serLoading]: any = useState(false);
+  const [loading, serLoading] = useState<boolean>(false);
 
   let jwtName = JSON.parse(window.localStorage.getItem("userName") as string);
   let jwtRepo = JSON.parse(
@@ -149,7 +150,6 @@ function NewIssuePage() {
         markDownBtn={markDownBtn}
         setmarkDownBtn={setmarkDownBtn}
         renderAssigneeData={renderAssigneeData}
-        renderLabelData={renderLabelData}
         setTargetText={setTargetText}
         renderIssueData={renderIssueData}
       />
@@ -274,4 +274,4 @@ function NewIssuePage() {
   );
 }
 
-export default NewIssuePage;
+export default NewIssue;

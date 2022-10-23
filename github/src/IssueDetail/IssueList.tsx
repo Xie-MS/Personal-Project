@@ -7,7 +7,7 @@ import { useParams } from "react-router-dom";
 
 import api from "../api";
 
-function AssigneePage({
+function SelectList({
   setListClose,
   targetText,
   itemList,
@@ -21,21 +21,17 @@ function AssigneePage({
   setTargetText,
   targetAssigneeSpan,
   targetLabelSpan,
-  issueDetailData,
-  setIssueDetailData,
   assigneeLogin,
   setAssigneeLogin,
-  createCommentRender,
   setCreateCommentRender,
   labelName,
   setLabelName,
-  loading,
   setLoading,
 }: {
-  setListClose: any;
+  setListClose: React.Dispatch<React.SetStateAction<boolean>>;
   targetText: string;
   itemList: boolean;
-  setItemList: any;
+  setItemList: React.Dispatch<React.SetStateAction<boolean>>;
   renderAssigneeData: any;
   renderLabelData: any;
   assigneeSelectData: String[];
@@ -43,17 +39,13 @@ function AssigneePage({
   labelSelectData: String[];
   setLabelSelectData: any;
   setTargetText: any;
-  targetAssigneeSpan: any;
-  targetLabelSpan: any;
-  issueDetailData: any;
-  setIssueDetailData: any;
+  targetAssigneeSpan: React.MutableRefObject<HTMLParagraphElement | null>;
+  targetLabelSpan: React.MutableRefObject<HTMLParagraphElement | null>;
   assigneeLogin: any;
   setAssigneeLogin: any;
-  createCommentRender: any;
   setCreateCommentRender: any;
   labelName: any;
   setLabelName: any;
-  loading: boolean;
   setLoading: any;
 }) {
   const [assigneeInputName, setAssigneeInputName]: any = useState("");
@@ -415,4 +407,4 @@ function AssigneePage({
   );
 }
 
-export default AssigneePage;
+export default SelectList;

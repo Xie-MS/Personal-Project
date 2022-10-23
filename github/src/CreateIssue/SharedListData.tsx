@@ -1,10 +1,10 @@
 import React from "react";
 
-import { useState, useRef, useEffect } from "react";
+import { useRef, useState } from "react";
 
 import { CheckIcon, XIcon } from "@primer/octicons-react";
 
-function AssigneePage({
+function SelectList({
   setListClose,
   targetText,
   itemList,
@@ -19,19 +19,19 @@ function AssigneePage({
   targetAssigneeSpan,
   targetLabelSpan,
 }: {
-  setListClose: any;
+  setListClose: React.Dispatch<React.SetStateAction<boolean>>;
   targetText: string;
   itemList: boolean;
-  setItemList: any;
+  setItemList: React.Dispatch<React.SetStateAction<boolean>>;
   renderAssigneeData: any;
   renderLabelData: any;
   assigneeSelectData: String[];
-  setAssigneeSelectData: any;
+  setAssigneeSelectData: React.Dispatch<any>;
   labelSelectData: String[];
-  setLabelSelectData: any;
+  setLabelSelectData: React.Dispatch<any>;
   setTargetText: any;
-  targetAssigneeSpan: any;
-  targetLabelSpan: any;
+  targetAssigneeSpan: React.MutableRefObject<HTMLParagraphElement | null>;
+  targetLabelSpan: React.MutableRefObject<HTMLParagraphElement | null>;
 }) {
   const [assigneeInputName, setAssigneeInputName]: any = useState("");
   const [labelsInputSelect, setLabelsInputSelect]: any = useState("");
@@ -295,4 +295,4 @@ function AssigneePage({
   );
 }
 
-export default AssigneePage;
+export default SelectList;
