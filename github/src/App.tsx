@@ -1,17 +1,14 @@
 import React from "react";
-import { useSelector } from "react-redux";
-import { useState } from "react";
 
-import { useReducer } from "react";
 import { Outlet, useLocation } from "react-router-dom";
-import { Reset } from "styled-reset";
 import { createGlobalStyle } from "styled-components";
+import { Reset } from "styled-reset";
 
-import Headers from "./header";
-import ContainerTitle from "./ContainerTitle";
-import SignIn from "./PleaseSignIn";
-import Footer from "./footer";
+import Footer from "./Footer/footer";
+import Headers from "./Header/header";
 import "./index.css";
+import SignIn from "./PleaseSignIn";
+import ContainerTitle from "./Repo/ContainerTitle";
 
 const GlobalStyle = createGlobalStyle`
   body {
