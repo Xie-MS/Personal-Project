@@ -680,15 +680,14 @@ let colorListArray: any = [
 ];
 
 function LabelManagement() {
-  const [labels, setLablels]: any = useState([]);
+  const [labels, setLablels] = useState<any>([]);
   const [active, setActive] = useState(false);
   const [sortActive, setSortActive] = useState(false);
-  const [createActive, setCreateActive]: any = useState(true);
+  const [createActive, setCreateActive] = useState(true);
   const [moreBtnNumActive, setMoreBtnNumActive] = useState(-1);
   const Description = useRef<HTMLInputElement | null>(null);
   const SeleceColor = useRef<HTMLInputElement | null>(null);
   const [inputName, setInputName]: any = useState("Label Preview");
-
   const [newLabelsSelectColor, setNewLabelsSelectColor]: any =
     useState("#FFFFFF");
   const [updateLabelsSelectColor, setUpdateLabelsSelectColor]: any =
@@ -698,14 +697,14 @@ function LabelManagement() {
   const [colorMathFloorNum, setColorMathFloorNum]: any = useState(0);
   const [LabelBtnColor, setLabelBtnColor]: any = useState();
 
-  const [LabelBtnColorNum, setLabelBtnColorNum]: any = useState(-1);
-  const [errorColorValue, setErrorColorValue]: any = useState(false);
-  const [labelsDataTotal, setLabelsDataTotal]: any = useState();
-  const [lightOrDarkCreateText, setLightOrCreateDark]: any = useState("black");
-  const [textLightOrDark, setTextLightOrDark]: any = useState("black");
+  const [LabelBtnColorNum, setLabelBtnColorNum] = useState(-1);
+  const [errorColorValue, setErrorColorValue] = useState(false);
+  const [labelsDataTotal, setLabelsDataTotal] = useState();
+  const [lightOrDarkCreateText, setLightOrCreateDark] = useState("black");
+  const [textLightOrDark, setTextLightOrDark] = useState("black");
 
-  const [labelTextLightOrDark, serLabelTextLightOrDark]: any = useState("");
-  const [loading, setLoading]: any = useState(false);
+  const [labelTextLightOrDark, serLabelTextLightOrDark] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -740,6 +739,7 @@ function LabelManagement() {
         setTextLightOrDark("white");
         serLabelTextLightOrDark("white");
       }
+      console.log(hsp, r1, r2, g1, g2, b1, b2);
     } else {
       const r1 = parseInt(SelectColor.slice(0, 1), 16);
       const r2 = parseInt(SelectColor.slice(1, 2), 16);
@@ -752,12 +752,10 @@ function LabelManagement() {
         setLightOrCreateDark("black");
         setTextLightOrDark("black");
         serLabelTextLightOrDark("black");
-        console.log(hsp, r1, r2, g1, g2, b1, b2, "black");
       } else {
         setLightOrCreateDark("white");
         setTextLightOrDark("white");
         serLabelTextLightOrDark("white");
-        console.log(hsp, r1, r2, g1, g2, b1, b2, "white");
       }
     }
   }
@@ -1032,25 +1030,17 @@ function LabelManagement() {
                 moreBtnNumActive={moreBtnNumActive}
                 setMoreBtnNumActive={setMoreBtnNumActive}
                 SeleceColor={SeleceColor}
-                setInputName={setInputName}
                 setNewLabelsSelectColor={setNewLabelsSelectColor}
                 selectColorMenuActive={selectColorMenuActive}
                 setSelectColorMenuActive={setSelectColorMenuActive}
                 colorMathFloorNum={colorMathFloorNum}
                 setColorMathFloorNum={setColorMathFloorNum}
-                LabelBtnColor={LabelBtnColor}
-                setLabelBtnColor={setLabelBtnColor}
                 LabelBtnColorNum={LabelBtnColorNum}
                 setLabelBtnColorNum={setLabelBtnColorNum}
                 errorColorValue={errorColorValue}
                 setErrorColorValue={setErrorColorValue}
-                labelsDataTotal={labelsDataTotal}
                 setLabelsDataTotal={setLabelsDataTotal}
-                lightOrDarkCreateText={lightOrDarkCreateText}
-                setLightOrCreateDark={setLightOrCreateDark}
-                textLightOrDark={textLightOrDark}
                 setTextLightOrDark={setTextLightOrDark}
-                labelTextLightOrDark={labelTextLightOrDark}
                 serLabelTextLightOrDark={serLabelTextLightOrDark}
                 loading={loading}
                 setLoading={setLoading}

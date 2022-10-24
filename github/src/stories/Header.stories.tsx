@@ -1,41 +1,40 @@
 import React from "react";
 
-import HeaderLogo from "../HeaderLogo";
-import HeaderMobileMenu from "../HeaderMobileMenu";
-import HeaderSearch from "../HeaderSearch";
-import HeaderSignIn from "../HeaderSignIn";
-import HeaderSignOut from "../HeaderSignOut";
-
+import Logo from "../Header/headerLogo";
+import MobileMenu from "../Header/HeaderMobileMenu";
+import Search from "../Header/HeaderSearch";
+import SignIn from "../Header/HeaderSignIn";
+import SignOut from "../Header/HeaderSignOut";
 export default {
-  title: "Example/Header",
-  component: HeaderLogo,
-  HeaderSearch,
-  HeaderSignIn,
-  HeaderSignOut,
-  HeaderMobileMenu,
+  title: "Example/header",
+  component: Logo,
+  MobileMenu,
+  Search,
+  SignIn,
+  SignOut,
   parameters: {
     // More on Story layout: https://storybook.js.org/docs/react/configure/story-layout
     layout: "fullscreen",
   },
 };
 
-const headerLogo = (args: any) => <HeaderLogo {...args} />;
-const headerSearch = (args: any) => <HeaderSearch {...args} />;
-const headerSignIn = (args: any) => <HeaderSignIn {...args} />;
-const headerSignOut = (args: any) => <HeaderSignOut {...args} />;
-const headerMobileMenu = (args: any) => <HeaderMobileMenu {...args} />;
+const Header_Logo = (args: any) => <Logo {...args} />;
+const Header_MobileMenu = (args: any) => <MobileMenu {...args} />;
+const Header_Search = (args: any) => <Search {...args} />;
+const Header_SignIn = (args: any) => <SignIn {...args} />;
+const Header_SignOut = (args: any) => <SignOut {...args} />;
 
-export const Header_Logo: any = headerLogo.bind({});
-Header_Logo.args = {};
+export const HeaderLogo: any = Header_Logo.bind({});
+HeaderLogo.args = {};
 
-export const Header_Search: any = headerSearch.bind({});
-Header_Search.args = {};
+export const HeaderSearch: any = Header_Search.bind({});
+HeaderSearch.args = {};
 
-export const Header_SignIn: any = headerSignIn.bind({});
-Header_SignIn.args = {};
+export const HeaderSignIn: any = Header_SignIn.bind({});
+HeaderSignIn.args = {};
 
-export const Header_SignOut: any = headerSignOut.bind({});
-Header_SignOut.args = {};
+export const HeaderSignOut: any = Header_SignOut.bind({});
+HeaderSignOut.args = {};
 
-export const Header_MobileMenu: any = headerMobileMenu.bind({});
-Header_MobileMenu.args = {};
+export const HeaderMobileMenu: any = Header_MobileMenu.bind({});
+HeaderMobileMenu.args = {};

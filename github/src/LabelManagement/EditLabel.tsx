@@ -426,58 +426,42 @@ function LabelEditManagement({
   moreBtnNumActive,
   setMoreBtnNumActive,
   SeleceColor,
-  setInputName,
   setNewLabelsSelectColor,
   selectColorMenuActive,
   setSelectColorMenuActive,
   colorMathFloorNum,
   setColorMathFloorNum,
-  LabelBtnColor,
-  setLabelBtnColor,
   index,
   LabelBtnColorNum,
   setLabelBtnColorNum,
   errorColorValue,
   setErrorColorValue,
-  labelsDataTotal,
   setLabelsDataTotal,
-  lightOrDarkCreateText,
-  setLightOrCreateDark,
-  textLightOrDark,
   setTextLightOrDark,
-  labelTextLightOrDark,
   serLabelTextLightOrDark,
   loading,
   setLoading,
 }: {
   labels: any;
-  setLablels: any;
-  moreBtnNumActive: any;
-  setMoreBtnNumActive: any;
-  SeleceColor: any;
-  setInputName: any;
-  setNewLabelsSelectColor: any;
-  selectColorMenuActive: any;
-  setSelectColorMenuActive: any;
-  colorMathFloorNum: any;
-  setColorMathFloorNum: any;
-  LabelBtnColor: any;
-  setLabelBtnColor: any;
-  LabelBtnColorNum: any;
-  setLabelBtnColorNum: any;
-  errorColorValue: any;
-  setErrorColorValue: any;
-  labelsDataTotal: any;
-  setLabelsDataTotal: any;
-  lightOrDarkCreateText: any;
-  setLightOrCreateDark: any;
-  textLightOrDark: any;
-  setTextLightOrDark: any;
-  labelTextLightOrDark: any;
-  serLabelTextLightOrDark: any;
+  setLablels: React.Dispatch<any>;
+  moreBtnNumActive: number;
+  setMoreBtnNumActive: React.Dispatch<any>;
+  SeleceColor: React.MutableRefObject<HTMLInputElement | null>;
+  setNewLabelsSelectColor: React.Dispatch<React.SetStateAction<string>>;
+  selectColorMenuActive: boolean;
+  setSelectColorMenuActive: React.Dispatch<React.SetStateAction<boolean>>;
+  colorMathFloorNum: number;
+  setColorMathFloorNum: React.Dispatch<React.SetStateAction<number>>;
+  LabelBtnColorNum: number;
+  setLabelBtnColorNum: React.Dispatch<React.SetStateAction<number>>;
+  errorColorValue: boolean;
+  setErrorColorValue: React.Dispatch<React.SetStateAction<boolean>>;
+  setLabelsDataTotal: React.Dispatch<React.SetStateAction<undefined>>;
+  setTextLightOrDark: React.Dispatch<React.SetStateAction<string>>;
+  serLabelTextLightOrDark: React.Dispatch<React.SetStateAction<string>>;
   index: number;
   loading: boolean;
-  setLoading: any;
+  setLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   const [updateActive, setUpdateActive] = useState(-1);
   const [closeLabelTr, setCloseLabelTr]: any = useState(0);
@@ -494,8 +478,6 @@ function LabelEditManagement({
     labels[index].color
   );
   const [UpdateChangeColor, setUpdateChangeColor]: any = useState("");
-
-  console.log(UpdateChangeColor);
 
   const dispatch = useDispatch();
   const LabelsData: any = useSelector((state) => state);
@@ -526,7 +508,6 @@ function LabelEditManagement({
         setLabelBtnColorText("white");
         setUpdateChangeColorText("white");
       }
-      console.log(hsp, r1, r2, g1, g2, b1, b2);
     } else {
       const r1 = parseInt(SelectColor.slice(0, 1), 16);
       const r2 = parseInt(SelectColor.slice(1, 2), 16);
@@ -656,8 +637,6 @@ function LabelEditManagement({
       });
     setLoading(false);
   }
-
-  // console.log(UpdateChangeColor);
 
   async function updataLabels(index: number) {
     setLoading(true);
