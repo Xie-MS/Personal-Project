@@ -17,14 +17,25 @@ const Footer = styled.div`
 `;
 
 const Footerleft = styled.div`
-display: flex;
-align-items: center;
-width: 186px;
-height: 25px;
-margin-right: 40px;
-}
+  display: flex;
+  align-items: center;
+  width: 186px;
+  height: 25px;
+  margin-right: 40px;
 
   @media screen and (max-width: 1011px) {
+    width: 100%;
+    display: none;
+    justify-content: center;
+    align-items: center;
+  }
+`;
+
+const FooterleftMobile = styled.div`
+  display: none;
+
+  @media screen and (max-width: 1011px) {
+    margin-top: 8px;
     width: 100%;
     display: flex;
     justify-content: center;
@@ -86,6 +97,10 @@ function Footers() {
         <FooterText>Blog</FooterText>
         <FooterText>About</FooterText>
       </FooterRight>
+      <FooterleftMobile>
+        <FooterLogo src={LogoImage} alt="" />
+        <CCText>© 2022 GitHub, Inc.</CCText>
+      </FooterleftMobile>
     </Footer>
   );
 }

@@ -92,8 +92,8 @@ function IssuePage() {
         setRenderData(data);
         if (data.length === 0) {
           setNoSearch(true);
-        } else {
-          setNoSearch(false);
+        } else if (data.length < 30) {
+          setEndpage(false);
         }
       } else if (
         sortSelect === "Your issues" &&
@@ -939,12 +939,18 @@ function IssuePage() {
               }
             }}
           >
-            <p className={`text-${endpage ? "[#0969da]" : "[#8c959f]"}`}>
+            <p
+              className={`text-${
+                endpage ? "[#0969da]" : "[#8c959f] cursor-not-allowed"
+              }`}
+            >
               Next
             </p>
             <ChevronRightIcon
               size={16}
-              className={`fill-${endpage ? "[#0969da]" : "[#8c959f]"}`}
+              className={`fill-${
+                endpage ? "[#0969da]" : "[#8c959f] cursor-not-allowed"
+              }`}
             />
           </button>
         </div>

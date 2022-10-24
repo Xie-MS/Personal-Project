@@ -234,7 +234,7 @@ function ContainerTitle() {
         <Functional>
           <FunctionalImgandText>
             <FunctionalImg src={CodeImage} alt="" />
-            <p>code</p>
+            <p>Code</p>
           </FunctionalImgandText>
           <FunctionalImgandText
             onClick={() => {
