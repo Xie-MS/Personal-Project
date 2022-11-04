@@ -54,11 +54,12 @@
 ## Demo
 
 - **Login**
-![SignIn_Demo](https://upload.cc/i1/2022/11/04/sl8IeF.gif)
+![ftm7k-98kyd](https://user-images.githubusercontent.com/82010307/199946108-08799144-bc3d-4380-bd8e-db5ea96ff5da.gif)
+
 
 ### 
 - **Search Issue**
-![SearchIssue_Demo](https://i.imgur.com/MYjBL5G.gif)
+![u24z6-4a5rp](https://user-images.githubusercontent.com/82010307/199946239-e87eaaae-f090-40a0-b378-f52c5769ad35.gif)
 
 ### 
 - **Pagination**
@@ -70,7 +71,7 @@
 
 ### 
 - **Create/Edit/Delete Label**
-![Label_Demo](https://imgur.com/iFOB2PB.gif)
+![lws6e-u84jt](https://user-images.githubusercontent.com/82010307/199946395-81f253d8-4867-416e-887c-001e75b8b92e.gif)
 
 ### 
 - **Timeline and Create/Edit/Delete Comment**
