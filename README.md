@@ -63,7 +63,7 @@
 
 ### 
 - **Pagination**
-![Pagination_Demo](https://imgur.com/W9Rprkn.gif)
+![Pagination_Demo](https://user-images.githubusercontent.com/82010307/200105881-846f092d-8b84-41d1-a7b8-792c7bb02725.gif)
 
 ### 
 - **Create Issue**
@@ -74,8 +74,12 @@
 ![lws6e-u84jt](https://user-images.githubusercontent.com/82010307/199946395-81f253d8-4867-416e-887c-001e75b8b92e.gif)
 
 ### 
-- **Timeline and Create/Edit/Delete Comment**
-![IssueDetail_Demo](https://i.imgur.com/9pMUy2d.gif)
+- **Create/Edit/Delete Comment**
+![Create/Edit/DeleteComment_Demo](https://user-images.githubusercontent.com/82010307/200106626-a7531032-ffd5-47e2-87a6-2c7453102102.gif)
+
+### 
+- **Timeline**
+![Timeline_Demo](https://user-images.githubusercontent.com/82010307/200111803-74fea8f0-aa9c-4cfd-8254-5936d5ac1b81.gif)
 
 
 ## About Me
