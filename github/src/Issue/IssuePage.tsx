@@ -7,7 +7,6 @@ import issueOpened from "../img/issueOpened.svg";
 import LabelsImage from "../img/Labels.svg";
 import Light from "../img/light.svg";
 import Milestone from "../img/milestone.svg";
-import UserImg from "../img/userImg.png";
 
 import {
   CheckCircleIcon,
@@ -25,33 +24,36 @@ import {
 import api from "../api";
 import Loading from "../Loading";
 import IssueLabelList from "./IssueLabelList";
+import IssueAssigneeList from "./IssuesAssigneeList";
 
 function IssuePage() {
   const navigate = useNavigate();
   const [filtersMenu, setFiletersMenu] = useState(false);
   const [labelMenu, setLabelMenu] = useState(false);
-  const [assigneMenu, setAssigne] = useState(false);
+  const [assigneMenu, setAssigneMenu] = useState(false);
   const [sortMenu, setSortMenu] = useState(false);
   const [mobileMenuBG, setMobileMenuBG] = useState(false);
   const [noSearch, setNoSearch] = useState(false);
   const [clearSearch, setClearSearch]: any = useState();
-  const [assigneeName, setAssigneeName] = useState("Xie-MS");
+  const [assigneeName, setAssigneeName] = useState("xms7104");
   const [assigneeLI, setAssigneeLI] = useState(true);
   const [sortSelectName, setSortSelectName] = useState("");
   const [date, setDate] = useState("");
   const [sort, setSort] = useState("");
   const [labelSelectOption, setLabelSelectOption]: any = useState([]);
+  const [assigneeSelectOption, setAssigneeSelectOption]: any = useState([]);
   const [page, setPage] = useState(1);
   const [firstpage, setFirstpage] = useState(false);
   const [endpage, setEndpage] = useState(true);
   const [labeslSelectName, setLabeslSelectName] = useState<any>([]);
+  const [assigneeSelectName, setAssigneeSelectName] = useState<any>([]);
   const [labeslSelectLength, setLabeslSelectLength] = useState(0);
   const [inputIssueName, setInputIssueName] = useState("");
   const [state, setState] = useState("open");
   const [renderData, setRenderData]: any = useState([]);
   const [allSearchInformation, setAllSearchInformation] = useState<any>({});
   const [labeslSelectSearch, setLabeslSelectSearch] = useState<any>([]);
-
+  const [assigneeSelectSearch, setAssigneeSelectSearch] = useState<any>([]);
   const [loading, serLoading]: any = useState(false);
 
   const [sortSelect, setsortSelect]: any = useState("");
@@ -73,7 +75,7 @@ function IssuePage() {
     "Recently updated",
     "Least recently updated",
   ];
-
+  console.log(allSearchInformation.assignee);
   useEffect(() => {
     async function getListIssues() {
       serLoading(true);
@@ -82,8 +84,8 @@ function IssuePage() {
           ? "&labels=" + allSearchInformation.labels
           : ""
       }${
-        allSearchInformation.Assignee
-          ? "&assignee=" + allSearchInformation.Assignee
+        allSearchInformation.assignee
+          ? "&assignee=" + allSearchInformation.assignee
           : ""
       }`;
 
@@ -296,19 +298,22 @@ function IssuePage() {
 
   function getAssignees(index: number) {
     return renderData.map((item: any, assigneesIndex: number) => {
-      if (
-        renderData[index].assignees.length !== 0 &&
-        index === assigneesIndex
-      ) {
-        return (
-          <div className="flex justify-end items-center w-[87.83px]">
-            <img
-              src={UserImg}
-              alt=""
-              className="w-[30%] rounded-full sm:hidden"
-            />
-          </div>
-        );
+      if (index === assigneesIndex) {
+        if (renderData[index].assignees.length !== 0) {
+          return renderData[index].assignees.map(
+            (item: any, userIndex: number) => {
+              return (
+                <div className="flex justify-end items-center">
+                  <img
+                    src={`${renderData[index].assignees[userIndex].avatar_url}`}
+                    alt=""
+                    className="rounded-full w-[20px] h-[20px] sm:hidden"
+                  />
+                </div>
+              );
+            }
+          );
+        }
       }
     });
   }
@@ -332,7 +337,6 @@ function IssuePage() {
         <li
           className="flex justify-start items-center border-b-[1px] border-solid border-gray-400 py-[7px] pl-9 pr-[7px] text-xs sm:pr-4 sm:py-4"
           onClick={() => {
-            setAssigneeName("Xie-MS");
             setsortSelect(Filters[FiltersDSelectIndex]);
             setAllSearchInformation(Filters[FiltersDSelectIndex]);
             setFiletersMenu(false);
@@ -517,7 +521,7 @@ function IssuePage() {
                     sortMenu === true
                   ) {
                     setLabelMenu(false);
-                    setAssigne(false);
+                    setAssigneMenu(false);
                     setSortMenu(false);
                   }
                 }}
@@ -534,7 +538,7 @@ function IssuePage() {
                     setMobileMenuBG(false);
                     setFiletersMenu(false);
                     setLabelMenu(false);
-                    setAssigne(false);
+                    setAssigneMenu(false);
                     setSortMenu(false);
                   }
                 }}
@@ -631,6 +635,9 @@ function IssuePage() {
                   setSortSelectName("");
                   setLabeslSelectName([]);
                   setLabeslSelectSearch([]);
+                  setAssigneeSelectName([]);
+                  setAssigneeSelectOption([]);
+                  setAssigneeSelectSearch([]);
                 }}
               >
                 Clear current search query, filters, and sorts
@@ -702,7 +709,7 @@ function IssuePage() {
                       sortMenu === true
                     ) {
                       setFiletersMenu(false);
-                      setAssigne(false);
+                      setAssigneMenu(false);
                       setSortMenu(false);
                     }
                   }}
@@ -737,7 +744,7 @@ function IssuePage() {
                 <button
                   className="flex justify-center items-center px-4 text-[#57606a] md:text-sm hover:text-black cursor-pointer"
                   onClick={() => {
-                    setAssigne(true);
+                    setAssigneMenu(true);
                     setMobileMenuBG(true);
                     if (
                       filtersMenu === true ||
@@ -753,92 +760,23 @@ function IssuePage() {
                   Assignee
                   <ChevronDownIcon size={16} className="hidden" />
                 </button>
-                <ul
-                  className={`${
-                    assigneMenu ? "block" : "hidden"
-                  } absolute top-[25px] right-[60px] bg-white border-[1px] border-solid border-gray-300 rounded-lg w-[275px] sm:sm:fixed sm:top-[1%] sm:left-[4%] sm:bottom-[35%] px-4 text-sm sm:w-[92%]`}
-                >
-                  <li className="px-4 py-[7px] text-xs font-semibold flex justify-between items-center sm:font-semibold sm:px-4 sm:py-4 cursor-pointer">
-                    <p>Filter by who's assigned</p>
-                    <p
-                      onClick={() => {
-                        setAssigne(false);
-                        setMobileMenuBG(false);
-                      }}
-                    >
-                      X
-                    </p>
-                  </li>
-                  <li className="px-2 py-2 border-t-[1px] border-solid border-gray-300 sm:px-4 sm:py-4">
-                    <input
-                      type="text"
-                      defaultValue="Filter users"
-                      className="py-[5px] px-3 bg-white border-[1px] border-solid border-gray-300 rounded-lg text-xs w-full"
-                      ref={AssigneeOnChange}
-                      onChange={(e) => {
-                        AssigneeInput(e);
-                      }}
-                      onKeyDown={(e) => {
-                        AssigneeInputClick(e);
-                      }}
-                    />
-                  </li>
-                  <li className="py-[7px] px-4 text-xs border-t-[1px] border-solid border-gray-300 flex justify-start items-center sm:px-4 sm:py-4 cursor-pointer">
-                    <div
-                      className="invisible"
-                      onClick={() => {
-                        setAllSearchInformation({
-                          ...allSearchInformation,
-                          Assignee: "",
-                        });
-                      }}
-                    >
-                      <CheckIcon size={16} className="mr-2" />
-                    </div>
-                    Assigned to nobody
-                  </li>
-                  <li
-                    className={`${
-                      assigneeLI ? "flex" : "hidden"
-                    } py-[7px] px-4 border-t-[1px] border-solid border-gray-300 text-xs flex justify-start items-center sm:px-4 sm:py-4 cursor-pointer`}
-                    onClick={() => {
-                      setsortSelect("Xie-MS");
-                      setAssigneeName("Xie-MS");
-                      setAssigne(false);
-                      setClearSearch(true);
-                      setAllSearchInformation({
-                        ...allSearchInformation,
-                        Assignee: "Xie-MS",
-                      });
-                    }}
-                  >
-                    <div
-                      className={`${
-                        assigneeUserName.current?.outerText === sortSelect
-                          ? "visible"
-                          : "invisible"
-                      }`}
-                    >
-                      <CheckIcon size={16} className="mr-2" />
-                    </div>
-                    <div className="flex items-center justify-start">
-                      <img
-                        src={UserImg}
-                        alt=""
-                        className="w-[9%] rounded-full mr-2"
-                      />
-                      <div className="flex items-center justify-center">
-                        <p
-                          className="mr-2 font-semibold"
-                          ref={assigneeUserName}
-                        >
-                          Xie-MS
-                        </p>
-                        <p>xms_7104</p>
-                      </div>
-                    </div>
-                  </li>
-                </ul>
+
+                <IssueAssigneeList
+                  assigneMenu={assigneMenu}
+                  setAssigneMenu={setAssigneMenu}
+                  sortSelect={sortSelect}
+                  setsortSelect={setsortSelect}
+                  setClearSearch={setClearSearch}
+                  allSearchInformation={allSearchInformation}
+                  setAllSearchInformation={setAllSearchInformation}
+                  assigneeSelectOption={assigneeSelectOption}
+                  setAssigneeSelectOption={setAssigneeSelectOption}
+                  assigneeSelectName={assigneeSelectName}
+                  setAssigneeSelectName={setAssigneeSelectName}
+                  setMobileMenuBG={setMobileMenuBG}
+                  assigneeSelectSearch={assigneeSelectSearch}
+                  setAssigneeSelectSearch={setAssigneeSelectSearch}
+                />
                 <button
                   className="flex justify-center items-center pl-4 text-[#57606a] md:text-sm hover:text-black"
                   onClick={() => {
@@ -852,7 +790,7 @@ function IssuePage() {
                     ) {
                       setFiletersMenu(false);
                       setLabelMenu(false);
-                      setAssigne(false);
+                      setAssigneMenu(false);
                     }
                   }}
                 >
