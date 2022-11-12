@@ -27,7 +27,7 @@ function IssueLabelList({
   setClearSearch: React.Dispatch<React.SetStateAction<boolean>>;
   allSearchInformation: any;
   setAllSearchInformation: React.Dispatch<any>;
-  assigneeSelectOption: string;
+  assigneeSelectOption: any;
   setAssigneeSelectOption: any;
   assigneeSelectName: any;
   setAssigneeSelectName: React.Dispatch<any>;
@@ -102,15 +102,6 @@ function IssueLabelList({
               ]);
             }
 
-            // if (assigneeSelectSearch.length === 0) {
-            //   const assigneeSelect = assigneeSelectSearch.slice(-1);
-            //   setAllSearchInformation({
-            //     ...allSearchInformation,
-            //     assignee: `${assigneeSelect}`,
-            //   });
-            //   console.log(assigneeSelect, allSearchInformation);
-            // }
-
             if (assigneeSelectOption.length >= 0) {
               setAllSearchInformation({
                 ...allSearchInformation,
@@ -160,8 +151,8 @@ function IssueLabelList({
     } else if (
       assigneeDataArray.toLocaleString().includes(e.target.value.toLowerCase())
     ) {
-      const assigneeSelectNum = assigneeSelectName.indexOf(e.target.value);
-      assigneeSelectName.splice(assigneeSelectNum, 1);
+      const assigneeSelectNum = assigneeSelectOption.indexOf(e.target.value);
+      assigneeSelectOption.splice(assigneeSelectNum, 1);
       // setAssigneeSelectName([...assigneeSelectName, e.target.value]);
       setAssigneeSelectClose(false);
     } else if (
@@ -169,7 +160,7 @@ function IssueLabelList({
         .toLocaleString()
         .includes(e.target.value.toLocaleString()) === false
     ) {
-      setAssigneeSelectName([...assigneeSelectName, e.target.value]);
+      setAssigneeSelectOption([...assigneeSelectOption, e.target.value]);
       setAssigneeSelectClose(false);
     }
   }
