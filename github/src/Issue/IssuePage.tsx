@@ -41,7 +41,7 @@ function IssuePage() {
   const [date, setDate] = useState("");
   const [sort, setSort] = useState("");
   const [labelSelectOption, setLabelSelectOption]: any = useState([]);
-  const [assigneeSelectOption, setAssigneeSelectOption]: any = useState([]);
+  const [assigneeSelectOption, setAssigneeSelectOption]: any = useState("");
   const [page, setPage] = useState(1);
   const [firstpage, setFirstpage] = useState(false);
   const [endpage, setEndpage] = useState(true);

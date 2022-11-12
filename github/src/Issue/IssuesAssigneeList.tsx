@@ -27,7 +27,7 @@ function IssueLabelList({
   setClearSearch: React.Dispatch<React.SetStateAction<boolean>>;
   allSearchInformation: any;
   setAllSearchInformation: React.Dispatch<any>;
-  assigneeSelectOption: any;
+  assigneeSelectOption: string;
   setAssigneeSelectOption: any;
   assigneeSelectName: any;
   setAssigneeSelectName: React.Dispatch<any>;
@@ -69,9 +69,6 @@ function IssueLabelList({
           } py-[7px] px-4 border-t-[1px] border-solid border-gray-300 text-xs flex justify-start items-center sm:px-4 sm:py-4 cursor-pointer`}
           onClick={() => {
             if (
-              // assigneeSelectName.includes(
-              //   assigneeData[assigneeSelectIndex].login
-              // ) &&
               assigneeSelectOption.includes(
                 assigneeData[assigneeSelectIndex].login
               )
@@ -84,7 +81,7 @@ function IssueLabelList({
               const assigneeSelecOptiontNum = assigneeSelectOption.indexOf(
                 assigneeData[assigneeSelectIndex].login
               );
-              assigneeSelectOption.splice(assigneeSelecOptiontNum, 1);
+              // assigneeSelectOption.splice(assigneeSelecOptiontNum, 1);
               setAssigneeSelectSearch([
                 ...assigneeSelectSearch,
                 assigneeSelectName,
@@ -94,10 +91,7 @@ function IssueLabelList({
                 assigneeData[assigneeSelectIndex].login
               ) === false
             ) {
-              setAssigneeSelectOption([
-                ...assigneeSelectOption,
-                assigneeData[assigneeSelectIndex].login,
-              ]);
+              setAssigneeSelectOption(assigneeData[assigneeSelectIndex].login);
               setAssigneeSelectName([
                 ...assigneeSelectName,
                 assigneeData[assigneeSelectIndex].login,
@@ -117,24 +111,19 @@ function IssueLabelList({
             //   console.log(assigneeSelect, allSearchInformation);
             // }
 
-            if (assigneeSelectOption.length === 0) {
+            if (assigneeSelectOption.length >= 0) {
               setAllSearchInformation({
                 ...allSearchInformation,
                 assignee: assigneeData[assigneeSelectIndex].login,
               });
               console.log(allSearchInformation, allSearchInformation.length);
-            } else if (assigneeSelectOption.length !== 0) {
-              setAllSearchInformation({
-                ...allSearchInformation,
-                assignee: assigneeSelectOption,
-              });
-              console.log(allSearchInformation, assigneeSelectOption);
             }
-            console.log(allSearchInformation, assigneeSelectOption);
+
             setsortSelect(assigneeData[assigneeSelectIndex].login);
             setClearSearch(true);
             setAssigneMenu(false);
             setMobileMenuBG(false);
+            console.log(allSearchInformation, assigneeSelectOption);
           }}
         >
           <div
@@ -187,10 +176,7 @@ function IssueLabelList({
 
   function assigneeSelectInputClick(e: any) {
     if (e.key === "Enter") {
-      setAssigneeSelectOption([
-        ...assigneeSelectOption,
-        assigneeInput.current?.value,
-      ]);
+      setAssigneeSelectOption(assigneeInput.current?.value);
       setsortSelect(assigneeInput.current?.value);
       setClearSearch(true);
       setAssigneMenu(false);
