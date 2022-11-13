@@ -75,7 +75,6 @@ function IssuePage() {
     "Recently updated",
     "Least recently updated",
   ];
-  console.log(allSearchInformation.assignee);
   useEffect(() => {
     async function getListIssues() {
       serLoading(true);
@@ -847,14 +846,13 @@ function IssuePage() {
           <button
             className="flex justify-start items-center px-[10px] py-[5px]"
             onClick={() => {
-              setPage(page - 1);
-              setsortSelect(page - 1);
-
-              if (page <= 2) {
+              if (page === 1) {
                 setEndpage(true);
                 setFirstpage(false);
-              } else if (page > 2) {
+              } else if (page !== 1) {
                 setFirstpage(true);
+                setPage(page - 1);
+                setsortSelect(page - 1);
               }
             }}
           >
@@ -867,13 +865,16 @@ function IssuePage() {
             </p>
           </button>
           <button
-            className="flex justify-start items-center px-[10px] py-[5px]"
+            className={`${
+              endpage ? "cursor-pointer" : "cursor-not-allowed disabled"
+            } flex justify-start items-center px-[10px] py-[5px]`}
             onClick={() => {
-              setPage(page + 1);
-              setsortSelect(page + 1);
-              setFirstpage(true);
-              if (page >= 2) {
+              if (renderData.length < 30) {
                 setEndpage(false);
+              } else {
+                setPage(page + 1);
+                setsortSelect(page + 1);
+                setFirstpage(true);
               }
             }}
           >

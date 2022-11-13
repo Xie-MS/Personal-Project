@@ -46,13 +46,11 @@ function IssueLabelList({
     async function getIssuesAssignee() {
       const data = await api.getIssuesAssignee();
       setAssigneeData(data);
-      console.log(data);
     }
     getIssuesAssignee();
   }, [sortSelect]);
 
   function assigneeSelect() {
-    console.log(allSearchInformation, assigneeSelectOption);
     return assigneeData.map((_item: any, assigneeSelectIndex: number) => {
       return (
         <li
@@ -107,14 +105,12 @@ function IssueLabelList({
                 ...allSearchInformation,
                 assignee: assigneeData[assigneeSelectIndex].login,
               });
-              console.log(allSearchInformation, allSearchInformation.length);
             }
 
             setsortSelect(assigneeData[assigneeSelectIndex].login);
             setClearSearch(true);
             setAssigneMenu(false);
             setMobileMenuBG(false);
-            console.log(allSearchInformation, assigneeSelectOption);
           }}
         >
           <div
